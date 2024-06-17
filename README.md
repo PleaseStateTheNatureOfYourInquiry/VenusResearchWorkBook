@@ -9,6 +9,6 @@ In the project top-directory of a research project (for example Temperature-UVBr
 
 At this point my subset of the Venus data sets is not yet included, as it is quite large and I still need to find a good place to park it online.
 
-The detailed description of the work is in the files in the docs section. These are compiled and can be viewed at the [Venus Research Workbook at ReadTheDocs](https://venusresearchworkbook.readthedocs.io/en/latest/)
+The detailed description of the work is in the files in the docs section. These are compiled and can be viewed at the [Venus Research Workbook at ReadTheDocs](https://venusresearchworkbook.readthedocs.io/en/latest/).
 
 
