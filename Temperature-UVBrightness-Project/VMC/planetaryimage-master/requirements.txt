@@ -1,0 +1,13 @@
+# Install planetaryimage itself
+-e .
+
+# Install our development requirements
+wheel>=0.23.0
+pep8==1.5.7
+flake8==2.4.1
+pytest
+tox
+sphinx
+numpydoc
+matplotlib
+planetary_test_data>=0.3.0

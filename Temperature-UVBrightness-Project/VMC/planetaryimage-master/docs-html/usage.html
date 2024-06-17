@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Usage &#8212; planetaryimage 0.4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    
+    <script src="_static/documentation_options.js?v=c87aa342"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PlanetaryImage" href="image.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="image.html" title="PlanetaryImage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">planetaryimage 0.4.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Usage</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
+<section id="quick-explanation">
+<h2>Quick Explanation<a class="headerlink" href="#quick-explanation" title="Link to this heading">¶</a></h2>
+<p>The example below shows how to use <code class="docutils literal notranslate"><span class="pre">planetaryimage</span></code>’s <code class="docutils literal notranslate"><span class="pre">PDS3Image</span></code> class to
+open a PDS image, inspect it’s label and display the image data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">planetaryimage</span> <span class="kn">import</span> <span class="n">PDS3Image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">testfile</span> <span class="o">=</span> <span class="s1">&#39;tests/mission_data/2p129641989eth0361p2600r8m1.img&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">image</span> <span class="o">=</span> <span class="n">PDS3Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">testfile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">record_bytes</span><span class="p">)</span>               <span class="c1"># access attribute</span>
+<span class="go">128</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;FILE_RECORDS&#39;</span><span class="p">])</span>      <span class="c1"># access label</span>
+<span class="go">332</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>  <span class="c1"># display image</span>
+</pre></div>
+</div>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p>Setup:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="k">as</span> <span class="nn">mpimg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">planetaryimage</span> <span class="kn">import</span> <span class="n">PDS3Image</span><span class="p">,</span> <span class="n">CubeFile</span>
+</pre></div>
+</div>
+<p>Gather the Images:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pdsfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.*&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">pdsfile</span> <span class="ow">in</span> <span class="n">pdsfiles</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>       <span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PDS3Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pdsfile</span><span class="p">))</span>
+<span class="gp">... </span>   <span class="k">except</span><span class="p">:</span>
+<span class="gp">... </span>       <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">images</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="nb">print</span> <span class="n">n</span><span class="p">,</span> <span class="n">image</span>
+<span class="go">0 1p190678905erp64kcp2600l8c1.img</span>
+<span class="go">1 mk19s259.img</span>
+<span class="go">2 m0002320.imq</span>
+<span class="go">3 mg00n217.sgr</span>
+<span class="go">4 h2225_0000_dt4.img</span>
+<span class="go">5 0044ML0205000000E1_DXXX.img</span>
+</pre></div>
+</div>
+<p>One can use the <code class="docutils literal notranslate"><span class="pre">try</span></code> statement in-case any of the images you have are
+not compatible with PDS3image. See <a class="reference external" href="https://planetaryimage.readthedocs.org/en/latest/supported_planetary_image_types.html">Suppored Planetary Images List</a>
+to know what image types are compatible. The <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">loop</span></code> will show what index
+number to use in future use of the image.</p>
+<p>To see the information about each image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="nb">print</span> <span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">&gt;i2 (1, 1024, 32) (1, 1024, 32)</span>
+<span class="go">uint8 (1, 1331, 1328) (1, 1331, 1328)</span>
+<span class="go">uint8 (1, 1600, 384) (1, 1600, 384)</span>
+<span class="go">uint8 (1, 960, 964) (1, 960, 964)</span>
+<span class="go">&gt;i2 (1, 10200, 1658) (1, 10200, 1658)</span>
+<span class="go">uint8 (3, 1200, 1648) (3, 1200, 1648)</span>
+</pre></div>
+</div>
+<p>To display a three band, color, image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">caltarget</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">caltarget</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.image.AxesImage at 0x10a13c250&gt;</span>
+</pre></div>
+</div>
+<img alt="_images/caltarget_1.png" src="_images/caltarget_1.png" />
+<p>It is important to look at the first number in <code class="docutils literal notranslate"><span class="pre">i.shape</span></code> (See attributes) or
+the value from <code class="docutils literal notranslate"><span class="pre">i.bands</span></code>. If this number is 3, then the above example works,
+otherwise, you should use <code class="docutils literal notranslate"><span class="pre">cmap=='gray'</span></code> parameter like in the below example.</p>
+<p>To display a single band, grayscale, image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">image1</span> <span class="o">=</span> <span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image1</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.image.AxesImage at 0x125817a50&gt;</span>
+</pre></div>
+</div>
+<img alt="_images/output_3_1.png" src="_images/output_3_1.png" />
+<p>The <code class="docutils literal notranslate"><span class="pre">cmap</span></code> keyword argument defines which <code class="docutils literal notranslate"><span class="pre">colormap</span></code> a grayscale image
+should be displayed with. In the case where <code class="docutils literal notranslate"><span class="pre">i.bands</span></code> is 3, it means the
+image is an RGB color image which does not need a colormap to be displayed
+properly.  If <code class="docutils literal notranslate"><span class="pre">i.bands</span></code> is 1, then the image is grayscale and <code class="docutils literal notranslate"><span class="pre">imshow</span></code>
+would use its default colormap, which is not grayscale.</p>
+<p>To see a subframe of an image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image1</span><span class="o">.</span><span class="n">image</span><span class="p">[</span><span class="mi">370</span><span class="p">:</span><span class="mi">620</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">250</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.image.AxesImage at 0x11c014450&gt;</span>
+</pre></div>
+</div>
+<img alt="_images/output_4_1.png" src="_images/output_4_1.png" />
+<p>To see the different bands of a colored image:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span>
+<span class="go">       mcam1.image[700:1100, 600:1000, 0],</span>
+<span class="go">       mcam1.image[700:1100, 600:1000, 1],</span>
+<span class="go">       mcam1.image[700:1100, 600:1000, 2],</span>
+<span class="go">   ]), cmap=&#39;gray&#39;)</span>
+<span class="go">&lt;matplotlib.image.AxesImage at 0x10fccd210&gt;</span>
+</pre></div>
+</div>
+<img alt="_images/caltarget_2.png" src="_images/caltarget_2.png" />
+<p>To save an image as a <cite>.png</cite> file for later viewing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">crater</span> <span class="o">=</span> <span class="n">image1</span><span class="o">.</span><span class="n">image</span><span class="p">[</span><span class="mi">370</span><span class="p">:</span><span class="mi">620</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">250</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imsave</span><span class="p">(</span><span class="s1">&#39;crater.png&#39;</span><span class="p">,</span> <span class="n">crater</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To do some image processing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">image1</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="go">(array([ 2.,  0.,  0., ...,  0.,  0.,  1.]),</span>
+<span class="go">array([  32.   ,   32.036,   32.072, ...,  175.928,  175.964,  176.   ]),</span>
+<span class="go">&lt;a list of 4000 Patch objects&gt;)</span>
+</pre></div>
+</div>
+<img alt="_images/output_8_1.png" src="_images/output_8_1.png" />
+<p>Using this Histogram can produce a clearer picture:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image1</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">115</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">135</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.image.AxesImage at 0x1397a2790&gt;</span>
+</pre></div>
+</div>
+<img alt="_images/output_9_1.png" src="_images/output_9_1.png" />
+<p>See <a class="reference external" href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.imshow">documentation for plt.imshow</a> and <a class="reference external" href="http://matplotlib.org/users/image_tutorial.html">Image tutorial for pyplot</a> to see more methods of image processing.</p>
+<p>You can also use planetaryimage to process Isis Cube Files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">planetaryimage</span> <span class="kn">import</span> <span class="n">CubeFile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isisimage</span> <span class="o">=</span> <span class="n">CubeFile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;tests/data/pattern.cub&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">isisimage</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">isisimage</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">isisimage</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(dtype(&#39;&lt;f4&#39;), (90, 90), (1, 90, 90))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">isisimage</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="go">&lt;matplotlib.image.AxesImage at 0x114010610&gt;</span>
+</pre></div>
+</div>
+<img alt="_images/Isisimage.png" src="_images/Isisimage.png" />
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#quick-explanation">Quick Explanation</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="installation.html"
+                          title="previous chapter">Installation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="image.html"
+                          title="next chapter">PlanetaryImage</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usage.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="image.html" title="PlanetaryImage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Installation"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">planetaryimage 0.4.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Usage</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2015, PlanetaryPy Developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

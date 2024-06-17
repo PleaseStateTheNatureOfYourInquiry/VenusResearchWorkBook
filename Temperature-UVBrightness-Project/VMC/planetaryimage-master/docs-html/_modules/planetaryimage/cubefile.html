@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>planetaryimage.cubefile &#8212; planetaryimage 0.4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=514cf933" />
+    
+    <script src="../../_static/documentation_options.js?v=c87aa342"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">planetaryimage 0.4.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">planetaryimage.cubefile</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for planetaryimage.cubefile</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">.image</span> <span class="kn">import</span> <span class="n">PlanetaryImage</span>
+<span class="kn">from</span> <span class="nn">.specialpixels</span> <span class="kn">import</span> <span class="n">SPECIAL_PIXELS</span>
+<span class="kn">from</span> <span class="nn">.decoders</span> <span class="kn">import</span> <span class="n">BandSequentialDecoder</span><span class="p">,</span> <span class="n">TileDecoder</span>
+
+
+<div class="viewcode-block" id="CubeFile">
+<a class="viewcode-back" href="../../image.html#planetaryimage.cubefile.CubeFile">[docs]</a>
+<span class="k">class</span> <span class="nc">CubeFile</span><span class="p">(</span><span class="n">PlanetaryImage</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Isis Cube file reader.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">      &gt;&gt;&gt; from planetaryimage import CubeFile</span>
+<span class="sd">      &gt;&gt;&gt; image = CubeFile.open(&#39;tests/data/pattern.cub&#39;)</span>
+<span class="sd">      &gt;&gt;&gt; # Examples of CubeFile Attributes</span>
+<span class="sd">      &gt;&gt;&gt; image.base</span>
+<span class="sd">      0.0</span>
+<span class="sd">      &gt;&gt;&gt; image.multiplier</span>
+<span class="sd">      1.0</span>
+<span class="sd">      &gt;&gt;&gt; image.specials[&#39;His&#39;]</span>
+<span class="sd">      -3.4028233e+38</span>
+<span class="sd">      &gt;&gt;&gt; image.tile_lines</span>
+<span class="sd">      128</span>
+<span class="sd">      &gt;&gt;&gt; image.tile_samples</span>
+<span class="sd">      128</span>
+<span class="sd">      &gt;&gt;&gt; image.tile_shape</span>
+<span class="sd">      (128, 128)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PIXEL_TYPES</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;UnsignedByte&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;SignedByte&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;int8&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;UnsignedWord&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;uint16&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;SignedWord&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;int16&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;UnsignedInteger&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;uint32&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;SignedInteger&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;Real&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;Double&#39;</span><span class="p">:</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="n">BYTE_ORDERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;NoByteOrder&#39;</span><span class="p">:</span> <span class="s1">&#39;=&#39;</span><span class="p">,</span>  <span class="c1"># system</span>
+        <span class="s1">&#39;Lsb&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span>          <span class="c1"># little-endian</span>
+        <span class="s1">&#39;Msb&#39;</span><span class="p">:</span> <span class="s1">&#39;&gt;&#39;</span>           <span class="c1"># big-endian</span>
+    <span class="p">}</span>
+
+    <span class="n">SPECIAL_PIXELS</span> <span class="o">=</span> <span class="n">SPECIAL_PIXELS</span>
+
+    <span class="k">def</span> <span class="nf">_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_to_write</span><span class="p">,</span> <span class="n">overwrite</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span> <span class="nf">_create_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_bands</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;Dimensions&#39;</span><span class="p">][</span><span class="s1">&#39;Bands&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;Dimensions&#39;</span><span class="p">][</span><span class="s1">&#39;Lines&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;Dimensions&#39;</span><span class="p">][</span><span class="s1">&#39;Samples&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;Format&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_start_byte</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;StartByte&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixel_type</span><span class="o">.</span><span class="n">newbyteorder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_byte_order</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">base</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;An additive factor by which to offset pixel DN.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Base&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">multiplier</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;A multiplicative factor by which to scale pixel DN.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Multiplier&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tile_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of lines per tile.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">!=</span> <span class="s1">&#39;Tile&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;TileLines&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tile_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of samples per tile.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">!=</span> <span class="s1">&#39;Tile&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;TileSamples&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tile_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shape of tiles.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">!=</span> <span class="s1">&#39;Tile&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tile_lines</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_samples</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_byte_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">BYTE_ORDERS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_pixels_group</span><span class="p">[</span><span class="s1">&#39;ByteOrder&#39;</span><span class="p">]]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_pixels_group</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_pixel_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">PIXEL_TYPES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_pixels_group</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">specials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the special pixel values&quot;&quot;&quot;</span>
+        <span class="n">pixel_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixels_group</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SPECIAL_PIXELS</span><span class="p">[</span><span class="n">pixel_type</span><span class="p">]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return detached filename else None.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">[</span><span class="s1">&#39;IsisCube&#39;</span><span class="p">][</span><span class="s1">&#39;Core&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;^Core&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CubeFile.apply_scaling">
+<a class="viewcode-back" href="../../image.html#planetaryimage.cubefile.CubeFile.apply_scaling">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply_scaling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scale pixel values to there true DN.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        copy: bool [True]</span>
+<span class="sd">            Whether to apply the scaling to a copy of the pixel data</span>
+<span class="sd">            and leave the original unaffected</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Numpy Array</span>
+<span class="sd">            A scaled version of the pixel data</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplier</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplier</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplier</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="CubeFile.apply_numpy_specials">
+<a class="viewcode-back" href="../../image.html#planetaryimage.cubefile.CubeFile.apply_numpy_specials">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply_numpy_specials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert isis special pixel values to numpy special pixel values.</span>
+
+<span class="sd">            =======  =======</span>
+<span class="sd">             Isis     Numpy</span>
+<span class="sd">            =======  =======</span>
+<span class="sd">            Null     nan</span>
+<span class="sd">            Lrs      -inf</span>
+<span class="sd">            Lis      -inf</span>
+<span class="sd">            His      inf</span>
+<span class="sd">            Hrs      inf</span>
+<span class="sd">            =======  =======</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        copy : bool [True]</span>
+<span class="sd">            Whether to apply the new special values to a copy of the</span>
+<span class="sd">            pixel data and leave the original unaffected</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Numpy Array</span>
+<span class="sd">            A numpy array with special values converted to numpy&#39;s nan, inf,</span>
+<span class="sd">            and -inf</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials</span><span class="p">[</span><span class="s1">&#39;Null&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials</span><span class="p">[</span><span class="s1">&#39;Min&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">NINF</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials</span><span class="p">[</span><span class="s1">&#39;Max&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="CubeFile.specials_mask">
+<a class="viewcode-back" href="../../image.html#planetaryimage.cubefile.CubeFile.specials_mask">[docs]</a>
+    <span class="k">def</span> <span class="nf">specials_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a pixel map for special pixels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        An array where the value is `False` if the pixel is special</span>
+<span class="sd">        and `True` otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials</span><span class="p">[</span><span class="s1">&#39;Min&#39;</span><span class="p">]</span>
+        <span class="n">mask</span> <span class="o">&amp;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials</span><span class="p">[</span><span class="s1">&#39;Max&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">mask</span></div>
+
+
+<div class="viewcode-block" id="CubeFile.get_image_array">
+<a class="viewcode-back" href="../../image.html#planetaryimage.cubefile.CubeFile.get_image_array">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_image_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an array for use in making an image.</span>
+
+<span class="sd">        Creates a linear stretch of the image and scales it to between `0` and</span>
+<span class="sd">        `255`. `Null`, `Lis` and `Lrs` pixels are set to `0`. `His` and `Hrs`</span>
+<span class="sd">        pixels are set to `255`.</span>
+
+<span class="sd">        Usage::</span>
+
+<span class="sd">            from planetaryimage import CubeFile</span>
+<span class="sd">            from PIL import Image</span>
+
+<span class="sd">            # Read in the image and create the image data</span>
+<span class="sd">            image = CubeFile.open(&#39;test.cub&#39;)</span>
+<span class="sd">            data = image.get_image_array()</span>
+
+<span class="sd">            # Save the first band to a new file</span>
+<span class="sd">            Image.fromarray(data[0]).save(&#39;test.png&#39;)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            A uint8 array of pixel values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">specials_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials_mask</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">specials_mask</span><span class="p">]</span> <span class="o">-=</span> <span class="n">data</span><span class="p">[</span><span class="n">specials_mask</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">specials_mask</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">255</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="n">specials_mask</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+        <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials</span><span class="p">[</span><span class="s1">&#39;His&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">specials</span><span class="p">[</span><span class="s1">&#39;Hrs&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">255</span>
+
+        <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_decoder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s1">&#39;BandSequential&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">BandSequentialDecoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">==</span> <span class="s1">&#39;Tile&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">TileDecoder</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile_shape</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unkown format (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">)</span></div>
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">planetaryimage 0.4.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">planetaryimage.cubefile</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2015, PlanetaryPy Developers.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

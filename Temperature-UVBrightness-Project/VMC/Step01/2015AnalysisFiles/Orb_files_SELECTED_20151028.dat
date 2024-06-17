@@ -1,0 +1,87 @@
+
+FILE: Orb_files_SELECTED_20151028.dat
+Date: 28-10-2015
+Update: 20-04-2024
+
+ This file contains all the hand selected Orb analysis files from the extended analysis AND the South Polar campaign 2013
+ (see notebook 14-05-2015)
+
+The change with the previous version (Orb_files_SELECTED) is that we have now taken the lat,lon coordinates for the soundings
+at 70km altitude. So all the files Orbnnnn_full_analysis... have been changed (by hand) to correct for that! Previously we
+were taking 50km altitude for the lat,lon coordinates for the soudings. Sometimes there can be several degrees difference
+in latitude and/or longitude.
+
+C_END
+Orb0260_full_analysis_AEX_SELECTED
+Orb0268_full_analysis_AEX_SELECTED
+Orb0270_full_analysis_AEX_SELECTED
+Orb0272_full_analysis_AEX_SELECTED
+Orb0422_full_analysis_AIX
+Orb0424_full_analysis_AIX
+Orb0427_full_analysis_AIX
+Orb0642_full_analysis_AEX
+Orb0643_full_analysis_AEX
+Orb0644_full_analysis_AEX
+Orb0959_full_analysis_AEX
+Orb0961_full_analysis_AEX
+Orb0963_full_analysis_AEX
+Orb0965_full_analysis_AEX_SELECTED
+Orb0967_full_analysis_AEX_SELECTED
+Orb0969_full_analysis_AEX_SELECTED
+Orb0971_full_analysis_AEX_SELECTED
+Orb1188_full_analysis_AIX_SELECTED
+Orb1189_full_analysis_AIX_SELECTED
+Orb1191_full_analysis_AIX
+Orb1193_full_analysis_AIX
+Orb1201_full_analysis_AIX_SELECTED
+Orb1204_full_analysis_AIX_SELECTED
+Orb1207_full_analysis_AIX_SELECTED
+Orb1513_full_analysis_AIX
+Orb1521_full_analysis_AIX
+Orb1748_full_analysis_AEX
+Orb1753_full_analysis_AEX
+Orb1758_full_analysis_AEX
+Orb1901_full_analysis_AIX_SELECTED
+Orb2065_full_analysis_AEX_SELECTED
+Orb2068_full_analysis_AEX_SELECTED
+Orb2069_full_analysis_AEX_SELECTED
+Orb2071_full_analysis_AEX_SELECTED
+Orb2072_full_analysis_AEX_SELECTED
+Orb2074_full_analysis_AEX_SELECTED
+Orb2300_full_analysis_AIX
+Orb2452_full_analysis_AEX_SELECTED
+Orb2453_full_analysis_AEX_SELECTED
+Orb2454_full_analysis_AEX_SELECTED
+Orb2456_full_analysis_AEX
+Orb2460_full_analysis_AEX
+Orb2630_full_analysis_AIX
+Orb2638_full_analysis_AIX
+Orb2777_full_analysis
+Orb2778_full_analysis
+Orb2779_full_analysis
+Orb2780_full_analysis
+Orb2781_full_analysis
+Orb2782_full_analysis
+Orb2783_full_analysis
+Orb2784_full_analysis
+Orb2785_full_analysis
+Orb2786_full_analysis
+Orb2787_full_analysis
+Orb2790_full_analysis
+Orb2792_full_analysis
+Orb2793_full_analysis
+Orb2794_full_analysis
+Orb2795_full_analysis
+Orb2796_full_analysis
+Orb2797_full_analysis
+Orb2798_full_analysis
+Orb2802_full_analysis
+Orb2803_full_analysis
+Orb2804_full_analysis
+Orb2805_full_analysis
+Orb2806_full_analysis
+Orb2807_full_analysis
+Orb2808_full_analysis
+Orb2809_full_analysis
+Orb2810_full_analysis
+Orb2811_full_analysis
