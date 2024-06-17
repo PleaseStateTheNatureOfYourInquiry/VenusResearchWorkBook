@@ -1,5 +1,7 @@
-Venus 
-=====
+
+
+Workbook 
+========
 
 .. _abbrevations:
 
@@ -811,8 +813,8 @@ I take one of the most recent publications I can find, based on Akatsuki NIR dat
 They published the data for each figure in their paper in a `Zenodo repository <https://doi.org/10.5281/zenodo.5159027>`_. 
 From the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv` file found in the :file:`Figure_data_csv/Figure5` directory of that repository I create a more nicely (human and HandyTools.readTable) readable table :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` using the :file:`./scripts/createTable_ThermalTide_Akiba2021_Figure5.py` script. 
 
-In the caption of Figure 3 of their paper, which also shows temperature cross section of thermal tides as a function LST but in the northern hemisphere only, it is stated that **... the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right**. I am officially confused and I try to figure out how this works. The wind blow the clouds towards the decreasing East Longitude, I know that from the formula from :ref:`Khatuntsev et al. 2013 <Khatuntsev2013>`. When I try to heck the rotation in the VMC images of consecutive days, I think that this is in the direction of increasing LST, so that the wind should blow in the direction of increasing LST .. this would make sense, because the rotation of the planet and the wind are in the same direction. But how to interpret the comment in Figure 3 of :ref:`Akiba et al. 2021 <Akiba2021>`?
-Mysteries to be solved!
+In the caption of Figure 3 of their paper, which also shows temperature cross section of thermal tides as a function LST but in the northern hemisphere only, it is stated that **... the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right**. I am officially confused and I try to figure out how this works. The wind blow the clouds towards the decreasing East Longitude, I know that from the formula from :ref:`Khatuntsev et al. 2013 <Khatuntsev2013>`. When I try to check the rotation using VMC images of consecutive days, I think that this corresponds to the direction of increasing LST, so that the wind should blow in the direction of increasing LST ... this would make sense, because the rotation of the planet and the wind are in the same direction. 
+In that case how to interpret the comment in Figure 3 of :ref:`Akiba et al. 2021 <Akiba2021>`?
 
 In the script :file:`./scripts/ThermalTideCorrection.dat` I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from table :file:`VMCSelectedImages.dat` and use linear interpolation first in latitude and then in LST of the values in the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` table to estimate the amplitude of the thermal tide for that VeRa sounding location. I write the results in the :file:`ThermalTideCorrection.dat` table file.
 
