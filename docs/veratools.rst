@@ -3,25 +3,8 @@
 VeRaTools
 ====================
 
+Please see `VeRaTools on ReadTheDocs <https://venustools.readthedocs.io/en/latest/veratools.html#>`_ for details and API's of the VeRaTools class.
 
-| :py:meth:`~.readVeRaTAB`
-| :py:meth:`~.getFilteredVeRaProfile`
-| :py:meth:`~.createVeRaProfilesTable`
-| :py:meth:`~.readValuesFromVeRaTable`
-|
-
-
-
-.. automethod:: VeRaTools.VeRaTools.readVeRaTAB
-
-
-.. automethod:: VeRaTools.VeRaTools.getFilteredVeRaProfile
-
-
-.. automethod:: VeRaTools.VeRaTools.createVeRaProfilesTable
-
-
-.. automethod:: VeRaTools.VeRaTools.readValuesFromVeRaTable
 
 
 
