@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workbook &mdash; Venus Research Workbook 0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=2709fde1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="VeRaTools" href="veratools.html" />
+    <link rel="prev" title="Venus Research Workbook at ReadTheDocs" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Venus Research Workbook
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Workbook</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#temperature-vs-uv-brightness">Temperature vs UV-brightness</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vex-vera-data">VEX-VeRa data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#step-01-extract-vera-profiles-information">Step 01 - Extract VeRa-profiles information</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-02-filter-vera-profiles">Step 02 - Filter VeRa profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#vex-vmc-data">VEX-VMC data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#reading-pds3-images-with-python">Reading PDS3 images with Python</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration-of-vmc-images">Calibration of VMC images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-01-select-process-vmc-images">Step 01 - Select &amp; process VMC images</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-02-determine-phase-curve">Step 02 - Determine phase curve</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-03-investigate-correlation">Step 03 - Investigate correlation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-04-thermal-tide-correction">Step 04 - Thermal tide correction</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="veratools.html">VeRaTools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmctools.html">VMCTools</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Venus Research Workbook</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Workbook</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/workbook.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="workbook">
+<h1>Workbook<a class="headerlink" href="#workbook" title="Link to this heading"></a></h1>
+<div class="admonition-abbreviations admonition" id="abbrevations">
+<p class="admonition-title">abbreviations</p>
+<div class="line-block">
+<div class="line"><strong>IDL</strong> - Interactive Data Language</div>
+<div class="line"><strong>LST</strong> - Local Solar Time</div>
+<div class="line"><strong>SPDC</strong> - South Polar Dynamics Campaign</div>
+<div class="line"><strong>VeRa</strong> - VEnus RAdio science</div>
+<div class="line"><strong>VEX</strong> - Venus Express</div>
+<div class="line"><strong>VMC</strong> - Venus Monitoring Camera</div>
+</div>
+</div>
+<div class="admonition-vex-orbit-ids admonition">
+<p class="admonition-title">VEX Orbit IDs</p>
+<p>The information about the orbit IDs per mission section comes from the file
+<code class="file docutils literal notranslate"><span class="pre">SOMEWHEREONYOURCOMPUTER/Data/VEX/VEX-SCIOPS-LI-053_1_1_VEX_Orbit_Date_DOY_Listing_2014Sep15.numbers</span></code>,
+see also the link to <a class="reference external" href="https://www.cosmos.esa.int/web/psa/venus-express">Venus Express at the ESA PSA</a></p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text"><strong>VEX Orbit IDs</strong></span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>mission section</p></th>
+<th class="head"><p>orbit ID range</p></th>
+<th class="head"><p>date range</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Nominal mission</p></td>
+<td><p>0001 - 0547</p></td>
+<td><p>20-04-2006 - 20-10-2007</p></td>
+</tr>
+<tr class="row-odd"><td><p>Extension 1</p></td>
+<td><p>0548 - 1135</p></td>
+<td><p>21-10-2007 - 30-05-2009</p></td>
+</tr>
+<tr class="row-even"><td><p>Extension 2</p></td>
+<td><p>1136 - 1583</p></td>
+<td><p>31-05-2009 - 21-08-2010</p></td>
+</tr>
+<tr class="row-odd"><td><p>Extension 3</p></td>
+<td><p>1584 - 2451</p></td>
+<td><p>22-08-2010 - 05-01-2013</p></td>
+</tr>
+<tr class="row-even"><td><p>Extension 4</p></td>
+<td><p>2452 - 3575</p></td>
+<td><p>06-01-2013 - 31-12-2015</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPDC</p></td>
+<td><p>2775 - 2811</p></td>
+<td><p>25-11-2013 - 31-12-2013</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="temperature-vs-uv-brightness">
+<span id="temperaturevsuvbrightness"></span><h2>Temperature vs UV-brightness<a class="headerlink" href="#temperature-vs-uv-brightness" title="Link to this heading"></a></h2>
+<p>The goal of this project is to investigate whether there is any relation between the atmospheric temperature as measured by means of radio occultation experiments and the UV-brightness as measured from images in the UV.</p>
+<p>I started this project with Colin Wilson at Oxford in 2015. At the time, I wrote all scripts using Interactive Date Language (IDL).
+At this point (2024) I redo the entire analysis, rewriting all code using Python, documenting the process and the code as thoroughly as possible.</p>
+<p>We use Venus Express VeRa and VMC data.</p>
+<section id="vex-vera-data">
+<span id="vexveradata"></span><h3>VEX-VeRa data<a class="headerlink" href="#vex-vera-data" title="Link to this heading"></a></h3>
+<p>Files are found in <code class="file docutils literal notranslate"><span class="pre">VeRa</span></code>.</p>
+<section id="step-01-extract-vera-profiles-information">
+<span id="verastep01"></span><h4>Step 01 - Extract VeRa-profiles information<a class="headerlink" href="#step-01-extract-vera-profiles-information" title="Link to this heading"></a></h4>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VeRa/Step01</span></code></div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRa_LocalSolarTime_CreateTable.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaProfiles_Lon-Lat_LST-Lat_Figure.py</span></code></div>
+<div class="line">files:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat</span></code></div>
+</div>
+</div>
+<p>Using the <code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_CreateTable.py</span></code> script, I create two tables that list the <strong>orbit ID, Day Of Year, time of observation, Local Solar Time, latitude, longitude</strong> and <strong>solar zenith angle</strong> at the one bar level for each of the VeRa soundings used in this project.</p>
+<p>The table <code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat</span></code> contains this information for all the selected profiles from the <strong>SPDC</strong> (orbits 2775 - 2811).
+The table <code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat</span></code> contains this information for all the selected profiles from the mission before the <strong>SPDC</strong>. (first orbit 0260, last orbit 2638 to be included).</p>
+<p>With the <code class="file docutils literal notranslate"><span class="pre">VeRaProfiles_Lon-Lat_LST-Lat_Figure.py</span></code> I create two plots, showing the distribution of the VeRa sounding locations on the Venus disk and as a function of  <em>LST</em>:</p>
+<a class="reference internal image-reference" href="_images/VeRaProfiles_Lon-Lat_Figure.png"><img alt="_images/VeRaProfiles_Lon-Lat_Figure.png" src="_images/VeRaProfiles_Lon-Lat_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
+<a class="reference internal image-reference" href="_images/VeRaProfiles_LocalSolarTime-Lat_Figure.png"><img alt="_images/VeRaProfiles_LocalSolarTime-Lat_Figure.png" src="_images/VeRaProfiles_LocalSolarTime-Lat_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
+</section>
+<section id="step-02-filter-vera-profiles">
+<span id="verastep02"></span><h4>Step 02 - Filter VeRa profiles<a class="headerlink" href="#step-02-filter-vera-profiles" title="Link to this heading"></a></h4>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VeRa/Step02</span></code></div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfiles_CreateNumpyArray.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py</span></code></div>
+<div class="line">files:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSelectedProfiles.profiles</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSouthPolarDynamicsCampaignProfiles.profiles</span></code></div>
+</div>
+</div>
+<p>We believe that a vertical resolution of 1km for the temperature profiles is sufficient for our purposes.
+Depending of the altitude of sounding, the VeRa profiles have a higher vertical resolution than 1km.
+Hence we use this to create <strong>averaged</strong> profiles.</p>
+<p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">getFilteredVeRaProfile()</span></code> method is designed to create a filtered profile from an original VeRa profile.
+I use the default settings to calculate profiles between 6098km and 6154km (56 levels) at a 1km vertical resolution.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.</p>
+</div>
+<p>In order to make it easier to access all the filtered profiles at once, without the need to recalculate each one of them,
+I use the <code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfiles_CreateNumpyArray.py</span></code> script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files:</p>
+<div class="line-block">
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSelectedProfiles.profiles</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSouthPoleProfiles.profiles</span></code></div>
+</div>
+<p>The Python dictionary has the following structure:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s1">&#39;OrbitID&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;ProfileID&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;LatitudeOneBar&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;LongitudeOneBar&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;DayOfYear&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;TimeOfDay&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;LocalSolarTime&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;FilteredProfiles&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;NumberOfFilteredLevels&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;OriginalProfiles&#39;</span> <span class="p">:</span> <span class="p">[],</span>
+  <span class="s1">&#39;NumberOfOriginalLevels&#39;</span> <span class="p">:</span> <span class="p">[]</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Each key in the dictionary corresponds to a list of the elements indicated by the key.
+The length of each list for each key is of course the same and all elements at the same index in the lists correspond to each other.</p>
+<p>The NumPy files can be read with:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">profiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span> <span class="p">(</span><span class="s1">&#39;VeRaSouthPolarDynamicsCampaignProfiles.profiles&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span> <span class="p">()</span>
+</pre></div>
+</div>
+<p>As an example, I create two plots (T-z and dT/dZ - z) to show the results for one profile (<code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py</span></code>):</p>
+<a class="reference internal image-reference" href="_images/VeRaProfiles_Orb2811_T-z_Figure.png"><img alt="_images/VeRaProfiles_Orb2811_T-z_Figure.png" src="_images/VeRaProfiles_Orb2811_T-z_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
+<a class="reference internal image-reference" href="_images/VeRaProfiles_Orb2811_dTdz-z_Figure.png"><img alt="_images/VeRaProfiles_Orb2811_dTdz-z_Figure.png" src="_images/VeRaProfiles_Orb2811_dTdz-z_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
+</section>
+</section>
+<section id="vex-vmc-data">
+<span id="vexvmcdata"></span><h3>VEX-VMC data<a class="headerlink" href="#vex-vmc-data" title="Link to this heading"></a></h3>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/</span></code></div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/workingWithPlanetaryImages.py</span></code></div>
+<div class="line">files:</div>
+</div>
+</div>
+<section id="reading-pds3-images-with-python">
+<span id="readingvmcimagespython"></span><h4>Reading PDS3 images with Python<a class="headerlink" href="#reading-pds3-images-with-python" title="Link to this heading"></a></h4>
+<p>The VMC PDS files are in <strong>PDS3</strong> format.
+A search for a Python module to read these files leads to <a class="reference external" href="https://planetaryimage.readthedocs.io/en/latest/index.html">planetaryimage</a>.
+It is older software, I see that the latest update recorded on the website is from 26 March 2016 (20160326), but for my purposes it is exactly what I need.
+After all, the PDS files are from that same time period. I install the module with:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install planetaryimage</span>
+</pre></div>
+</div>
+<p>I also retrieve the source code from Github and park it in <code class="file docutils literal notranslate"><span class="pre">VMC/planetaryimage-master</span></code>. I compile the <a class="reference external" href="file:VMC/planetaryimage-master/docs-html/index.html">documentation locally</a>.</p>
+<p>I try it out with the Python script <code class="file docutils literal notranslate"><span class="pre">./scripts/workingWithPlanetaryImages.py</span></code>:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">planetaryimage</span> <span class="kn">import</span> <span class="n">PDS3Image</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">VMCimage</span> <span class="o">=</span> <span class="n">PDS3Image</span><span class="o">.</span><span class="n">open</span> <span class="p">(</span><span class="s1">&#39;/Users/maarten/Science/Venus/Data/VEX/VMC/Orb0085/V0085_0000_UV2.IMG&#39;</span><span class="p">)</span>
+<span class="n">VMCimageGEO</span> <span class="o">=</span> <span class="n">PDS3Image</span><span class="o">.</span><span class="n">open</span> <span class="p">(</span><span class="s1">&#39;/Users/maarten/Science/Venus/Data/VEX/VMC/Orb0085/V0085_0000_UV2.GEO&#39;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">clf</span> <span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span> <span class="p">(</span><span class="s1">&#39;.../Temperature-UVBrightness-Project/VMC/Orb0085/V0085_0000_UV2.IMG&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span> <span class="p">(</span><span class="n">VMCimage</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span> <span class="p">(</span><span class="s1">&#39;V0085_0000_UV2.png&#39;</span><span class="p">)</span>
+
+<span class="c1"># datetime object</span>
+<span class="nb">print</span> <span class="p">(</span> <span class="s2">&quot;VMCimageGEO.label [&#39;START_TIME&#39;]&quot;</span><span class="p">,</span> <span class="n">VMCimageGEO</span><span class="o">.</span><span class="n">label</span> <span class="p">[</span><span class="s1">&#39;START_TIME&#39;</span><span class="p">]</span> <span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span> <span class="s1">&#39;day = </span><span class="si">{}</span><span class="s1">, hour = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">VMCimageGEO</span><span class="o">.</span><span class="n">label</span> <span class="p">[</span><span class="s1">&#39;START_TIME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">VMCimageGEO</span><span class="o">.</span><span class="n">label</span> <span class="p">[</span><span class="s1">&#39;START_TIME&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">hour</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">clf</span> <span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span> <span class="p">(</span><span class="s1">&#39;latitude plane index [3]&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span> <span class="p">(</span><span class="n">VMCimageGEO</span><span class="o">.</span><span class="n">data</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">90</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span> <span class="p">(</span><span class="s1">&#39;V0085_0000_UV2_latitude.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Execution leads to:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">run</span> <span class="n">workingWithPlanetaryImages</span><span class="o">.</span><span class="n">py</span>
+<span class="n">VMCimageGEO</span><span class="o">.</span><span class="n">label</span> <span class="p">[</span><span class="s1">&#39;START_TIME&#39;</span><span class="p">]</span> <span class="mi">2006</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">14</span> <span class="mi">16</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">31</span><span class="o">+</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span>
+<span class="n">day</span> <span class="o">=</span> <span class="mi">14</span><span class="p">,</span> <span class="n">hour</span> <span class="o">=</span> <span class="mi">16</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/V0260_0008_UV2.png"><img alt="_images/V0260_0008_UV2.png" src="_images/V0260_0008_UV2.png" style="width: 448.0px; height: 336.0px;" /></a>
+<a class="reference internal image-reference" href="_images/V0260_0008_UV2_latitude.png"><img alt="_images/V0260_0008_UV2_latitude.png" src="_images/V0260_0008_UV2_latitude.png" style="width: 448.0px; height: 336.0px;" /></a>
+</section>
+<section id="calibration-of-vmc-images">
+<span id="calibratingvmcimages"></span><h4>Calibration of VMC images<a class="headerlink" href="#calibration-of-vmc-images" title="Link to this heading"></a></h4>
+<p>The calibrated radiance factor <span class="math notranslate nohighlight">\(RF_{x,y}\)</span> for a valid (= on Venus disk) pixel <span class="math notranslate nohighlight">\((x,y)\)</span> in a VMC image is:</p>
+<div class="math notranslate nohighlight">
+\[RF_{x,y} = \pi \beta R_{observed - x,y} \frac {d_{Venus}}{S_{Sun}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the calibration correction factor (see <a class="reference internal" href="#shalygina2015"><span class="std std-ref">Shalygina  et al. 2015</span></a>, their Table 1), <span class="math notranslate nohighlight">\(R_{observed - x,y}\)</span> is the value at the pixel in ADU times the radiance scaling factor read from the VMC image header (<code class="code docutils literal notranslate"><span class="pre">VMCImage.label</span> <span class="pre">['RADIANCE_SCALING_FACTOR'].value</span></code>, when read with <a class="reference external" href="https://planetaryimage.readthedocs.io/en/latest/index.html">planetaryimage module</a> in Python) in <span class="math notranslate nohighlight">\(W/m^2/\mu m/ster/ADU\)</span>, <span class="math notranslate nohighlight">\(d_{Venus}\)</span> is the distance of Venus to the Sun in AU and <span class="math notranslate nohighlight">\(S_{Sun}\)</span> the solar flux in <span class="math notranslate nohighlight">\(W/m^2/\mu m\)</span> at 1AU (see <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. 2015</span></a> their Equation 2).</p>
+<p>For <span class="math notranslate nohighlight">\(S_{Sun}\)</span> (from <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. 2015</span></a> their Equation 1):</p>
+<div class="math notranslate nohighlight">
+\[S_{Sun} = \frac {\int S_{irradiance}(\lambda) T(\lambda) d\lambda}{\int T (\lambda) d\lambda}\]</div>
+<p>I determined the <span class="math notranslate nohighlight">\(S_{irradiance}\)</span> using the <a class="reference external" href="https://www.nrel.gov/grid/solar-resource/spectra.html">Solar Spectra website</a> and the transmission function of the UV filter of the VMC camera (<a class="reference internal" href="#markiewicz2007"><span class="std std-ref">Markiewicz et al. 2007</span></a> their Figure 3):</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/Markiewicz_2007_Figure3.png"><img alt="_images/Markiewicz_2007_Figure3.png" src="_images/Markiewicz_2007_Figure3.png" style="width: 974.0px; height: 496.0px;" /></a>
+</figure>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="_images/Markiewicz_2007_Figure3_UV.jpg"><img alt="_images/Markiewicz_2007_Figure3_UV.jpg" src="_images/Markiewicz_2007_Figure3_UV.jpg" style="width: 262.5px; height: 396.8px;" /></a>
+<figcaption>
+<p><span class="caption-text">My parametrisation of the UV part of Figure 3 from <a class="reference internal" href="#markiewicz2007"><span class="std std-ref">Markiewicz et al. 2007</span></a></span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>This results is <span class="math notranslate nohighlight">\(S_{Sun} = 1081 W/m^2/\mu m\)</span>.</p>
+<p>The value of <span class="math notranslate nohighlight">\(d_{Venus} = 0.723AU\)</span> to within 1% in <span class="math notranslate nohighlight">\(d_{Venus}^2\)</span> over the orbit of Venus. I therefore consider this value a contant.</p>
+</section>
+<section id="step-01-select-process-vmc-images">
+<span id="vmcstep01"></span><h4>Step 01 - Select &amp; process VMC images<a class="headerlink" href="#step-01-select-process-vmc-images" title="Link to this heading"></a></h4>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step01</span></code></div>
+</div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VMCImagesEvaluate.py</span></code></div>
+<div class="line">files:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.iValidPoints</span></code></div>
+</div>
+</div>
+<p>I have carefully looked at the process I developed and followed in 2015 using IDL-scripts.
+Here I redo everything with Python.</p>
+<p>The first step is to select all the VMC images that are useful for the analysis.
+The criterium is that at the time the VMC image was taken, the wind advected area where the VeRa sounding was acquired on the same orbit is on the visible part of the Venus disk, <em>i.e.</em> I take pixels with a solar incidence angle &lt; 89˚.
+The correction for wind advection is calculated by taking the average wind speed at the latitude of the VeRa sounding (at 70km altitude) times the time span between the VMC and the VeRa observation. Both zonal and meridional winds are taken into account. For this I parametrise the winds profile:</p>
+<div class="admonition-parametrisation-of-the-zonal-and-meridional-wind admonition">
+<p class="admonition-title">Parametrisation of the zonal and meridional wind.</p>
+<p><a class="reference internal" href="#khatuntsev2013"><span class="std std-ref">Khatuntsev et al. (2013)</span></a> report on the zonal and meridional wind profiles measured from VEX orbits up to 2299 (10-year period).
+They present the result in their figures 10(a) and (b): <em>Mean zonal (a) and meridional (b) profiles of the wind speed derived over the period of 10 venusian years by manual cloud tracking. Error bars correspond to 99.9999% 5σ-x confidence interval based on the standard deviation of the weighted mean. Standard deviations are presented by shadowed areas.</em></p>
+<p>They present the formulae (their Equations (1) and (2)) with which the winds have been calculated by comparing two images:</p>
+<div class="math notranslate nohighlight">
+\[U = \frac {(\lambda_2 - \lambda_1) (R+h) cos (\theta)}{\Delta t}\]</div>
+<div class="math notranslate nohighlight">
+\[V = \frac {(\theta_2 - \theta_1) (R + h)}{\Delta t}\]</div>
+<p>where the indices <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(2\)</span> refer to the first and second image, <span class="math notranslate nohighlight">\(\lambda\)</span> is the longitude and <span class="math notranslate nohighlight">\(\theta\)</span> the latitude. Since <span class="math notranslate nohighlight">\(U\)</span> is negative (see table below), it means the wind blows the clouds in the direction of smaller Venus longitudes.</p>
+<p>From my (physical) notebook entry on 19-03-2015: the average zonal wind is determined from figure 10a in <a class="reference internal" href="#khatuntsev2013"><span class="std std-ref">Khatuntsev et al. (2013)</span></a>
+and can be parametrised as (<span class="math notranslate nohighlight">\(U\)</span> in units of m/s):</p>
+<table class="docutils align-default" id="id4">
+<caption><span class="caption-text"><strong>Parametrised average zonal wind</strong></span><a class="headerlink" href="#id4" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Latitude range (˚)</p></th>
+<th class="head"><p>wind parametrisation (m/s)</p></th>
+<th class="head"><p>notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>(-75˚, -50˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(U({\theta})\)</span> =  -94   + (<span class="math notranslate nohighlight">\({\theta}\)</span> + 50) * (65.6/-25)</p></td>
+<td><p>also use for latitudes down to -90˚.</p></td>
+</tr>
+<tr class="row-odd"><td><p>(-50˚, -40˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(U({\theta})\)</span> = -101.5 + (<span class="math notranslate nohighlight">\({\theta}\)</span> + 40) * (7.5/-10)</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>(-40˚, -15˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(U({\theta})\)</span> =  -93 + (<span class="math notranslate nohighlight">\({\theta}\)</span> + 15) * (-8.5/-35)</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>(-15˚, 0˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(v{\theta})\)</span> = -93</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<figure class="align-default" id="id5">
+<a class="reference internal image-reference" href="_images/Khatuntsev_2013_Figure10a_ZonalWind.jpg"><img alt="_images/Khatuntsev_2013_Figure10a_ZonalWind.jpg" src="_images/Khatuntsev_2013_Figure10a_ZonalWind.jpg" style="width: 160.60000000000002px; height: 123.80000000000001px;" /></a>
+<figcaption>
+<p><span class="caption-text">Khatuntsev et al. (2013) Figure 10a. Zonal wind parametrisation.</span><a class="headerlink" href="#id5" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>From my (physical) notebook entry on 24-04-2015: the average meridional wind is determined from figure 10b in <a class="reference internal" href="#khatuntsev2013"><span class="std std-ref">Khatuntsev et al. (2013)</span></a>
+and can be parametrised as (<span class="math notranslate nohighlight">\(V\)</span> in units of m/s):</p>
+<table class="docutils align-default" id="id6">
+<caption><span class="caption-text"><strong>Parametrised average meridional wind</strong></span><a class="headerlink" href="#id6" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Latitude range (˚)</p></th>
+<th class="head"><p>wind parametrisation (m/s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>(-90˚, -75˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(V({\theta})\)</span>) =  0</p></td>
+</tr>
+<tr class="row-odd"><td><p>(-75˚, -50˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(V({\theta})\)</span>) = -9.58 + ( <span class="math notranslate nohighlight">\({\theta}\)</span> + 50 ) * (9.38/-25)</p></td>
+</tr>
+<tr class="row-even"><td><p>(-50˚, -20˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(V({\theta})\)</span>) = -6.5  + ( <span class="math notranslate nohighlight">\({\theta}\)</span> + 20 ) * (-3.08/-30)</p></td>
+</tr>
+<tr class="row-odd"><td><p>(-20˚, 0˚]</p></td>
+<td><p><span class="math notranslate nohighlight">\(V({\theta})\)</span>) = -3.26 + ( <span class="math notranslate nohighlight">\({\theta}\)</span> + 0 )   * (-3.24/-20)</p></td>
+</tr>
+</tbody>
+</table>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="_images/Khatuntsev_2013_Figure10b_MeridionalWind.jpg"><img alt="_images/Khatuntsev_2013_Figure10b_MeridionalWind.jpg" src="_images/Khatuntsev_2013_Figure10b_MeridionalWind.jpg" style="width: 175.70000000000002px; height: 118.9px;" /></a>
+<figcaption>
+<p><span class="caption-text">Khatuntsev et al. (2013) Figure 10b. Meridional wind parametrisation.</span><a class="headerlink" href="#id7" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</div>
+<p>The latitude and longitude of the VeRa sounding, which is the starting location for the calculation of the corresponding area in the VMC images, is taken at the cloud top level at 70km altitude and is extracted from the average VeRa profiles as described in <a class="reference internal" href="#verastep02"><span class="std std-ref">Step 2</span></a> of the <a class="reference internal" href="#vexveradata"><span class="std std-ref">VEX-VeRa Data</span></a> section.</p>
+<p>For the standard deviation of the wind speeds I estimate 20m/s for the zonal wind and 12m/s for the meridional winds, based on the gray areas of the figures 10a and 10b in <a class="reference internal" href="#khatuntsev2013"><span class="std std-ref">Khatuntsev et al. (2013)</span></a>.</p>
+<figure class="align-default" id="id8">
+<a class="reference internal image-reference" href="_images/Khatuntsev_2013_Figure10a-b.png"><img alt="_images/Khatuntsev_2013_Figure10a-b.png" src="_images/Khatuntsev_2013_Figure10a-b.png" style="width: 402.8px; height: 159.60000000000002px;" /></a>
+<figcaption>
+<p><span class="caption-text">Khatuntsev et al. (2013) Figure 10, the standard deviation is defined by the gray areas.</span><a class="headerlink" href="#id8" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>These uncertainties determine the size of the area, the <em>latitude-longitude-box</em>, around the VeRa sounding location at the time of the VMC image observation: the corners of the box are calculated by taking the zonal and meridional wind speeds plus or minus their standard deviations, and calculate where the VeRa location would be advected to in those cases over the time difference between the VMC image and the VeRa acquisition. The larger the time span, the larger the uncertainty and thus the <em>latitude-longitude-box</em>.</p>
+<p>I create the method <code class="xref py py-meth docutils literal notranslate"><span class="pre">getWindAdvectedBox()</span></code> to calculate this <em>latitude-longitude-box</em> for a given VMC image.
+This method is called in the script <code class="file docutils literal notranslate"><span class="pre">./scripts/VMCImagesEvaluate.py</span></code>.</p>
+<p>Running this scripts has two iterations. During the first iteration, I create to process all the images and create plots of each image with the position of the VeRa sounding indicated with a <strong>X</strong> and a box indicating the wind advected area of that location at the time of the VMC image in question.
+These plots are saved in the subfolder <code class="file docutils literal notranslate"><span class="pre">Images</span></code> created inside the directories of the orbits containing the .GEO and .IMG files, for example <code class="file docutils literal notranslate"><span class="pre">/Users/maarten/Science/Venus/Temperature-UV_Analysis_2024/Data/VEX/VMC/Orb2811/Images</span></code>.</p>
+<p>I manually evaluate each image plot and select the ones that have the advected box fully on the visible disk of Venus as mentioned above, and copy these plots to the <code class="file docutils literal notranslate"><span class="pre">UsedImages</span></code> subfolder that I manually create in each orbit directory, for example
+<code class="file docutils literal notranslate"><span class="pre">/Users/maarten/Science/Venus/Temperature-UV_Analysis_2024/Data/VEX/VMC/Orb2811/UsedImages</span></code>.</p>
+<p>I now run the <code class="file docutils literal notranslate"><span class="pre">./scripts/VMCImagesEvaluate.py</span></code> script a second time to process the selected images and write the results to the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table file. The header and first few lines of which are of this file are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>File: VMCSelectedImages.dat
+ Created at 2024-05-21 at 16:48:01
+
+ Target altitude (cloud tops) = 70km (Lat_VeRa, Lon_VeRa, T, dT)
+ Standard deviation zonal wind = 20m/s
+ Standard deviation meridional wind = 12m/s
+
+ # point in box are all the points in the latitude-longitude box on the Venus disk
+ Radiance factor is the average of the points in the latitude-longitude box with values &gt; 0 and incidence angles &lt; 89˚
+ dRadiance factor is the standard deviation of the radiance factor
+
+ 73 orbits with a total of 1374 images
+
+ Orbit       Image          DOY      VeRa Time    VMC Time   Time diff  Lat_VeRa   Lon_VeRa   lat_centre_VMC   Lat_range_VMC   Lon_centre_VMC   Lon_range_VMC       #Points in box   Radiance factor  dRadiance factor     T       dT     Local Solar Time
+                         yyyy-mm-dd     (h)         (h)         (h)       (˚)        (˚)            (˚)             (˚)              (˚)             (˚)                                                                  (K)      (K)          (h)
+C_END
+ 0260   V0260_0038_UV2   2007-01-06     8.48        4.98       -3.49    -60.30     242.65         -59.63      -61.04  -58.22       258.56       253.81  263.31             71              1.096            0.141        229.24    0.761        7.61
+ 0260   V0260_0047_UV2   2007-01-06     8.48       18.65       10.17    -60.30     242.65         -62.26      -66.37  -58.15       196.31       182.48  210.15            516              1.037            0.028        229.24    0.761        7.61
+ ....
+ ....
+ 2811   V2811_0084_UV2   2013-12-31     7.96        8.65        0.69    -58.03      62.02         -58.19      -58.47  -57.91        58.80        57.91   59.68              7              0.874            0.030        227.96    0.680       16.07
+ 2811   V2811_0088_UV2   2013-12-31     7.96        8.98        1.03    -58.03      62.02         -58.26      -58.68  -57.84        57.25        55.94   58.56             13              0.800            0.029        227.96    0.680       16.07
+</pre></div>
+</div>
+<p>Running this script during the second iteration I also create a NumPy file called <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.iValidPoints</span></code>. To read this file:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="n">iValidPointsDictionary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span> <span class="p">(</span><span class="s1">&#39;VMCSelectedImages.iValidPoints&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span> <span class="p">()</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">iValidPointsDictionary</span><span class="o">.</span><span class="n">key</span> <span class="p">()</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">dict_keys</span><span class="p">([</span><span class="s1">&#39;Image File Name&#39;</span><span class="p">,</span> <span class="s1">&#39;Indices Valid Points&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>where the <code class="code docutils literal notranslate"><span class="pre">iValidPointsDictionary</span> <span class="pre">['Image</span> <span class="pre">File</span> <span class="pre">Name']</span></code> is the list of all the included file names, and the <code class="code docutils literal notranslate"><span class="pre">iValidPointsDictionary</span> <span class="pre">['Indices</span> <span class="pre">Valid</span> <span class="pre">Points']</span></code> is the list of lists of indices of the points in the flattened VMC image arrays that are in latitude-longitude boxes.
+In this way, I do not need to recalculate these if I need them at some later stage.</p>
+<p>Some examples of a some of the selected images for orbit 2811 (South Polar Dynamics Campaign). The <strong>X</strong> indicates the coordinates of the VeRa-observation, and the light gray boxes are the latitude-longitude wind advected areas that correspond to the VeRa-location at the time of the VMC-observation.</p>
+<a class="reference internal image-reference" href="_images/V2811_0024_UV2.png"><img alt="_images/V2811_0024_UV2.png" src="_images/V2811_0024_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
+<a class="reference internal image-reference" href="_images/V2811_0040_UV2.png"><img alt="_images/V2811_0040_UV2.png" src="_images/V2811_0040_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
+<a class="reference internal image-reference" href="_images/V2811_0060_UV2.png"><img alt="_images/V2811_0060_UV2.png" src="_images/V2811_0060_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
+<a class="reference internal image-reference" href="_images/V2811_0080_UV2.png"><img alt="_images/V2811_0080_UV2.png" src="_images/V2811_0080_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
+<a class="reference internal image-reference" href="_images/V2811_0084_UV2.png"><img alt="_images/V2811_0084_UV2.png" src="_images/V2811_0084_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
+<a class="reference internal image-reference" href="_images/V2811_0088_UV2.png"><img alt="_images/V2811_0088_UV2.png" src="_images/V2811_0088_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
+<p>The top row is from ingress, the bottom two images are from egress. The time of the egress images is very close to the VeRa-observation, as can be clearly seen by the positions of the <strong>X</strong> and the gray boxes. Note also that the size of the gray boxes is small, because the uncertainty in the latitude and longitude is a function of the time difference between the VeRa and VMC observations.</p>
+</section>
+<section id="step-02-determine-phase-curve">
+<span id="vmcstep02"></span><h4>Step 02 - Determine phase curve<a class="headerlink" href="#step-02-determine-phase-curve" title="Link to this heading"></a></h4>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step02</span></code></div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreatePhaseAngleCurveTable.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code></div>
+<div class="line">files:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseAngleCurve.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit.dat</span></code></div>
+</div>
+</div>
+<p>In this step, I construct the phase curve.
+The 1374 selected images from 73 orbits cover a phase angle range between 27˚ and 140˚.
+These images have been selected during <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a> above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file”<cite>UsedImages</cite> subfolders for each orbit.</p>
+<p>For each selected image, I use all the pixels on the visible disk and take the average and the median values.
+By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
+In order to avoid the effect of these outliers, I apply an iterative averaging process:</p>
+<ul class="simple">
+<li><p>Step 1: calculate the average;</p></li>
+<li><p>Step 2: check if the current average value is different by more than a given <strong>percentage</strong> (set by the user) from the one from the previous iteration;</p></li>
+<li><p>Step 3a: if yes, then remove all the points outside <strong>n</strong> times the standard deviation (<strong>sd</strong>), where <strong>n</strong> is given by the user and return to Step 1;</p></li>
+<li><p>Step 3b: if no, then finish.</p></li>
+</ul>
+<p>I try some values and find that <strong>n</strong> <sub>sd</sub> <strong>= 3</strong> and <strong>percentage = 1%</strong> gives good results.
+Here is an example of a sequence of iterations.</p>
+<figure class="align-default" id="id9">
+<a class="reference internal image-reference" href="_images/V0260_0047_UV2_iteration_QQ_Histogram.png"><img alt="_images/V0260_0047_UV2_iteration_QQ_Histogram.png" src="_images/V0260_0047_UV2_iteration_QQ_Histogram.png" style="width: 325.0px; height: 375.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Iterative progression of histogram and QQ plot for image V0260_0047, with <strong>n</strong> <sub>sd</sub> <strong>= 3</strong> and <strong>percentage = 1%</strong>.</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>With the script <code class="file docutils literal notranslate"><span class="pre">./CreatePhaseAngleCurveTable.py</span></code> I process all the images and export the results to the <code class="file docutils literal notranslate"><span class="pre">PhaseAngleCurve.dat</span></code> table file.</p>
+<p>I now look at how to best construct and fit the phase curve to a quadratic polinomial with NumPy’s <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.polynomial.polynomial.Polynomial.fit.html">np.polynomial.polynomial.Polynomial.fit ()</a> function.
+I create the script <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code>.
+At first I use <strong>all the data points</strong> as they are and get the following result:</p>
+<a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles.png"><img alt="_images/PhaseCurve_allPhaseAngles.png" src="_images/PhaseCurve_allPhaseAngles.png" style="width: 460.79999999999995px; height: 345.59999999999997px;" /></a>
+<a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles_detail.png"><img alt="_images/PhaseCurve_allPhaseAngles_detail.png" src="_images/PhaseCurve_allPhaseAngles_detail.png" style="width: 453.0px; height: 348.0px;" /></a>
+<p>The fit to the quadratic model is clearly off, the <span class="math notranslate nohighlight">\(r^2\)</span> value is low.</p>
+<p>It is clear the Nominal (green) and Extension 1 (blue) mission sections are quite different than the rest. In the detailed plot on the right, there seems to be quite a lot of <em>regularity</em> in the Nominal and Extension 1 data, which I find somewhat suspicious.
+Could this be related to calibration issues? When inspecting more closely the values of the Radiance Scaling Factors in <code class="file docutils literal notranslate"><span class="pre">PhaseAngleCurve.dat</span></code> around phase angles of 90˚, I find a number of instances where in the same orbit (consecutive) images have different calibration factors. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   Image          phase angle   Average RF  dAverage RF     Q1 RF  Median RF  Q3 RF   # iterations   Radiance Scaling Factor
+                      (˚)                                                                              W/m2/ster/micron/DN
+...
+V0268_0032_UV2       89.47         0.896      0.1717        0.747    0.904    1.022        2               0.04643
+...
+V0268_0031_UV2       89.50         0.904      0.1805        0.749    0.901    1.042        2               0.07738
+...
+V0268_0030_UV2       89.52         0.895      0.1801        0.743    0.889    1.029        2               0.11607
+...
+</pre></div>
+</div>
+<p>Though looking at the resulting radiance values, these seem to be consistent among each other, which could mean these images have been recorded in different amplifier modes? I cannot seem to find information about this in the header or other metadata with the image.</p>
+<p>When I ignore different part of data, the phase curve becomes more convincing:</p>
+<a class="reference internal image-reference" href="_images/PhaseCurveExtension1-4+SPDC_allPhaseAngles.png"><img alt="_images/PhaseCurveExtension1-4%2BSPDC_allPhaseAngles.png" src="_images/PhaseCurveExtension1-4%2BSPDC_allPhaseAngles.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/PhaseCurveExtension2-4+SPDC_allPhaseAngles.png"><img alt="_images/PhaseCurveExtension2-4%2BSPDC_allPhaseAngles.png" src="_images/PhaseCurveExtension2-4%2BSPDC_allPhaseAngles.png" style="width: 480.0px; height: 360.0px;" /></a>
+<p>Finally, discarding the data from the highest phase angles (&gt;=130˚) also seems to help:</p>
+<figure class="align-default" id="id10">
+<a class="reference internal image-reference" href="_images/PhaseCurveExtension2-4+SPDC_PhaseAngleLT130dgr.png"><img alt="_images/PhaseCurveExtension2-4%2BSPDC_PhaseAngleLT130dgr.png" src="_images/PhaseCurveExtension2-4%2BSPDC_PhaseAngleLT130dgr.png" style="width: 640.0px; height: 480.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Ignore data from the Nominal and Extension 1 mission section and phase angles &gt;= 130˚.</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>To further improve the phase curve, I decide not to use the data as is, but rather to bin it in phase angle bins of 1˚ wide, and take the average value within each bin.
+I get the following sequence of results (same as above, first all the data, second ignore Nominal mission section, third ignore Nominal and Extension 1 mission sections):</p>
+<a class="reference internal image-reference" href="_images/PhaseCurveBinned_allPhaseAngles.png" id="orbitimagesexample"><img alt="_images/PhaseCurveBinned_allPhaseAngles.png" id="orbitimagesexample" src="_images/PhaseCurveBinned_allPhaseAngles.png" style="width: 320.0px; height: 240.0px;" /></a>
+<a class="reference internal image-reference" href="_images/PhaseCurveBinnedExtension1-4+SPDC_allPhaseAngles.png"><img alt="_images/PhaseCurveBinnedExtension1-4%2BSPDC_allPhaseAngles.png" src="_images/PhaseCurveBinnedExtension1-4%2BSPDC_allPhaseAngles.png" style="width: 320.0px; height: 240.0px;" /></a>
+<a class="reference internal image-reference" href="_images/PhaseCurveBinnedExtension2-4+SPDC_allPhaseAngles.png"><img alt="_images/PhaseCurveBinnedExtension2-4%2BSPDC_allPhaseAngles.png" src="_images/PhaseCurveBinnedExtension2-4%2BSPDC_allPhaseAngles.png" style="width: 320.0px; height: 240.0px;" /></a>
+<p>Finally:</p>
+<figure class="align-default" id="id11">
+<img alt="_images/PhaseCurveBinnedExtension2-4%2BSPDC_PhaseAngleLT130dgr.png" src="_images/PhaseCurveBinnedExtension2-4%2BSPDC_PhaseAngleLT130dgr.png" />
+<figcaption>
+<p><span class="caption-text">Ignore data from the Nominal and Extension 1 mission section and phase angles &gt;= 130˚ - binned.</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The grey area is calculated by varying the value in each bin, by adding a random value to the binned value.
+This random value is normally distributed around the average (the value in the bin).
+The standard deviation I took as the maximum of the standard deviation as calculated from the individual values that make up the average value in the bin, and the uncertainty as be assessed through equation 3.14 of <a class="reference internal" href="#bevington2003"><span class="std std-ref">Bevington and Robinson (2003)</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_v^2 = \sum \sigma_{x_i}^2    \frac{\partial v}{\partial x_i}^2\]</div>
+<p>with <span class="math notranslate nohighlight">\(v\)</span> being the average value of <span class="math notranslate nohighlight">\((x_1, x_2, ..., x_N)\)</span>, the individual values in the bin, hence <span class="math notranslate nohighlight">\(v = \sum x_i / N\)</span>, and thus:</p>
+<div class="math notranslate nohighlight" id="uncertaintyinaverage">
+\[\sigma_v^2 = \sum  \sigma_{xi}^2 / N^2\]</div>
+<p>I run this test 1000 times, and for each set of new binned values I recalculate the fit and plot it in light transparent grey. These are the grey areas in the plots, around the fitted phase curves.
+I also keep the values for all these tests to estimate the uncertainties in the fitted phase curve. There are possibly two ways to determine this uncertainty. One would be to calculate the standard deviation of the radiance factors of the 1000 experiments for each phase angle bin, the other to simply take the difference between the maximum and the minimum value of the 1000 experiments for each phase angle bin.
+Also, the average value of the 1000 experiments for each phase angle bin should be the same, to within great precision, as the model fit. I verify that this is true to the level of a 0.05% (<span class="math notranslate nohighlight">\(100 * (RF_{model} - RF_{average}) / RF_{model}\)</span>).</p>
+<p>Using the <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit.dat</span></code> table file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> File: PhaseCurveFit.dat
+ Created at 2024-05-25 at 22:19:37
+
+  RF (pa)= 0.000174 * pa^2 + -0.0216 * pa +   1.174  |  r^2 = 0.956 (pa = phase angle in ˚)
+
+ RF (Fit) = Radiance Factor as fit with the quadratic model above
+ RF (Average) = average Radiance Factor from 1000 gaussian noise experiments
+ dRF = standard deviation of the Radiance Factor from 1000 gaussian noise experiments
+ MaxMin RF = maximum - minimum of the Radiance Factor from 1000 gaussian noise experiments
+
+   phase angle   RF (Fit)  RF (Average)   dRF     MaxMin RF
+       (˚)
+C_END
+      27.0        0.719       0.720      0.0349    0.2138
+      28.0        0.707       0.708      0.0336    0.2061
+      29.0        0.695       0.696      0.0323    0.1987
+      ...
+      ...
+     127.0        1.237       1.237      0.0357    0.2289
+     128.0        1.260       1.260      0.0372    0.2386
+     129.0        1.283       1.283      0.0389    0.2486
+</pre></div>
+</div>
+</section>
+<section id="step-03-investigate-correlation">
+<span id="vmcstep03"></span><h4>Step 03 - Investigate correlation<a class="headerlink" href="#step-03-investigate-correlation" title="Link to this heading"></a></h4>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step03</span></code></div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code></div>
+<div class="line">files:</div>
+</div>
+</div>
+<p>It is now the moment to analyse any correlation between the VeRa-derived temperatures at 70km altitude and the VMC-derived UV-brightness in the same area.</p>
+<p>For this part, as for the determination of the phase curve in the previous step, I ignore the selected images from the nominal and the extension 1 sections.
+The first orbit in my data set is <code class="file docutils literal notranslate"><span class="pre">Orb1188</span></code> from extension 2.</p>
+<p>The table file <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> contains the average radiance factors inside the latitude-longitude-boxes corresponding to the VeRa-sounding at the time of the image, as well as the phase angle at the time of observation and the VeRa-derived temperature at 70km altitude.
+Note that for the South Polar Dynamics Campaign, there are images on both the ingress and egress sections of the orbit, before and after the VeRa sounding.
+See also the <a class="reference internal" href="#orbitimagesexample"><span class="std std-ref">examples for orbit 2811</span></a> in <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a>.</p>
+<p>In order to compare the radiance factors between images at different phase angles, they have to be corrected or normalised for the phase angle dependency using the phase curve.
+To do this, I normalise the radiance factors to the radiance factor of the phase curve at the same phase angle.
+I call this variable the Radiance Factor Ratio (<span class="math notranslate nohighlight">\(RFR\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[RFR = \frac {RF_{measured} (\phi)}{RF_{phase curve} (\phi)}\]</div>
+<p>The uncertainty in <span class="math notranslate nohighlight">\(RFR\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[\sigma_{RFR}^2 = (\frac {\sigma_{RF-measured}}{RF_{phase curve}})^2 +  (\frac {\sigma_{RF-phase curve} RF_{measured}}{RF_{phase curve}^2})^2\]</div>
+<p>I create the script <code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code> to extract the information from the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> and the <code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit.dat</span></code> and calculate the RFRs as a function of the VeRa-derived temperatures and fit least square lines.</p>
+<p>First, look at two separate orbits from the South Polar Dynamics Campaign (2811) and extension 3 (1748):</p>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_images_orbit_2811-2811.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_images_orbit_2811-2811.png" src="_images/RadianceFactorRatio_vs_Temperature_images_orbit_2811-2811.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_images_orbit_1748-1748.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_images_orbit_1748-1748.png" src="_images/RadianceFactorRatio_vs_Temperature_images_orbit_1748-1748.png" style="width: 480.0px; height: 360.0px;" /></a>
+<p>There are two groups of points for the orbit 2811, the RFR values for the egress images very close to the actual VeRa observation in time and place are significantly higher: they are at low phases angle and the amount of points in the boxes is low, <em>i.e.</em> the box is very small. Here is print of the values with first the phase angle, next the radiance factor divided by the model phase curve radiance factor, which equals the RFR. The number of points in the latitude-longitude box is the last number:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> 82˚: 0.5710 / 0.5740 = 0.9948 +/- 0.1196 (# points = 702)</span>
+<span class="go"> 84˚: 0.5780 / 0.5880 = 0.9830 +/- 0.1111 (# points = 635)</span>
+<span class="go"> 85˚: 0.5830 / 0.5960 = 0.9782 +/- 0.1073 (# points = 585)</span>
+<span class="go"> 86˚: 0.5910 / 0.6040 = 0.9785 +/- 0.1018 (# points = 535)</span>
+<span class="go"> 88˚: 0.6010 / 0.6220 = 0.9662 +/- 0.0927 (# points = 492)</span>
+<span class="go"> 89˚: 0.6120 / 0.6310 = 0.9699 +/- 0.0871 (# points = 451)</span>
+<span class="go"> 90˚: 0.6060 / 0.6400 = 0.9469 +/- 0.0848 (# points = 401)</span>
+<span class="go"> 91˚: 0.6080 / 0.6500 = 0.9354 +/- 0.0760 (# points = 367)</span>
+<span class="go"> 93˚: 0.6180 / 0.6710 = 0.9210 +/- 0.0656 (# points = 342)</span>
+<span class="go"> 95˚: 0.6390 / 0.6930 = 0.9221 +/- 0.0622 (# points = 311)</span>
+<span class="go"> 97˚: 0.6480 / 0.7170 = 0.9038 +/- 0.0613 (# points = 280)</span>
+<span class="go">100˚: 0.6780 / 0.7550 = 0.8980 +/- 0.0487 (# points = 261)</span>
+<span class="go">103˚: 0.7030 / 0.7960 = 0.8832 +/- 0.0470 (# points = 237)</span>
+<span class="go">106˚: 0.7530 / 0.8400 = 0.8964 +/- 0.0503 (# points = 214)</span>
+<span class="go">110˚: 0.8150 / 0.9040 = 0.9015 +/- 0.0637 (# points = 187)</span>
+<span class="go">115˚: 0.9160 / 0.9910 = 0.9243 +/- 0.0736 (# points = 168)</span>
+<span class="go">121˚: 1.1040 / 1.1080 = 0.9964 +/- 0.0983 (# points = 140)</span>
+<span class="go">125˚: 1.2660 / 1.1930 = 1.0612 +/- 0.1216 (# points = 129)</span>
+<span class="go"> 27˚: 0.9270 / 0.7190 = 1.2893 +/- 0.1970 (# points =   3)</span>
+<span class="go"> 29˚: 0.8740 / 0.6950 = 1.2576 +/- 0.1864 (# points =   7)</span>
+<span class="go"> 34˚: 0.8000 / 0.6420 = 1.2461 +/- 0.1610 (# points =  13)</span>
+</pre></div>
+</div>
+<p>It can be seen that the statistics for last three images (which correspond to the  <a class="reference internal" href="#orbitimagesexample"><span class="std std-ref">last row here</span></a>), it based on very low numbers, compared to the ingress of the images. The uncertainties in the last three are therefore also larger. I am not sure how to compare these two sets properly.</p>
+<p>I can make three plots:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>the RFR of all the images as a function of VeRa-derived temperature;</p></li>
+<li><p>the average or median RFR of the images per orbit as a function of VeRa-derived temperature;</p></li>
+<li><p>the temperature-binned version of (2), either the average value or the median.</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition-uncertainties-in-the-case-of-taking-the-average-of-a-set-rfr-values-for-one-orbit admonition">
+<p class="admonition-title">uncertainties in the case of taking the average of a set RFR values for one orbit</p>
+<p>The uncertainty is the maximum of on the one hand the uncertainty as derived from the <a class="reference internal" href="#uncertaintyinaverage"><span class="std std-ref">averaging formula</span></a> and on the other hand the standard deviation of the average of the points. The last value is (almost) always the larger one, which means that the error bars represent the spread in the points. For the South Polar Dynamics Campaign (red points in the figures below) the spread is large due to the ingress and egress value differences.</p>
+</div>
+<div class="admonition-uncertainties-in-the-case-of-taking-the-median-of-a-set-rfr-values-for-one-orbit admonition">
+<p class="admonition-title">uncertainties in the case of taking the median of a set RFR values for one orbit</p>
+<p>The uncertainty in the median can be evaluated by means of changing the data points in the set and recalculate a median at each new instance. Each data point in the set has an uncertainty associated. Take this uncertainty as the standard deviation for that data point around the mean, which is the value of the data point. Using the NumPy <em>np.random.normal</em> method create gaussian noise with the standard deviation for each data point and add it to that data point. In this case I do this 1000 times for the whole set, and therefore I get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the the uncertainty in the median.</p>
+<p>On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.</p>
+<p>I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, and in other cases the second one.</p>
+</div>
+<p>If I use all the images with phase angles &lt; 130˚, which is the limit of the phase curve, see <a class="reference internal" href="#vmcstep02"><span class="std std-ref">Step 02</span></a>, then the results are:</p>
+<figure class="align-default" id="id12">
+<img alt="_images/RadianceFactorRatio_vs_Temperature_all_images.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images.png" />
+<figcaption>
+<p><span class="caption-text">The RFR of all the images as a function of VeRa-derived temperature.</span><a class="headerlink" href="#id12" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_median.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_median.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_median.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K.png" style="width: 480.0px; height: 360.0px;" /></a>
+<p>Note that in the temperature-binned plots, I have applied a simple weighting when determining the least square linear fit: for each temperature-bin the average (or median) value is added the amount of times to the set as there are points in the bin. In this way, the points at the extremes of the temperature range are counted only one time (one value per bin), whereas for the middle values there are more points per bin, which will count more heavily.</p>
+<p>Even in this situation, where I include all the images from the ingress and egress sections of the orbits, there seems to be a clear anti-correlation between the VeRa-derived temperature at 70km altitude and the VMC_derived UV-brightness RFR.</p>
+<p>Note also that the temperature binning could be one way to take account for the variations on the temperature that exist due to gravity waves and thermal tides. Thermal tides can be on the order of +/- 4K (<a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al. 2021</span></a>), so a bin width of 8K would be necessary:</p>
+<figure class="align-default">
+<img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K.png" />
+</figure>
+<p>When I use the images with phase angles &lt; 130˚ and number of points in the latitude-longitude boxes more then 20, which basically excludes the egress images, then the results are:</p>
+<figure class="align-default" id="id13">
+<img alt="_images/RadianceFactorRatio_vs_Temperature_all_images1.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images1.png" />
+<figcaption>
+<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature. Note that theis excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<figure class="align-default">
+<img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K1.png" />
+</figure>
+<p>The anti-correlation is also clear here, with similar regression values as for the first case.</p>
+<p>Finally, it is interesting to look at just the egress data points, which results in the oposite correlation, but much less convincing.</p>
+<figure class="align-default" id="id14">
+<img alt="_images/RadianceFactorRatio_vs_Temperature_all_images2.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images2.png" />
+<figcaption>
+<p><span class="caption-text">The RFR of the images with phase angles &lt; 60˚, which is only the South Polar Dynamics Campaign egress images.</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average2.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average2.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_median2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_median2.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_median2.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K2.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K2.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K2.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K2.png" style="width: 480.0px; height: 360.0px;" /></a>
+</section>
+<section id="step-04-thermal-tide-correction">
+<span id="vmcstep04"></span><h4>Step 04 - Thermal tide correction<a class="headerlink" href="#step-04-thermal-tide-correction" title="Link to this heading"></a></h4>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step04</span></code></div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/createTable_ThermalTide_Akiba2021_Figure5.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/thermalTideAkiba2021.py</span></code></div>
+<div class="line">files:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code></div>
+</div>
+</div>
+<p>There are thermal tides and gravity waves that affect the temperature.
+Thermal tides are fixed in Local Solar Time.
+I want to try to apply a correction to the temperature field for the thermal tide.
+I take one of the most recent publications I can find, based on Akatsuki NIR data, <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al. 2021</span></a>. In their Figure 5, they present the thermal tide anomaly (amplitude) for all latitudes between -62˚.5 and +62˚.5 latitude at 69km altitude, which is only 1km below the VeRa-sounded level I have been looking at (well within the scale height).</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/Akiba_2021_Figure5.png"><img alt="_images/Akiba_2021_Figure5.png" src="_images/Akiba_2021_Figure5.png" style="width: 794.0px; height: 609.0px;" /></a>
+</figure>
+<p>They published the data for each figure in their paper in a <a class="reference external" href="https://doi.org/10.5281/zenodo.5159027">Zenodo repository</a>.
+From the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv</span></code> file found in the <code class="file docutils literal notranslate"><span class="pre">Figure_data_csv/Figure5</span></code> directory of that repository I create a more nicely (human and HandyTools.readTable) readable table <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> using the <code class="file docutils literal notranslate"><span class="pre">./scripts/createTable_ThermalTide_Akiba2021_Figure5.py</span></code> script.</p>
+<p>In the caption of Figure 3 of their paper, which also shows temperature cross section of thermal tides as a function LST but in the northern hemisphere only, it is stated that <strong>… the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right</strong>. I am officially confused and I try to figure out how this works. The wind blow the clouds towards the decreasing East Longitude, I know that from the formula from <a class="reference internal" href="#khatuntsev2013"><span class="std std-ref">Khatuntsev et al. 2013</span></a>. When I try to check the rotation using VMC images of consecutive days, I think that this corresponds to the direction of increasing LST, so that the wind should blow in the direction of increasing LST … this would make sense, because the rotation of the planet and the wind are in the same direction.
+In that case how to interpret the comment in Figure 3 of <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al. 2021</span></a>?</p>
+<p>In the script <code class="file docutils literal notranslate"><span class="pre">./scripts/ThermalTideCorrection.dat</span></code> I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from table <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> and use linear interpolation first in latitude and then in LST of the values in the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> table to estimate the amplitude of the thermal tide for that VeRa sounding location. I write the results in the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
+<p>I adapt the <code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code> script in <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> to allow taking into account (subtract) thermal tide amplitude corrections from the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
+<p>Also, the uncertainty in the thermal tide amplitude seems to be on the order of $pm$0.1K (Figure 7 from <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al.</span></a>), but I am trying to verify this value with the authors.</p>
+</section>
+</section>
+<section id="references">
+<span id="id1"></span><h3>References<a class="headerlink" href="#references" title="Link to this heading"></a></h3>
+<p id="akiba2021"><strong>Akiba, M.</strong> et al., 2021. Thermal Tides in the Upper Cloud Layer of  Venus as Deduced From the Emission Angle Dependence of the Brightness Temperature by Akatsuki/LIR. JRG Planets, 126, e2020JE006808, 140-158. <a class="reference external" href="https://doi.org/10.1029/2020JE006808">DOI 10.1029/2020JE006808</a>.</p>
+<p id="bevington2003"><strong>P.R. Bevington and D.K. Robinson</strong> 2003. Data Reduction and Error Analysis for the Physical Sciences. Third Edition, McGraw Hill Higher Education.</p>
+<p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> et al., 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
+<p id="lee2015"><strong>Lee, Y.J.</strong> et al., 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
+<p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> et al., 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
+<p id="shalygina2015"><strong>Shalygina, Y.J.</strong> et al., 2015. Optical properties of the Venus upper clouds from the data obtained
+by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 113-114, 135-158. <a class="reference external" href="https://doi.org/10.1016/j.pss.2014.11.012">DOI 10.1016/j.pss.2014.11.012</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Venus Research Workbook at ReadTheDocs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="veratools.html" class="btn btn-neutral float-right" title="VeRaTools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .
+      <span class="lastupdated">Last updated on Jun 18, 2024, 9:18:17 AM.
+      </span></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
