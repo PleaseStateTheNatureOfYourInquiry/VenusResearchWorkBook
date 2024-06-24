@@ -43,6 +43,8 @@ from VMCTools import VMCTools
 VMCOrbitBoundaries = [1000, 2811]
 numberOfPointInLatitudeLongitudeBoxMinimum = 20
 phaseAngleLimit = 130
+
+# Set here to either take the average of the median of the RFR values for each orbit.
 radianceFactorRatiosStatistics = { 'Use average step2' : True, 
                                    'Use average step3' : False }
 
@@ -51,11 +53,12 @@ statisticsStringStep3 = 'average'  if radianceFactorRatiosStatistics ['Use avera
 
 temperatureBinSize = 8
 
-thermalTideCorrection = True
-thermalTideString = '_thermalTideCorrection'  if thermalTideCorrection else  ''
+thermalTideCorrectionApply = True
+thermalTideString = '_thermalTideCorrection'  if thermalTideCorrectionApply else  ''
 
 
-plotParameters = { 'create plots' : [True, True, True],
+# The first plot is all points, the second plot is the RFRs averages (or median-ed) for each orbit, the third is with binned temperatures.
+plotParameters = { 'create plots' : [True, True, False],
                    'plot titles' : [ 'All points orbits {} - {}, \n # points in lat-lon box > {}, $\phi$ < {:3d}'.format ( VMCOrbitBoundaries [0], 
                                                                                                                            VMCOrbitBoundaries [1], 
                                                                                                                            numberOfPointInLatitudeLongitudeBoxMinimum, 
@@ -130,6 +133,7 @@ RFRatioRange = [0.6,1.6]
 radianceFactorRatiosInLatLonBox = []
 dRadianceFactorRatiosInLatLonBox = []
 VeRaTemperatures = []
+dVeRaTemperatures = []
 missionSectionColours = []
 VMCOrbitIDs = []
 for iImage in range (numberOfVMCImages):
@@ -162,20 +166,25 @@ for iImage in range (numberOfVMCImages):
             np.sqrt ( ( dRadianceFactorInLatLonBox / phaseCurve [0][1][iPhaseCurve] ) ** 2 +
                       ( dPhaseCurve * RadianceFactorInLatLonBox / ( phaseCurve [0][1][iPhaseCurve] ) ** 2 ) ** 2 ) )
         
+
+        # Determine the thermal tide amplitude, if the  thermalTideCorrection  boolean is True.
         thermalTideAmplitude = 0
-        if thermalTideCorrection:
-           
+        dThermalTideAmplitude = 0
+        if thermalTideCorrectionApply:
+                   
             iThermalTideCorrectionPerOrbit = 0     
             while iThermalTideCorrectionPerOrbit < len ( thermalTideCorrection [0][0] ) and \
                   thermalTideCorrection [0][0][iThermalTideCorrectionPerOrbit] != VMCOrbitID:
                   
                 iThermalTideCorrectionPerOrbit += 1  
         
-            thermalTideAmplitude = -thermalTideCorrection [0][5][iThermalTideCorrectionPerOrbit]    
-            print (VMCOrbitID, thermalTideAmplitude)
+            thermalTideAmplitude = -thermalTideCorrection [0][5][iThermalTideCorrectionPerOrbit] 
+            dThermalTideAmplitude = 0.1 #K (from Akiba et al. 2021)
+#             print (VMCOrbitID, thermalTideAmplitude)
             
         
         VeRaTemperatures.append ( VMCSelectedImages [0][18][iImage] + thermalTideAmplitude )
+        dVeRaTemperatures.append ( np.sqrt ( VMCSelectedImages [0][19][iImage]**2 + dThermalTideAmplitude**2 ) )
         missionSectionColours.append ( VMCTools.getColourForVEXMissionSection (VMCSelectedImages [1][0][iImage] ) )
 
         
@@ -190,7 +199,7 @@ for iImage in range (numberOfVMCImages):
 
 
 # Create the plot for this step.
-xLabelString = 'VeRa-derived temperature at 70km (K) with thermal tide correction'  if thermalTideCorrection else   'VeRa-derived temperature at 70km (K)'
+xLabelString = 'VeRa-derived temperature at 70km (K) with thermal tide correction'  if thermalTideCorrectionApply else   'VeRa-derived temperature at 70km (K)'
 yLabelString = 'Radiance Factor Ratio'
 if plotParameters ['create plots'][0]:
     
@@ -227,6 +236,7 @@ if plotParameters ['create plots'][1]:
     radianceFactorRatiosInLatLonBoxUnique = []
     dRadianceFactorRatiosInLatLonBoxUnique = []
     VeRaTemperaturesUnique = []
+    dVeRaTemperaturesUnique = []
     missionSectionColoursUnique = []
     for iVMCOrbitIDsUnique, VMCOrbitIDUnique in enumerate (VMCOrbitIDsUnique):
     
@@ -240,6 +250,7 @@ if plotParameters ['create plots'][1]:
             if VMCOrbitID == VMCOrbitIDUnique:
                 
                 VeRaTemperatureAtOrbit = VeRaTemperatures [iVMCOrbitID]
+                dVeRaTemperatureAtOrbit = dVeRaTemperatures [iVMCOrbitID]
                 radianceFactorRatiosInOrbit.append ( radianceFactorRatiosInLatLonBox [iVMCOrbitID] )
                 dRadianceFactorRatiosInOrbit.append ( dRadianceFactorRatiosInLatLonBox  [iVMCOrbitID] )
                 dRadianceFactorRatiosSquareSum += dRadianceFactorRatiosInOrbit [-1] ** 2
@@ -249,6 +260,7 @@ if plotParameters ['create plots'][1]:
         if numberOfRadianceFactorRatios:
             
             VeRaTemperaturesUnique.append(VeRaTemperatureAtOrbit)
+            dVeRaTemperaturesUnique.append (dVeRaTemperatureAtOrbit)
             
             if radianceFactorRatiosStatistics ['Use average step2']:
             
@@ -278,21 +290,29 @@ if plotParameters ['create plots'][1]:
     radianceFactorRatiosInLatLonBoxUnique = np.asarray (radianceFactorRatiosInLatLonBoxUnique)
     dRadianceFactorRatiosInLatLonBoxUnique = np.asarray (dRadianceFactorRatiosInLatLonBoxUnique)
     VeRaTemperaturesUnique = np.asarray (VeRaTemperaturesUnique)
+    dVeRaTemperaturesUnique = np.asarray (dVeRaTemperaturesUnique)
 
 
     # Create the plot.
     plt.figure (2)
     plt.clf ()
+
     plt.scatter (VeRaTemperaturesUnique, radianceFactorRatiosInLatLonBoxUnique, c = missionSectionColoursUnique)
-    HandyTools.plotErrorBars (VeRaTemperaturesUnique, radianceFactorRatiosInLatLonBoxUnique, yErrors = dRadianceFactorRatiosInLatLonBoxUnique, colours = missionSectionColoursUnique)
+    HandyTools.plotErrorBars ( xValues = VeRaTemperaturesUnique, 
+                               xErrors = dVeRaTemperaturesUnique, 
+                               yValues = radianceFactorRatiosInLatLonBoxUnique, 
+                               yErrors = dRadianceFactorRatiosInLatLonBoxUnique, 
+                               colours = missionSectionColoursUnique )
+
     plt.xlim ( temperatureRange[0], temperatureRange [1] )
+    plt.ylim ( RFRatioRange [0], RFRatioRange [1] )
+
     plt.xlabel (xLabelString)
     plt.ylabel (yLabelString)
     plt.title ( plotParameters ['plot titles'][1] )
 
-    plt.ylim ( RFRatioRange [0], RFRatioRange [1] )
     
-    fit = DataTools.linearLeastSquare(VeRaTemperaturesUnique, radianceFactorRatiosInLatLonBoxUnique)
+    fit = DataTools.linearLeastSquare (VeRaTemperaturesUnique, radianceFactorRatiosInLatLonBoxUnique)
     x = 220 + np.arange (2) * 25
     y = fit [0] * x + fit [1]
     print ('average / median  - fit:', fit)
