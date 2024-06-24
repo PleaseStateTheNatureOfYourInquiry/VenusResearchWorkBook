@@ -731,7 +731,7 @@ When I use the images with phase angles < 130˚ and number of points in the lati
 
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_all_images.png    
 
-    The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature. Note that theis excludes the egress images from the South Polar Dynamics Campaign.
+    The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature. Note that this excludes the egress images from the South Polar Dynamics Campaign.
 
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_orbits_average.png
@@ -802,36 +802,104 @@ Step 04 - Thermal tide correction
     | :file:`ThermalTideCorrection.dat`
 
 
-There are thermal tides and gravity waves that affect the temperature. 
+There are thermal tides and gravity waves that affect the temperature in the atmosphere. 
 Thermal tides are fixed in Local Solar Time.
-I want to try to apply a correction to the temperature field for the thermal tide.
-I take one of the most recent publications I can find, based on Akatsuki NIR data, :ref:`Akiba et al. 2021 <Akiba2021>`. In their Figure 5, they present the thermal tide anomaly (amplitude) for all latitudes between -62˚.5 and +62˚.5 latitude at 69km altitude, which is only 1km below the VeRa-sounded level I have been looking at (well within the scale height).
+I want to try to correct the VeRa-derived temperatures for the thermal tide.
+I take one of the most recent publications I can find, based on Akatsuki NIR data, :ref:`Akiba et al. 2021 <Akiba2021>`. In their Figure 5, they present the thermal tide anomaly for all latitudes between -62˚.5 and +62˚.5 latitude at 69km altitude, which is only 1km below the VeRa-sounded level I have been looking at (well within the scale height). The values in the figure are the deviations from the mean zonal temperature at each latitude. 
 
 .. figure:: ./images/Akiba_2021_Figure5.png
     :scale: 50%
 
-They published the data for each figure in their paper in a `Zenodo repository <https://doi.org/10.5281/zenodo.5159027>`_. 
-From the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv` file found in the :file:`Figure_data_csv/Figure5` directory of that repository I create a more nicely (human and HandyTools.readTable) readable table :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` using the :file:`./scripts/createTable_ThermalTide_Akiba2021_Figure5.py` script. 
+The corresponding data files (tables) can be found at `this Zenodo repository <https://doi.org/10.5281/zenodo.5159027>`_. 
+From the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv` file found in the :file:`Figure_data_csv/Figure5` directory of that repository I create a more human (and HandyTools.readTable) readable table :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` using the :file:`./scripts/createTable_ThermalTide_Akiba2021_Figure5.py` script. 
 
-In the caption of Figure 3 of their paper, which also shows temperature cross section of thermal tides as a function LST but in the northern hemisphere only, it is stated that **... the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right**. I am officially confused and I try to figure out how this works. The wind blow the clouds towards the decreasing East Longitude, I know that from the formula from :ref:`Khatuntsev et al. 2013 <Khatuntsev2013>`. When I try to check the rotation using VMC images of consecutive days, I think that this corresponds to the direction of increasing LST, so that the wind should blow in the direction of increasing LST ... this would make sense, because the rotation of the planet and the wind are in the same direction. 
-In that case how to interpret the comment in Figure 3 of :ref:`Akiba et al. 2021 <Akiba2021>`?
+In the caption of Figure 3 of their paper (the figure shows temperature cross section of thermal tides as a function LST in the northern hemisphere only) it is stated that **... the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right**. I verify by corresponding with the authors that this is also valid for the other figures in the paper. What I find to be confusing in this statement, or at least the way I interpret it, is that it seems as if there are **two Local Solar Times**: one **on Venus** and another one ... of **the figure**? 
+The :ref:`wind is in the direction of increasing LST <longitudeandlocalsolartime>`, hence the last part of their statement corroborates with that.
 
 In the script :file:`./scripts/ThermalTideCorrection.dat` I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from table :file:`VMCSelectedImages.dat` and use linear interpolation first in latitude and then in LST of the values in the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` table to estimate the amplitude of the thermal tide for that VeRa sounding location. I write the results in the :file:`ThermalTideCorrection.dat` table file.
 
 I adapt the :file:`./scripts/CorrelateRadianceFactors_Temperature.py` script in :ref:`Step03 <VMCStep03>` to allow taking into account (subtract) thermal tide amplitude corrections from the :file:`ThermalTideCorrection.dat` table file.
 
-Also, the uncertainty in the thermal tide amplitude seems to be on the order of $\pm$0.1K (Figure 7 from :ref:`Akiba et al. <Akiba2021>`), but I am trying to verify this value with the authors.
+
+Also, the uncertainty in the thermal tide amplitude seems to be on the order of :math:`\pm` 0.1K (Figure 7 from :ref:`Akiba et al. <Akiba2021>`), but I am trying to verify this value with the authors.
+
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20_thermalTideCorrecion/RadianceFactorRatio_vs_Temperature_all_images.png    
+
+    The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20_thermalTideCorrecion/RadianceFactorRatio_vs_Temperature_orbits_average.png
+    :scale: 75%
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_orbits_average.png
+    :scale: 75%
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20_thermalTideCorrecion/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K.png
+    :scale: 75%
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K.png
+    :scale: 75%
+
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20_thermalTideCorrecion/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K.png
+    :scale: 75%
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K.png
+    :scale: 75%
+
+
+
+
+.. _longitudeandlocalsolartime:
+
+Longitude and Local Solar Time on Venus
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+I (obviously) need to make sure I do the comparisons between Venus Express data and Akatsuki data / results correctly. Confusion on my end about definition of Local (Solar) Time and the direction of (East) longitude triggered me looking into this topic and I went into some length to fully understand rotation directions and longitude definitions. 
+Referring to :ref:`Archinal et al. 2018 <Archinal2018>` (their Section 2 and Figure 1):
+
+.. figure:: ./images/Archinal_2018_Figure1.png
+    :scale: 25%
+
+
+* The North pole of a planet is defined on the *north side of the invariable plane of the solar system*;
+* The *direction of East* is counter clockwise when looking down from the North;
+* The prime meridian is defined by a surface feature, often a crater;
+* There is a definition of the nodes of the crossing of the planet's equatorial plane with that of the International Celestial Reference System (ICRF);
+* The angle **W** between the node at +90˚ and the prime meridian is measured in *easterly* direction along the planet's equator;
+* If the rotation of the planet is *prograde* (counter-clockwise seen from the North), then **W** increases with time. This is the case for the Earth. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude decreases with time;
+* If the rotation of the planet is *retrograde* (clockwise seen from the North), then **W** decreases with time. This is the case for the Venus. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude increases with time.
+    
+
+This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise.
+Hence the (East) longitude should be increasing in the counter-clockwise direction. This is the case (see also `VMCTools.readVMCImageAndGeoCube <https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube>`_):
+
+.. figure:: ./images/longitudeTransformationCheck.png
+    :scale: 80%
+
+    (left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.
+    
+It also follows that the **Local Solar Time increases** in the direction of **decreasing East longitude**.
+The **zonal wind** moves the clouds in the direction of **increasing LST** and **decreasing East longitude**.
+
+LST is calculated from the difference in longitude of a pixel on the Venus disk and the longitude of the **Sub Solar Point**. I verify that for the LST values reported in the VeRa :file:`.TXT` files, this gives the correct results. For example for the file :file:`Orb0260_EGR/V32ICL1L04_AEX_070060729_60.TXT` the **Sub-Solar Longitude (lowest sample)** is 178˚.51 and the longitude of the VeRa-sounded location lowest sample) is 244˚.58. The difference is 66˚.07, which corresponds to 6h x 90˚ / 66˚.07 = 4.40467h. As the longitude of the VeRa-location is larger than that of the sub-solar point, and from the conclusion that LST increases in the direction of decreasing longitude, it means that the VeRa-sounded location is more towards the morning limb, before noon: 12h - 4.40467h = 7.6h. The reported LST in the :file:`.TXT` file is 7.61h at 1bar, which is slightly becasue it is not corresponding to the lowest sample. 
 
 
 
 .. _references:
 
 References
-^^^^^^^^^^^
+^^^^^^^^^^
 
 .. _Akiba2021:
 
-**Akiba, M.** et al., 2021. Thermal Tides in the Upper Cloud Layer of  Venus as Deduced From the Emission Angle Dependence of the Brightness Temperature by Akatsuki/LIR. JRG Planets, 126, e2020JE006808, 140-158. `DOI 10.1029/2020JE006808 <https://doi.org/10.1029/2020JE006808>`_.
+**Akiba, M.** *et al.*, 2021. Thermal Tides in the Upper Cloud Layer of  Venus as Deduced From the Emission Angle Dependence of the Brightness Temperature by Akatsuki/LIR. JRG Planets, 126, e2020JE006808, 140-158. `DOI 10.1029/2020JE006808 <https://doi.org/10.1029/2020JE006808>`_.
+
+
+.. _Archinal2018:
+
+**Archinal, B.A.** et al. 2018. Report of the IAU Working Group on CartographicCoordinates and Rotational Elements: 2015. Celest Mech Dyn Astr. 130, 22 - 68.
+`DOI 10.1007/s10569-017-9805-5 (pdf) <https://astropedia.astrogeology.usgs.gov/download/Docs/WGCCRE/WGCCRE2015reprint.pdf>`_.
 
 
 .. _Bevington2003:
@@ -840,22 +908,23 @@ References
 
 .. _Khatuntsev2013:
 
-**Khatuntsev, I.V.** et al., 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. `DOI 10.1016/j.icarus.2013.05.018 <http://dx.doi.org/10.1016/j.icarus.2013.05.018>`_.
+**Khatuntsev, I.V.** *et al.*, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. `DOI 10.1016/j.icarus.2013.05.018 <http://dx.doi.org/10.1016/j.icarus.2013.05.018>`_.
 
 .. _Lee2015:
 
-**Lee, Y.J.** et al., 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. `DOI 10.1016/j.icarus.2015.02.015 <http://dx.doi.org/10.1016/j.icarus.2015.02.015>`_.
+**Lee, Y.J.** *et al.*, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. `DOI 10.1016/j.icarus.2015.02.015 <http://dx.doi.org/10.1016/j.icarus.2015.02.015>`_.
 
 
 .. _Markiewicz2007:
 
-**Markiewicz, W.J.** et al., 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. `DOI 10.1016/j.pss.2007.01.004 <https://doi.org/10.1016/j.pss.2007.01.004>`_.
+**Markiewicz, W.J.** *et al.*, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. `DOI 10.1016/j.pss.2007.01.004 <https://doi.org/10.1016/j.pss.2007.01.004>`_.
 
 
 .. _Shalygina2015:
 
-**Shalygina, Y.J.** et al., 2015. Optical properties of the Venus upper clouds from the data obtained
+**Shalygina, Y.J.** *et al.*, 2015. Optical properties of the Venus upper clouds from the data obtained
 by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 113-114, 135-158. `DOI 10.1016/j.pss.2014.11.012 <https://doi.org/10.1016/j.pss.2014.11.012>`_.
+
 
 
 

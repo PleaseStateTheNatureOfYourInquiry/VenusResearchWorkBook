@@ -1,7 +1,7 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240604
+# Version: v20240624
 
 # Extract the Radiance Factors and VeRa-derived temperatures from table file   VMCSelectedImages.dat  created in Step01 of the images of the selected orbits
 # (VMCOrbitBoundaries) and normalise each Radiance Factor to the model phase curve from table file  PhaseCurveFit.dat  created in Step02: 
@@ -17,6 +17,9 @@
 #  (3) the temperature-binned average or median of the results in (2)
 #
 # In steps (2) and (3) calculate the least square linear fit to the results.
+#
+# The VeRa-derived temperatures can be corrected for the thermal tide, which is determined in Step04, by setting the  thermalTideCorrection  boolean.
+
 
 # Standard imports.
 import os
@@ -49,7 +52,7 @@ statisticsStringStep3 = 'average'  if radianceFactorRatiosStatistics ['Use avera
 temperatureBinSize = 8
 
 thermalTideCorrection = True
-thermalTideString = '_thermalTideCorrecion'  if thermalTideCorrection else  ''
+thermalTideString = '_thermalTideCorrection'  if thermalTideCorrection else  ''
 
 
 plotParameters = { 'create plots' : [True, True, True],
@@ -187,6 +190,8 @@ for iImage in range (numberOfVMCImages):
 
 
 # Create the plot for this step.
+xLabelString = 'VeRa-derived temperature at 70km (K) with thermal tide correction'  if thermalTideCorrection else   'VeRa-derived temperature at 70km (K)'
+yLabelString = 'Radiance Factor Ratio'
 if plotParameters ['create plots'][0]:
     
     plt.figure (1)
@@ -194,8 +199,8 @@ if plotParameters ['create plots'][0]:
     plt.scatter (VeRaTemperatures, radianceFactorRatiosInLatLonBox, s = 5, c = missionSectionColours)
     plt.xlim ( temperatureRange[0], temperatureRange [1] )
     plt.ylim ( RFRatioRange [0], RFRatioRange [1] )
-    plt.xlabel ('VeRa-derived temperature at 70km (K)')
-    plt.ylabel ('Radiance Factor Ratio')
+    plt.xlabel (xLabelString)
+    plt.ylabel (yLabelString)
     plt.title ( plotParameters ['plot titles'][0] )
 
     xStart = 216
@@ -281,8 +286,8 @@ if plotParameters ['create plots'][1]:
     plt.scatter (VeRaTemperaturesUnique, radianceFactorRatiosInLatLonBoxUnique, c = missionSectionColoursUnique)
     HandyTools.plotErrorBars (VeRaTemperaturesUnique, radianceFactorRatiosInLatLonBoxUnique, yErrors = dRadianceFactorRatiosInLatLonBoxUnique, colours = missionSectionColoursUnique)
     plt.xlim ( temperatureRange[0], temperatureRange [1] )
-    plt.xlabel ('VeRa-derived temperature at 70km (K)')
-    plt.ylabel ('Radiance Factor Ratio')
+    plt.xlabel (xLabelString)
+    plt.ylabel (yLabelString)
     plt.title ( plotParameters ['plot titles'][1] )
 
     plt.ylim ( RFRatioRange [0], RFRatioRange [1] )
@@ -361,7 +366,7 @@ if plotParameters ['create plots'][2]:
     HandyTools.plotErrorBars (VeRaTemperaturesBinned, radianceFactorRatiosInLatLonBoxBinned, yErrors = dRadianceFactorRatiosInLatLonBoxBinned, colours = 'darkblue')
     plt.xlim ( temperatureRange[0], temperatureRange [1] )
     plt.ylim ( RFRatioRange [0], RFRatioRange [1] )
-    plt.xlabel ('VeRa-derived temperature at 70km (K)')
+    plt.xlabel (xLabelString)
     plt.ylabel ( 'Radiance Factor Ratio (T-binned {:3.1f}K wide)'.format (temperatureBinSize) )
     plt.title ( plotParameters ['plot titles'][2], fontsize = 10 )
 

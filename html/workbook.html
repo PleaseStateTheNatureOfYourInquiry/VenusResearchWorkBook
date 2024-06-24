@@ -61,6 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#step-04-thermal-tide-correction">Step 04 - Thermal tide correction</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#longitude-and-local-solar-time-on-venus">Longitude and Local Solar Time on Venus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -672,7 +673,7 @@ I call this variable the Radiance Factor Ratio (<span class="math notranslate no
 <figure class="align-default" id="id13">
 <img alt="_images/RadianceFactorRatio_vs_Temperature_all_images1.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images1.png" />
 <figcaption>
-<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature. Note that theis excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
+<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id13" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" style="width: 480.0px; height: 360.0px;" /></a>
@@ -713,30 +714,72 @@ I call this variable the Radiance Factor Ratio (<span class="math notranslate no
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code></div>
 </div>
 </div>
-<p>There are thermal tides and gravity waves that affect the temperature.
+<p>There are thermal tides and gravity waves that affect the temperature in the atmosphere.
 Thermal tides are fixed in Local Solar Time.
-I want to try to apply a correction to the temperature field for the thermal tide.
-I take one of the most recent publications I can find, based on Akatsuki NIR data, <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al. 2021</span></a>. In their Figure 5, they present the thermal tide anomaly (amplitude) for all latitudes between -62˚.5 and +62˚.5 latitude at 69km altitude, which is only 1km below the VeRa-sounded level I have been looking at (well within the scale height).</p>
+I want to try to correct the VeRa-derived temperatures for the thermal tide.
+I take one of the most recent publications I can find, based on Akatsuki NIR data, <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al. 2021</span></a>. In their Figure 5, they present the thermal tide anomaly for all latitudes between -62˚.5 and +62˚.5 latitude at 69km altitude, which is only 1km below the VeRa-sounded level I have been looking at (well within the scale height). The values in the figure are the deviations from the mean zonal temperature at each latitude.</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/Akiba_2021_Figure5.png"><img alt="_images/Akiba_2021_Figure5.png" src="_images/Akiba_2021_Figure5.png" style="width: 794.0px; height: 609.0px;" /></a>
 </figure>
-<p>They published the data for each figure in their paper in a <a class="reference external" href="https://doi.org/10.5281/zenodo.5159027">Zenodo repository</a>.
-From the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv</span></code> file found in the <code class="file docutils literal notranslate"><span class="pre">Figure_data_csv/Figure5</span></code> directory of that repository I create a more nicely (human and HandyTools.readTable) readable table <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> using the <code class="file docutils literal notranslate"><span class="pre">./scripts/createTable_ThermalTide_Akiba2021_Figure5.py</span></code> script.</p>
-<p>In the caption of Figure 3 of their paper, which also shows temperature cross section of thermal tides as a function LST but in the northern hemisphere only, it is stated that <strong>… the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right</strong>. I am officially confused and I try to figure out how this works. The wind blow the clouds towards the decreasing East Longitude, I know that from the formula from <a class="reference internal" href="#khatuntsev2013"><span class="std std-ref">Khatuntsev et al. 2013</span></a>. When I try to check the rotation using VMC images of consecutive days, I think that this corresponds to the direction of increasing LST, so that the wind should blow in the direction of increasing LST … this would make sense, because the rotation of the planet and the wind are in the same direction.
-In that case how to interpret the comment in Figure 3 of <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al. 2021</span></a>?</p>
+<p>The corresponding data files (tables) can be found at <a class="reference external" href="https://doi.org/10.5281/zenodo.5159027">this Zenodo repository</a>.
+From the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv</span></code> file found in the <code class="file docutils literal notranslate"><span class="pre">Figure_data_csv/Figure5</span></code> directory of that repository I create a more human (and HandyTools.readTable) readable table <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> using the <code class="file docutils literal notranslate"><span class="pre">./scripts/createTable_ThermalTide_Akiba2021_Figure5.py</span></code> script.</p>
+<p>In the caption of Figure 3 of their paper (the figure shows temperature cross section of thermal tides as a function LST in the northern hemisphere only) it is stated that <strong>… the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right</strong>. I verify by corresponding with the authors that this is also valid for the other figures in the paper. What I find to be confusing in this statement, or at least the way I interpret it, is that it seems as if there are <strong>two Local Solar Times</strong>: one <strong>on Venus</strong> and another one … of <strong>the figure</strong>?
+The <a class="reference internal" href="#longitudeandlocalsolartime"><span class="std std-ref">wind is in the direction of increasing LST</span></a>, hence the last part of their statement corroborates with that.</p>
 <p>In the script <code class="file docutils literal notranslate"><span class="pre">./scripts/ThermalTideCorrection.dat</span></code> I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from table <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> and use linear interpolation first in latitude and then in LST of the values in the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> table to estimate the amplitude of the thermal tide for that VeRa sounding location. I write the results in the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>I adapt the <code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code> script in <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> to allow taking into account (subtract) thermal tide amplitude corrections from the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
-<p>Also, the uncertainty in the thermal tide amplitude seems to be on the order of $pm$0.1K (Figure 7 from <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al.</span></a>), but I am trying to verify this value with the authors.</p>
+<p>Also, the uncertainty in the thermal tide amplitude seems to be on the order of <span class="math notranslate nohighlight">\(\pm\)</span> 0.1K (Figure 7 from <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al.</span></a>), but I am trying to verify this value with the authors.</p>
+<figure class="align-default" id="id15">
+<img alt="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" />
+<figcaption>
+<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K3.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K3.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K3.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K2.png" style="width: 480.0px; height: 360.0px;" /></a>
+<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K1.png" style="width: 480.0px; height: 360.0px;" /></a>
 </section>
+</section>
+<section id="longitude-and-local-solar-time-on-venus">
+<span id="longitudeandlocalsolartime"></span><h3>Longitude and Local Solar Time on Venus<a class="headerlink" href="#longitude-and-local-solar-time-on-venus" title="Link to this heading"></a></h3>
+<p>I (obviously) need to make sure I do the comparisons between Venus Express data and Akatsuki data / results correctly. Confusion on my end about definition of Local (Solar) Time and the direction of (East) longitude triggered me looking into this topic and I went into some length to fully understand rotation directions and longitude definitions.
+Referring to <a class="reference internal" href="#archinal2018"><span class="std std-ref">Archinal et al. 2018</span></a> (their Section 2 and Figure 1):</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/Archinal_2018_Figure1.png"><img alt="_images/Archinal_2018_Figure1.png" src="_images/Archinal_2018_Figure1.png" style="width: 317.0px; height: 355.5px;" /></a>
+</figure>
+<ul class="simple">
+<li><p>The North pole of a planet is defined on the <em>north side of the invariable plane of the solar system</em>;</p></li>
+<li><p>The <em>direction of East</em> is counter clockwise when looking down from the North;</p></li>
+<li><p>The prime meridian is defined by a surface feature, often a crater;</p></li>
+<li><p>There is a definition of the nodes of the crossing of the planet’s equatorial plane with that of the International Celestial Reference System (ICRF);</p></li>
+<li><p>The angle <strong>W</strong> between the node at +90˚ and the prime meridian is measured in <em>easterly</em> direction along the planet’s equator;</p></li>
+<li><p>If the rotation of the planet is <em>prograde</em> (counter-clockwise seen from the North), then <strong>W</strong> increases with time. This is the case for the Earth. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude decreases with time;</p></li>
+<li><p>If the rotation of the planet is <em>retrograde</em> (clockwise seen from the North), then <strong>W</strong> decreases with time. This is the case for the Venus. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude increases with time.</p></li>
+</ul>
+<p>This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise.
+Hence the (East) longitude should be increasing in the counter-clockwise direction. This is the case (see also <a class="reference external" href="https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube">VMCTools.readVMCImageAndGeoCube</a>):</p>
+<figure class="align-default" id="id16">
+<a class="reference internal image-reference" href="_images/longitudeTransformationCheck.png"><img alt="_images/longitudeTransformationCheck.png" src="_images/longitudeTransformationCheck.png" style="width: 1000.0px; height: 408.8px;" /></a>
+<figcaption>
+<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id16" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>It also follows that the <strong>Local Solar Time increases</strong> in the direction of <strong>decreasing East longitude</strong>.
+The <strong>zonal wind</strong> moves the clouds in the direction of <strong>increasing LST</strong> and <strong>decreasing East longitude</strong>.</p>
+<p>LST is calculated by the difference in longitude of a pixel on the Venus disk and the longitude of the <strong>Sub Solar Point</strong>. I verify that for the LST values reported in the VeRa <code class="file docutils literal notranslate"><span class="pre">.TXT</span></code> files, this gives the correct results. For example for the file <code class="file docutils literal notranslate"><span class="pre">Orb0260_EGR/V32ICL1L04_AEX_070060729_60.TXT</span></code> the <strong>Sub-Solar Longitude (lowest sample)</strong> is 178˚.51 and the longitude of the VeRa-sounded location lowest sample) is 244˚.58. The difference is 66˚.07, which corresponds to 6 * 90˚ / 66˚.07 = 4.4.0467h. As the longitude of the VeRa-location is larger than that of the sub-solar point, and from the conclusion that LST increases in the direction of decreasing longitude, it means that the VeRa-sounded location is more towards the morning limb, before noon: 12h - 4.40467h = 7.6h. The reported LST in the <code class="file docutils literal notranslate"><span class="pre">.TXT</span></code> file is 7.61h at 1bar, which is slightly becasue it is not corresponding to the lowest sample.</p>
 </section>
 <section id="references">
 <span id="id1"></span><h3>References<a class="headerlink" href="#references" title="Link to this heading"></a></h3>
-<p id="akiba2021"><strong>Akiba, M.</strong> et al., 2021. Thermal Tides in the Upper Cloud Layer of  Venus as Deduced From the Emission Angle Dependence of the Brightness Temperature by Akatsuki/LIR. JRG Planets, 126, e2020JE006808, 140-158. <a class="reference external" href="https://doi.org/10.1029/2020JE006808">DOI 10.1029/2020JE006808</a>.</p>
+<p id="akiba2021"><strong>Akiba, M.</strong> <em>et al.</em>, 2021. Thermal Tides in the Upper Cloud Layer of  Venus as Deduced From the Emission Angle Dependence of the Brightness Temperature by Akatsuki/LIR. JRG Planets, 126, e2020JE006808, 140-158. <a class="reference external" href="https://doi.org/10.1029/2020JE006808">DOI 10.1029/2020JE006808</a>.</p>
+<p id="archinal2018"><strong>Archinal, B.A.</strong> et al. 2018. Report of the IAU Working Group on CartographicCoordinates and Rotational Elements: 2015. Celest Mech Dyn Astr. 130, 22 - 68.
+<a class="reference external" href="https://astropedia.astrogeology.usgs.gov/download/Docs/WGCCRE/WGCCRE2015reprint.pdf">DOI 10.1007/s10569-017-9805-5 (pdf)</a>.</p>
 <p id="bevington2003"><strong>P.R. Bevington and D.K. Robinson</strong> 2003. Data Reduction and Error Analysis for the Physical Sciences. Third Edition, McGraw Hill Higher Education.</p>
-<p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> et al., 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
-<p id="lee2015"><strong>Lee, Y.J.</strong> et al., 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
-<p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> et al., 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
-<p id="shalygina2015"><strong>Shalygina, Y.J.</strong> et al., 2015. Optical properties of the Venus upper clouds from the data obtained
+<p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> <em>et al.</em>, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
+<p id="lee2015"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
+<p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> <em>et al.</em>, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
+<p id="shalygina2015"><strong>Shalygina, Y.J.</strong> <em>et al.</em>, 2015. Optical properties of the Venus upper clouds from the data obtained
 by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 113-114, 135-158. <a class="reference external" href="https://doi.org/10.1016/j.pss.2014.11.012">DOI 10.1016/j.pss.2014.11.012</a>.</p>
 </section>
 </section>
@@ -754,7 +797,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Jun 18, 2024, 9:18:17 AM.
+      <span class="lastupdated">Last updated on Jun 24, 2024, 7:16:14 AM.
       </span></p>
   </div>
 
