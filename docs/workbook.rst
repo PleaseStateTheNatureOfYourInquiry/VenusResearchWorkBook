@@ -19,7 +19,7 @@ Workbook
 
     The information about the orbit IDs per mission section comes from the file 
     :file:`SOMEWHEREONYOURCOMPUTER/Data/VEX/VEX-SCIOPS-LI-053_1_1_VEX_Orbit_Date_DOY_Listing_2014Sep15.numbers`,
-    see also the link to `Venus Express at the ESA PSA <https://www.cosmos.esa.int/web/psa/venus-express>`_
+    see also the link to `Venus Express at the ESA PSA <https://www.cosmos.esa.int/web/psa/venus-express>`_.
 
     .. csv-table:: **VEX Orbit IDs**
        :header: "mission section", "orbit ID range", date range
@@ -76,7 +76,7 @@ Step 01 - Extract VeRa-profiles information
 Using the :file:`VeRa_LocalSolarTime_CreateTable.py` script, I create two tables that list the **orbit ID, Day Of Year, time of observation, Local Solar Time, latitude, longitude** and **solar zenith angle** at the one bar level for each of the VeRa soundings used in this project. 
 
 The table :file:`VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat` contains this information for all the selected profiles from the **SPDC** (orbits 2775 - 2811).
-The table :file:`VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat` contains this information for all the selected profiles from the mission before the **SPDC**. (first orbit 0260, last orbit 2638 to be included).
+The table :file:`VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat` contains this information for all the selected profiles from the mission before the **SPDC**. (first included orbit 0260, last included orbit 2638).
 
 With the :file:`VeRaProfiles_Lon-Lat_LST-Lat_Figure.py` I create two plots, showing the distribution of the VeRa sounding locations on the Venus disk and as a function of  *LST*:
 
@@ -106,11 +106,11 @@ Step 02 - Filter VeRa profiles
 
 
 We believe that a vertical resolution of 1km for the temperature profiles is sufficient for our purposes. 
-Depending of the altitude of sounding, the VeRa profiles have a higher vertical resolution than 1km.
-Hence I use this to create **averaged** profiles, with bins that are one kilometer wide. 
-Upon averaging, I take the uncertainty in the average values as the standard deviation.
+Depending of the altitude of sounding, the VeRa profiles have a (much) higher vertical resolution.
+I create vertically **averaged** profiles, where I average the temperatures values in bins of one kilometer wide. 
+I take the standard deviation in each bin as the uncertainty of the averaged temperatures.
 
-The :py:meth:`~.getFilteredVeRaProfile` method is designed to create a filtered profile from an original VeRa profile. 
+The :py:meth:`~.getFilteredVeRaProfile` method is designed to create a filtered profile from an original VeRa profile.
 I use the default settings to calculate profiles between 6098km and 6154km (56 levels) at a 1km vertical resolution.
 
 .. note::
@@ -118,7 +118,7 @@ I use the default settings to calculate profiles between 6098km and 6154km (56 l
     Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.
 
 In order to make it easier to access all the filtered profiles at once, without the need to recalculate each one of them, 
-I use the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files:
+I use the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files using the :code:`np.save` function:
 
 | :file:`VeRaSelectedProfiles.profiles`
 | :file:`VeRaSouthPoleProfiles.profiles`
@@ -139,7 +139,8 @@ The Python dictionary has the following structure:
       'OriginalProfiles' : [],
       'NumberOfOriginalLevels' : [] }
 
-Each key in the dictionary corresponds to a list of the elements indicated by the key.
+Each key in the dictionary corresponds to a list of the variables as indicated by the key. 
+For example the key :code:`'OrbitID'` is a list of strings, whereas the key :code:`'FilteredProfiles'` is a list of lists. 
 The length of each list for each key is of course the same and all elements at the same index in the lists correspond to each other.
 
 The NumPy files can be read with:
