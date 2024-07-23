@@ -112,7 +112,7 @@
 <p class="admonition-title">VEX Orbit IDs</p>
 <p>The information about the orbit IDs per mission section comes from the file
 <code class="file docutils literal notranslate"><span class="pre">SOMEWHEREONYOURCOMPUTER/Data/VEX/VEX-SCIOPS-LI-053_1_1_VEX_Orbit_Date_DOY_Listing_2014Sep15.numbers</span></code>,
-see also the link to <a class="reference external" href="https://www.cosmos.esa.int/web/psa/venus-express">Venus Express at the ESA PSA</a></p>
+see also the link to <a class="reference external" href="https://www.cosmos.esa.int/web/psa/venus-express">Venus Express at the ESA PSA</a>.</p>
 <table class="docutils align-default" id="id2">
 <caption><span class="caption-text"><strong>VEX Orbit IDs</strong></span><a class="headerlink" href="#id2" title="Link to this table"></a></caption>
 <thead>
@@ -174,7 +174,7 @@ At this point (2024) I redo the entire analysis, rewriting all code using Python
 </div>
 <p>Using the <code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_CreateTable.py</span></code> script, I create two tables that list the <strong>orbit ID, Day Of Year, time of observation, Local Solar Time, latitude, longitude</strong> and <strong>solar zenith angle</strong> at the one bar level for each of the VeRa soundings used in this project.</p>
 <p>The table <code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat</span></code> contains this information for all the selected profiles from the <strong>SPDC</strong> (orbits 2775 - 2811).
-The table <code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat</span></code> contains this information for all the selected profiles from the mission before the <strong>SPDC</strong>. (first orbit 0260, last orbit 2638 to be included).</p>
+The table <code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat</span></code> contains this information for all the selected profiles from the mission before the <strong>SPDC</strong>. (first included orbit 0260, last included orbit 2638).</p>
 <p>With the <code class="file docutils literal notranslate"><span class="pre">VeRaProfiles_Lon-Lat_LST-Lat_Figure.py</span></code> I create two plots, showing the distribution of the VeRa sounding locations on the Venus disk and as a function of  <em>LST</em>:</p>
 <a class="reference internal image-reference" href="_images/VeRaProfiles_Lon-Lat_Figure.png"><img alt="_images/VeRaProfiles_Lon-Lat_Figure.png" src="_images/VeRaProfiles_Lon-Lat_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
 <a class="reference internal image-reference" href="_images/VeRaProfiles_LocalSolarTime-Lat_Figure.png"><img alt="_images/VeRaProfiles_LocalSolarTime-Lat_Figure.png" src="_images/VeRaProfiles_LocalSolarTime-Lat_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
@@ -194,9 +194,9 @@ The table <code class="file docutils literal notranslate"><span class="pre">VeRa
 </div>
 </div>
 <p>We believe that a vertical resolution of 1km for the temperature profiles is sufficient for our purposes.
-Depending of the altitude of sounding, the VeRa profiles have a higher vertical resolution than 1km.
-Hence I use this to create <strong>averaged</strong> profiles, with bins that are one kilometer wide.
-Upon averaging, I take the uncertainty in the average values as the standard deviation.</p>
+Depending of the altitude of sounding, the VeRa profiles have a (much) higher vertical resolution.
+I create vertically <strong>averaged</strong> profiles, where I average the temperatures values in bins of one kilometer wide.
+I take the standard deviation in each bin as the uncertainty of the averaged temperatures.</p>
 <p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">getFilteredVeRaProfile()</span></code> method is designed to create a filtered profile from an original VeRa profile.
 I use the default settings to calculate profiles between 6098km and 6154km (56 levels) at a 1km vertical resolution.</p>
 <div class="admonition note">
@@ -204,7 +204,7 @@ I use the default settings to calculate profiles between 6098km and 6154km (56 l
 <p>Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.</p>
 </div>
 <p>In order to make it easier to access all the filtered profiles at once, without the need to recalculate each one of them,
-I use the <code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfiles_CreateNumpyArray.py</span></code> script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files:</p>
+I use the <code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfiles_CreateNumpyArray.py</span></code> script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files using the <code class="code docutils literal notranslate"><span class="pre">np.save</span></code> function:</p>
 <div class="line-block">
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSelectedProfiles.profiles</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSouthPoleProfiles.profiles</span></code></div>
@@ -223,14 +223,15 @@ I use the <code class="file docutils literal notranslate"><span class="pre">./sc
   <span class="s1">&#39;NumberOfOriginalLevels&#39;</span> <span class="p">:</span> <span class="p">[]</span> <span class="p">}</span>
 </pre></div>
 </div>
-<p>Each key in the dictionary corresponds to a list of the elements indicated by the key.
+<p>Each key in the dictionary corresponds to a list of the variables as indicated by the key.
+For example the key <code class="code docutils literal notranslate"><span class="pre">'OrbitID'</span></code> is a list of strings, whereas the key <code class="code docutils literal notranslate"><span class="pre">'FilteredProfiles'</span></code> is a list of lists.
 The length of each list for each key is of course the same and all elements at the same index in the lists correspond to each other.</p>
 <p>The NumPy files can be read with:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">profiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span> <span class="p">(</span><span class="s1">&#39;VeRaSouthPolarDynamicsCampaignProfiles.profiles&#39;</span><span class="p">,</span> <span class="n">allow_pickle</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span> <span class="p">()</span>
 </pre></div>
 </div>
 <p>As an example, I create two plots (T-z and dT/dZ - z) to show the results for one profile (<code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py</span></code>):</p>
-<a class="reference internal image-reference" href="_images/VeRaProfiles_Orb2811_T-z_Figure.png"><img alt="_images/VeRaProfiles_Orb2811_T-z_Figure.png" src="_images/VeRaProfiles_Orb2811_T-z_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
+<a class="reference internal image-reference" href="_images/VeRaProfiles_Orb2811_T-z_Figure.png"><img alt="_images/VeRaProfiles_Orb2811_T-z_Figure.png" src="_images/VeRaProfiles_Orb2811_T-z_Figure.png" style="width: 1200.0px; height: 360.0px;" /></a>
 <a class="reference internal image-reference" href="_images/VeRaProfiles_Orb2811_dTdz-z_Figure.png"><img alt="_images/VeRaProfiles_Orb2811_dTdz-z_Figure.png" src="_images/VeRaProfiles_Orb2811_dTdz-z_Figure.png" style="width: 384.0px; height: 288.0px;" /></a>
 </section>
 </section>
@@ -797,7 +798,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Jun 24, 2024, 8:14:03 PM.
+      <span class="lastupdated">Last updated on Jul 23, 2024, 11:24:57 PM.
       </span></p>
   </div>
 
