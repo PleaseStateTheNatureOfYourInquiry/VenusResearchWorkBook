@@ -107,30 +107,26 @@ Step 02 - Filter VeRa profiles
 
 We believe that a vertical resolution of 1km for the temperature profiles is sufficient for our purposes. 
 Depending of the altitude of sounding, the VeRa profiles have a (much) higher vertical resolution.
-I create vertically **averaged** profiles, where I average the temperatures values in bins of one kilometer wide. 
-I take the standard deviation in each bin as the uncertainty of the averaged temperatures.
+I create vertically **averaged** profiles, where I average the temperatures values in vertical bins of one kilometer wide.
+I take the standard deviation in each bin to be the uncertainty of the average temperature for that bin.
+If there is only one value in the bin, then the uncertainty is not calculated (set to NaN). This occurs higher in the atmosphere, above 80km altitude, a region that is not important for this study.
 
-The :py:meth:`~.getFilteredVeRaProfile` method is designed to create a filtered profile from an original VeRa profile.
+The :py:meth:`~.getFilteredVeRaProfile` method is designed to create a filtered (vertically averaged) profile from an original VeRa profile.
 I use the default settings to calculate profiles between 6098km and 6154km (56 levels) at a 1km vertical resolution.
 
 .. note::
 
     Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.
 
-In order to make it easier to access all the filtered profiles at once, without the need to recalculate each one of them, 
-I use the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files using the :code:`np.save` function:
 
-| :file:`VeRaSelectedProfiles.profiles`
-| :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles.profiles`
+As an example, I create two plots (T-z and dT/dZ - z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`, also see :ref:`Step02bis <VeRaStep02bis>` for details on the :code:`.profiles` files):
 
-See the :ref:`Step02bis <VeRaStep02bis>` for details.
-
-
-As an example, I create two plots (T-z and dT/dZ - z) to show the results for one profile (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`):
-
-.. image:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_T-z_Figure.png
+.. figure:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_T-z_Figure.png
     :scale: 60%
-.. image:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_dTdz-z_Figure.png
+
+    (left) Averaged temperature profile between 50 and 100km altitude and original VeRa profile; (middle) uncertainty (standard deviation) in the temperature as explained in the text above. The gaps are due to missing point, when the uncertainty is set to NaN, because there is only one temperature value in a vertical bin; (right) number of original VeRa temperatures for each vertical bin, in red are indicated levels with only one temperature value.
+
+.. figure:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_dTdz-z_Figure.png
     :scale: 60%
 
 
@@ -138,13 +134,14 @@ As an example, I create two plots (T-z and dT/dZ - z) to show the results for on
 .. VeRaStep02bis:
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Step 02bis - structure of the .profiles files
+Step 02bis - the .profiles files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The file in this project have been created with the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script and are called:
+In order to make it easier to access all the filtered profiles at once, without the need to recalculate each one of them, 
+I use the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files using the :code:`np.save` function:
 
 | :file:`VeRaSelectedProfiles.profiles`
-| :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles`
+| :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles.profiles`
 
 Each file is a Python dictionary with the following structure:
 
