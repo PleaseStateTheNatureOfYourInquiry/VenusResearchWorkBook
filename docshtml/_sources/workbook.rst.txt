@@ -121,9 +121,32 @@ In order to make it easier to access all the filtered profiles at once, without 
 I use the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files using the :code:`np.save` function:
 
 | :file:`VeRaSelectedProfiles.profiles`
-| :file:`VeRaSouthPoleProfiles.profiles`
+| :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles.profiles`
 
-The Python dictionary has the following structure:
+See the :ref:`Step02bis <VeRaStep02bis>` for details.
+
+
+As an example, I create two plots (T-z and dT/dZ - z) to show the results for one profile (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`):
+
+.. image:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_T-z_Figure.png
+    :scale: 60%
+.. image:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_dTdz-z_Figure.png
+    :scale: 60%
+
+
+
+.. VeRaStep02bis:
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 02bis - structure of the .profiles files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The file in this project have been created with the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script and are called:
+
+| :file:`VeRaSelectedProfiles.profiles`
+| :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles`
+
+Each file is a Python dictionary with the following structure:
 
 .. code:: Python
 
@@ -140,23 +163,31 @@ The Python dictionary has the following structure:
       'NumberOfOriginalLevels' : [] }
 
 Each key in the dictionary corresponds to a list of the variables as indicated by the key. 
-For example the key :code:`'OrbitID'` is a list of strings, whereas the key :code:`'FilteredProfiles'` is a list of lists. 
 The length of each list for each key is of course the same and all elements at the same index in the lists correspond to each other.
 
-The NumPy files can be read with:
+They can be read with the following command:
 
 .. code:: Python
 
-    profiles = np.load ('VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
+    [1] profilesDictionary = np.load ('VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
+
+
+As an example, corresponding to the figures in :ref:`VeRaStep02 <VeRaStep02>`:
+
+    | :code:`profilesDictionary ['OrbitID'][-1]: '2811' # str`
+    | :code:`profilesDictionary ['ProfileID'][-1]: 'V32ICL2L04_AEX_133650732_60.TAB' # str`
+    | :code:`profilesDictionary ['LatitudeOneBar'][-1]: -55.5 # float; unit ˚``
+    | :code:`profilesDictionary ['LongitudeOneBar'][-1]: 63.14 # float; unit ˚``
+    | :code:`profilesDictionary ['DayOfYear'][-1]: '2013-12-31 # str`
+    | :code:`profilesDictionary ['TimeOfDay'][-1]: 7.955436944444445 # float; unit hours`
+    | :code:`profilesDictionary ['LocalSolarTime'][-1]: 16.07 # float; unit hours`
+    | :code:`profilesDictionary ['FilteredProfiles'][-1]: # list of 10 lists` (first element of return of `VeRaTools.getFilteredVeRaProfile <https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.getFilteredVeRaProfile>`_)
+    | :code:`profilesDictionary ['NumberOfFilteredLevels'][-1]: 56 # int` (second element of return of `VeRaTools.getFilteredVeRaProfile <https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.getFilteredVeRaProfile>`_)
+    | :code:`profilesDictionary ['OriginalProfiles'][-1]: # list of seven lists` (first element of return of `VeRaTools.readVeRaTAB <https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.readVeRaTAB>`_)
+    | :code:`profilesDictionary ['NumberOfOriginalLevels'][-1]: 643 # int` (second element of return of `VeRaTools.readVeRaTAB <https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.readVeRaTAB>`_)
 
 
 
-As an example, I create two plots (T-z and dT/dZ - z) to show the results for one profile (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`):
-
-.. image:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_T-z_Figure.png
-    :scale: 60%
-.. image:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_dTdz-z_Figure.png
-    :scale: 60%
 
 
 
@@ -364,7 +395,7 @@ For the standard deviation of the wind speeds I estimate 20m/s for the zonal win
 These uncertainties determine the size of the area, the *latitude-longitude-box*, around the VeRa sounding location at the time of the VMC image observation: the corners of the box are calculated by taking the zonal and meridional wind speeds plus or minus their standard deviations, and calculate where the VeRa location would be advected to in those cases over the time difference between the VMC image and the VeRa acquisition. The larger the time span, the larger the uncertainty and thus the *latitude-longitude-box*.
 
 
-I create the method :py:meth:`~.getWindAdvectedBox` to calculate this *latitude-longitude-box* for a given VMC image.
+I create the method `VMCTools.getWindAdvectedBox <https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.getWindAdvectedBox>`_ to calculate this *latitude-longitude-box* for a given VMC image.
 This method is called in the script :file:`./scripts/VMCImagesEvaluate.py`.
 
 Running this scripts has two iterations. During the first iteration, I create to process all the images and create plots of each image with the position of the VeRa sounding indicated with a **X** and a box indicating the wind advected area of that location at the time of the VMC image in question. 
