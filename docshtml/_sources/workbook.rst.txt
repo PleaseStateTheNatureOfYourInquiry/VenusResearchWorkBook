@@ -898,8 +898,7 @@ Referring to :ref:`Archinal et al. 2018 <Archinal2018>` (their Section 2 and Fig
 * If the rotation of the planet is *retrograde* (clockwise seen from the North), then **W** decreases with time. This is the case for the Venus. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude increases with time.
     
 
-This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise.
-Hence the (East) longitude should be increasing in the counter-clockwise direction. This is the case (see also `VMCTools.readVMCImageAndGeoCube <https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube>`_):
+This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise, and the (East) longitude increases in the clockwise direction. This is the case (see also `VMCTools.readVMCImageAndGeoCube <https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube>`_):
 
 .. figure:: ./images/longitudeTransformationCheck.png
     :scale: 80%
