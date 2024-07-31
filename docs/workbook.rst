@@ -108,23 +108,23 @@ Step 02 - Filter VeRa profiles
 We believe that a vertical resolution of 1km for the temperature profiles is sufficient for our purposes. 
 Depending of the altitude of sounding, the VeRa profiles have a (much) higher vertical resolution.
 I create vertically **averaged** profiles, where I average the temperatures values in vertical bins of one kilometer wide.
-I take the standard deviation in each bin to be the uncertainty of the average temperature for that bin.
+I take the standard deviation in each bin as the uncertainty of the average temperature for that bin.
 If there is only one value in the bin, then the uncertainty is not calculated (set to NaN). This occurs higher in the atmosphere, above 80km altitude, a region that is not important for this study.
 
-The :py:meth:`~.getFilteredVeRaProfile` method is designed to create a filtered (vertically averaged) profile from an original VeRa profile.
-I use the default settings to calculate profiles between 6098km and 6154km (56 levels) at a 1km vertical resolution.
+The `VeRaTools.getFilteredVeRaProfile <https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.getFilteredVeRaProfile>`_ method of the `VeraTools pseudo class <https://venustools.readthedocs.io/en/latest/veratools.html#>`_ is designed to create a filtered (vertically averaged) profile from an original VeRa profile.
+I use the default settings to calculate profiles between 48km and 104km (56 levels) at a 1km vertical resolution.
 
 .. note::
 
     Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.
 
 
-As an example, I create two plots (T-z and dT/dZ - z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`, also see :ref:`Step02bis <VeRaStep02bis>` for details on the :code:`.profiles` files):
+As an example below are plots of T(z) and dT/dZ (z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`, also see :ref:`Step02bis <VeRaStep02bis>` for details on the :code:`.profiles` files):
 
 .. figure:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_T-z_Figure.png
     :scale: 60%
 
-    (left) Averaged temperature profile between 50 and 100km altitude and original VeRa profile; (middle) uncertainty (standard deviation) in the temperature as explained in the text above. The gaps are due to missing point, when the uncertainty is set to NaN, because there is only one temperature value in a vertical bin; (right) number of original VeRa temperatures for each vertical bin, in red are indicated levels with only one temperature value.
+    (left) Averaged temperature profile between 50 and 100km altitude (blue) and original VeRa profile (orange); (middle) uncertainty (standard deviation) in the temperature as explained in the text above. The gaps are due to missing point, when the uncertainty is set to NaN, because there is only one temperature value in a vertical bin; (right) number of original VeRa temperatures for each vertical bin, in red are indicated levels with only one temperature value.
 
 .. figure:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_dTdz-z_Figure.png
     :scale: 60%
@@ -138,7 +138,7 @@ Step 02bis - the .profiles files
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In order to make it easier to access all the filtered profiles at once, without the need to recalculate each one of them, 
-I use the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable, which is written to two NumPy files using the :code:`np.save` function:
+I create and run the :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py` script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable.  I create two NumPy files (using the :code:`np.save` function):
 
 | :file:`VeRaSelectedProfiles.profiles`
 | :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles.profiles`
@@ -160,8 +160,7 @@ Each file is a Python dictionary with the following structure:
       'NumberOfOriginalLevels' : [] }
 
 Each key in the dictionary corresponds to a list of the variables as indicated by the key. 
-The length of each list for each key is of course the same and all elements at the same index in the lists correspond to each other.
-
+The length of each list for each key is the same and all elements at the same index in the lists correspond to each other.
 They can be read with the following command:
 
 .. code:: Python
@@ -169,7 +168,7 @@ They can be read with the following command:
     [1] profilesDictionary = np.load ('VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
 
 
-As an example, corresponding to the figures in :ref:`VeRaStep02 <VeRaStep02>`:
+As an example the last profiles in the :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles.profiles` file, corresponding to the figures in :ref:`VeRaStep02 <VeRaStep02>`:
 
     | :code:`profilesDictionary ['OrbitID'][-1]: '2811' # str`
     | :code:`profilesDictionary ['ProfileID'][-1]: 'V32ICL2L04_AEX_133650732_60.TAB' # str`
@@ -208,7 +207,7 @@ VEX-VMC data
 Reading PDS3 images with Python
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The VMC PDS files are in **PDS3** format. 
+The VMC PDS files are stored in **PDS3** format. 
 A search for a Python module to read these files leads to `planetaryimage <https://planetaryimage.readthedocs.io/en/latest/index.html>`_.
 It is older software, I see that the latest update recorded on the website is from 26 March 2016 (20160326), but for my purposes it is exactly what I need.
 After all, the PDS files are from that same time period. I install the module with:
@@ -218,8 +217,7 @@ After all, the PDS files are from that same time period. I install the module wi
     pip install planetaryimage
 
 
-I also retrieve the source code from Github and park it in :file:`VMC/planetaryimage-master`. I compile the `documentation locally <file: VMC/planetaryimage-master/docs-html/index.html>`_.
-
+I also retrieve the source code from Github and park it in :file:`VMC/planetaryimage-master`, and compile the `documentation locally <file: ../Temperature-UVBrightness-Project/VMC/planetaryimage-master/docs-html/index.html>`_.
 I try it out with the Python script :file:`./scripts/workingWithPlanetaryImages.py`:
 
 .. code-block:: Python
@@ -309,7 +307,7 @@ Step 01 - Select & process VMC images
 
 .. admonition:: directory, scripts & files
 
-    |  top directory: :file:`VMC/Step01`
+    | top directory: :file:`VMC/Step01`
     | scripts:
     | :file:`./scripts/VMCImagesEvaluate.py`
     | files:
@@ -392,14 +390,14 @@ For the standard deviation of the wind speeds I estimate 20m/s for the zonal win
 These uncertainties determine the size of the area, the *latitude-longitude-box*, around the VeRa sounding location at the time of the VMC image observation: the corners of the box are calculated by taking the zonal and meridional wind speeds plus or minus their standard deviations, and calculate where the VeRa location would be advected to in those cases over the time difference between the VMC image and the VeRa acquisition. The larger the time span, the larger the uncertainty and thus the *latitude-longitude-box*.
 
 
-I create the method `VMCTools.getWindAdvectedBox <https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.getWindAdvectedBox>`_ to calculate this *latitude-longitude-box* for a given VMC image.
+I create the method `getWindAdvectedBox <https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.getWindAdvectedBox>`_ in the `VMCTools pseudo class <https://venustools.readthedocs.io/en/latest/vmctools.html#>`_ to calculate this *latitude-longitude-box* for a given VMC image.
 This method is called in the script :file:`./scripts/VMCImagesEvaluate.py`.
 
 Running this scripts has two iterations. During the first iteration, I create to process all the images and create plots of each image with the position of the VeRa sounding indicated with a **X** and a box indicating the wind advected area of that location at the time of the VMC image in question. 
-These plots are saved in the subfolder :file:`Images` created inside the directories of the orbits containing the .GEO and .IMG files, for example :file:`/Users/maarten/Science/Venus/Temperature-UV_Analysis_2024/Data/VEX/VMC/Orb2811/Images`. 
+These plots are saved in the subfolder :file:`Images` created inside the directories of the orbits containing the .GEO and .IMG files, for example :file:`SOMEPATH//Venus/Data/VEX/VMC/Orb2811/Images`. 
 
 I manually evaluate each image plot and select the ones that have the advected box fully on the visible disk of Venus as mentioned above, and copy these plots to the :file:`UsedImages` subfolder that I manually create in each orbit directory, for example 
-:file:`/Users/maarten/Science/Venus/Temperature-UV_Analysis_2024/Data/VEX/VMC/Orb2811/UsedImages`. 
+:file:`SOMEPATH/Venus/Data/VEX/VMC/Orb2811/UsedImages`. 
 
 I now run the :file:`./scripts/VMCImagesEvaluate.py` script a second time to process the selected images and write the results to the :file:`VMCSelectedImages.dat` table file. The header and first few lines of which are of this file are:
 
