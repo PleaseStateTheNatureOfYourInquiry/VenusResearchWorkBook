@@ -150,6 +150,12 @@ see also the link to <a class="reference external" href="https://www.cosmos.esa.
 </tbody>
 </table>
 </div>
+<div class="admonition-unresolved-questions-not-to-forget admonition" id="unresolvedquestionnottoforget">
+<p class="admonition-title">unresolved questions not to forget</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#unresolvedquestion1"><span class="std std-ref">Why during the some orbits, in the same orbit different calibration factors where used?</span></a></p></li>
+</ul>
+</div>
 <section id="temperature-vs-uv-brightness">
 <span id="temperaturevsuvbrightness"></span><h2>Temperature vs UV-brightness<a class="headerlink" href="#temperature-vs-uv-brightness" title="Link to this heading"></a></h2>
 <p>The goal of this project is to investigate whether there is any relation between the atmospheric temperature as measured by means of radio occultation experiments and the UV-brightness as measured from images in the UV.</p>
@@ -508,7 +514,7 @@ In this way, I do not need to recalculate these if I need them at some later sta
 </div>
 <p>In this step, I construct the phase curve.
 The 1374 selected images from 73 orbits cover a phase angle range between 27˚ and 140˚.
-These images have been selected during <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a> above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file”<cite>UsedImages</cite> subfolders for each orbit.</p>
+These images have been selected during <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a> above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file`UsedImages` subfolders for each orbit.</p>
 <p>For each selected image, I use all the pixels on the visible disk and take the average and the median values.
 By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
 In order to avoid the effect of these outliers, I apply an iterative averaging process:</p>
@@ -546,8 +552,8 @@ V0268_0030_UV2       89.52         0.895      0.1801        0.743    0.889    1.
 ...
 </pre></div>
 </div>
-<p>Though looking at the resulting radiance values, these seem to be consistent among each other, which could mean these images have been recorded in different amplifier modes? I cannot seem to find information about this in the header or other metadata with the image.</p>
-<p>When I ignore different part of data, the phase curve becomes more convincing:</p>
+<p id="unresolvedquestion1">Though looking at the resulting radiance values, these seem to be consistent among each other, which could mean these images have been recorded in different amplifier modes? I cannot seem to find information about this in the header or other metadata with the image (see <a class="reference internal" href="#unresolvedquestionnottoforget"><span class="std std-ref">first unresolved question</span></a>).</p>
+<p>When I ignore different sections of data, the phase curve becomes more convincing:</p>
 <a class="reference internal image-reference" href="_images/PhaseCurveExtension1-4+SPDC_allPhaseAngles.png"><img alt="_images/PhaseCurveExtension1-4%2BSPDC_allPhaseAngles.png" src="_images/PhaseCurveExtension1-4%2BSPDC_allPhaseAngles.png" style="width: 480.0px; height: 360.0px;" /></a>
 <a class="reference internal image-reference" href="_images/PhaseCurveExtension2-4+SPDC_allPhaseAngles.png"><img alt="_images/PhaseCurveExtension2-4%2BSPDC_allPhaseAngles.png" src="_images/PhaseCurveExtension2-4%2BSPDC_allPhaseAngles.png" style="width: 480.0px; height: 360.0px;" /></a>
 <p>Finally, discarding the data from the highest phase angles (&gt;=130˚) also seems to help:</p>
@@ -569,22 +575,25 @@ I get the following sequence of results (same as above, first all the data, seco
 <p><span class="caption-text">Ignore data from the Nominal and Extension 1 mission section and phase angles &gt;= 130˚ - binned.</span><a class="headerlink" href="#id15" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>The grey area is calculated by varying the value in each bin, by adding a random value to the binned value.
-This random value is normally distributed around the average (the value in the bin).
-The standard deviation I took as the maximum of the standard deviation as calculated from the individual values that make up the average value in the bin, and the uncertainty as be assessed through equation 3.14 of <a class="reference internal" href="#bevington2003"><span class="std std-ref">Bevington and Robinson (2003)</span></a>:</p>
+<p>The grey area around the line is the result of estimating the uncertainty.
+To do that I varied the value in each bin by adding a random value to the bin value.
+This random value is taken from a normal distribution: the standard deviation of this normal distribution is the maximum of all the uncertainties on the individual values in the bin and the uncertainty as assessed through equation 3.14 of <a class="reference internal" href="#bevington2003"><span class="std std-ref">Bevington and Robinson (2003)</span></a>:</p>
 <div class="math notranslate nohighlight">
 \[\sigma_v^2 = \sum \sigma_{x_i}^2    \frac{\partial v}{\partial x_i}^2\]</div>
 <p>with <span class="math notranslate nohighlight">\(v\)</span> being the average value of <span class="math notranslate nohighlight">\((x_1, x_2, ..., x_N)\)</span>, the individual values in the bin, hence <span class="math notranslate nohighlight">\(v = \sum x_i / N\)</span>, and thus:</p>
 <div class="math notranslate nohighlight" id="uncertaintyinaverage">
 \[\sigma_v^2 = \sum  \sigma_{xi}^2 / N^2\]</div>
 <p>I run this test 1000 times, and for each set of new binned values I recalculate the fit and plot it in light transparent grey. These are the grey areas in the plots, around the fitted phase curves.
-I also keep the values for all these tests to estimate the uncertainties in the fitted phase curve. There are possibly two ways to determine this uncertainty. One would be to calculate the standard deviation of the radiance factors of the 1000 experiments for each phase angle bin, the other to simply take the difference between the maximum and the minimum value of the 1000 experiments for each phase angle bin.
+I also keep the values for all these tests to estimate the uncertainties in the fitted phase curve. There are possibly two ways to determine this uncertainty. One would be to calculate the standard deviation of the radiance factors of the 1000 experiments for each phase angle bin.
+The other is to simply take the difference between the maximum and the minimum value of the 1000 experiments for each phase angle bin.
+This second method generally results in larger uncertainties, but not always.
 Also, the average value of the 1000 experiments for each phase angle bin should be the same, to within great precision, as the model fit. I verify that this is true to the level of a 0.05% (<span class="math notranslate nohighlight">\(100 * (RF_{model} - RF_{average}) / RF_{model}\)</span>).</p>
-<p>Using the <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit.dat</span></code> table file:</p>
+<p>Using the <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit.dat</span></code> table file, that contains the results of these experiments and the different ways
+to determine the uncertainties.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span> File: PhaseCurveFit.dat
  Created at 2024-05-25 at 22:19:37
 
-  RF (pa)= 0.000174 * pa^2 + -0.0216 * pa +   1.174  |  r^2 = 0.956 (pa = phase angle in ˚)
+  RF (pa)  =  0.000174 * pa^2  +  -0.0216 * pa  +  1.174  |  r^2 = 0.956  (pa = phase angle in ˚)
 
  RF (Fit) = Radiance Factor as fit with the quadratic model above
  RF (Average) = average Radiance Factor from 1000 gaussian noise experiments
@@ -618,11 +627,11 @@ C_END
 </div>
 <p>It is now the moment to analyse any correlation between the VeRa-derived temperatures at 70km altitude and the VMC-derived UV-brightness in the same area.</p>
 <p>For this part, as for the determination of the phase curve in the previous step, I ignore the selected images from the nominal and the extension 1 sections.
-The first orbit in my data set is <code class="file docutils literal notranslate"><span class="pre">Orb1188</span></code> from extension 2.</p>
+The first orbit in my data set is <code class="file docutils literal notranslate"><span class="pre">Orb1188</span></code> from Extension 2.</p>
 <p>The table file <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> contains the average radiance factors inside the latitude-longitude-boxes corresponding to the VeRa-sounding at the time of the image, as well as the phase angle at the time of observation and the VeRa-derived temperature at 70km altitude.
 Note that for the South Polar Dynamics Campaign, there are images on both the ingress and egress sections of the orbit, before and after the VeRa sounding.
 See also the <a class="reference internal" href="#orbitimagesexample"><span class="std std-ref">examples for orbit 2811</span></a> in <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a>.</p>
-<p>In order to compare the radiance factors between images at different phase angles, they have to be corrected or normalised for the phase angle dependency using the phase curve.
+<p>In order to compare the radiance factors between images at different phase angles, they have to be corrected, or normalised, for the phase angle dependency using the phase curve.
 To do this, I normalise the radiance factors to the radiance factor of the phase curve at the same phase angle.
 I call this variable the Radiance Factor Ratio (<span class="math notranslate nohighlight">\(RFR\)</span>):</p>
 <div class="math notranslate nohighlight">
@@ -634,7 +643,10 @@ I call this variable the Radiance Factor Ratio (<span class="math notranslate no
 <p>First, look at two separate orbits from the South Polar Dynamics Campaign (2811) and extension 3 (1748):</p>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_images_orbit_2811-2811.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_images_orbit_2811-2811.png" src="_images/RadianceFactorRatio_vs_Temperature_images_orbit_2811-2811.png" style="width: 480.0px; height: 360.0px;" /></a>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_images_orbit_1748-1748.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_images_orbit_1748-1748.png" src="_images/RadianceFactorRatio_vs_Temperature_images_orbit_1748-1748.png" style="width: 480.0px; height: 360.0px;" /></a>
-<p>There are two groups of points for the orbit 2811, the RFR values for the egress images very close to the actual VeRa observation in time and place are significantly higher: they are at low phases angle and the amount of points in the boxes is low, <em>i.e.</em> the box is very small. Here is print of the values with first the phase angle, next the radiance factor divided by the model phase curve radiance factor, which equals the RFR. The number of points in the latitude-longitude box is the last number:</p>
+<p>There are two groups of points for the orbit 2811.
+The RFR values for the egress images very close to the actual VeRa observation in time and place are significantly higher: they are at low phases angle and the amount of points in the boxes is low, <em>i.e.</em> the boxes are very small.
+Corresponding to the figure on the left above, below are printed the phase angle, the radiance factor divided by the model phase curve radiance factor and the
+resulting RFR and uncertainty (as per the formula above). The number of points in the latitude-longitude box is the last number on each line:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> 82˚: 0.5710 / 0.5740 = 0.9948 +/- 0.1196 (# points = 702)</span>
 <span class="go"> 84˚: 0.5780 / 0.5880 = 0.9830 +/- 0.1111 (# points = 635)</span>
 <span class="go"> 85˚: 0.5830 / 0.5960 = 0.9782 +/- 0.1073 (# points = 585)</span>
@@ -658,8 +670,8 @@ I call this variable the Radiance Factor Ratio (<span class="math notranslate no
 <span class="go"> 34˚: 0.8000 / 0.6420 = 1.2461 +/- 0.1610 (# points =  13)</span>
 </pre></div>
 </div>
-<p>It can be seen that the statistics for last three images (which correspond to the  <a class="reference internal" href="#orbitimagesexample"><span class="std std-ref">last row here</span></a>), is based on very low numbers, compared to the ingress images. The uncertainties in the last three are therefore larger. I am not sure how to compare these two sets properly.</p>
-<p>I can make three plots:</p>
+<p>It can be seen that the statistics for last three images (which correspond to the  <a class="reference internal" href="#orbitimagesexample"><span class="std std-ref">last row here</span></a>), is based on very low numbers, compared to the ingress images. The uncertainties in the last three are (therefore) larger. I am not sure how to compare these two sets properly.</p>
+<p>I can make three types plots:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>the RFR of all the images as a function of VeRa-derived temperature;</p></li>
@@ -669,13 +681,14 @@ I call this variable the Radiance Factor Ratio (<span class="math notranslate no
 </div></blockquote>
 <div class="admonition-uncertainties-in-the-case-of-taking-the-average-of-a-set-rfr-values-for-one-orbit admonition">
 <p class="admonition-title">uncertainties in the case of taking the average of a set RFR values for one orbit</p>
-<p>The uncertainty is the maximum of on the one hand the uncertainty as derived from the <a class="reference internal" href="#uncertaintyinaverage"><span class="std std-ref">averaging formula</span></a> and on the other hand the standard deviation of the average of the points. The last value is (almost) always the larger one, which means that the error bars represent the spread in the points. For the South Polar Dynamics Campaign (red points in the figures below) the spread is large due to the ingress and egress value differences.</p>
+<p>The uncertainty is the maximum of the uncertainty derived from the <a class="reference internal" href="#uncertaintyinaverage"><span class="std std-ref">averaging formula</span></a> and the standard deviation of the average of the points.
+The last value is almost always the larger one. For the South Polar Dynamics Campaign (red points in the figures below) the spread is large due to the ingress and egress value differences.</p>
 </div>
 <div class="admonition-uncertainties-in-the-case-of-taking-the-median-of-a-set-rfr-values-for-one-orbit admonition">
 <p class="admonition-title">uncertainties in the case of taking the median of a set RFR values for one orbit</p>
-<p>The uncertainty in the median can be evaluated by means of changing the data points in the set and recalculate a median at each new instance. Each data point in the set has an uncertainty associated. Take this uncertainty as the standard deviation for that data point around the mean, which is the value of the data point. Using the NumPy <em>np.random.normal</em> method create gaussian noise with the standard deviation for each data point and add it to that data point. In this case I do this 1000 times for the whole set, and therefore I get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the the uncertainty in the median.</p>
+<p>The uncertainty in the median can be evaluated by means of changing the data points in the set and recalculate a median at each new instance. Each data point in the set has an uncertainty associated. Take this uncertainty as the standard deviation for that data point around the mean, which is the value of the data point. Using the NumPy <em>np.random.normal</em> method create gaussian noise with the standard deviation for each data point and add it to that data point. In this case I do this 1000 times for the whole set and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median.</p>
 <p>On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.</p>
-<p>I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, and in other cases the second one.</p>
+<p>I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, in other cases the second one.</p>
 </div>
 <p>When I use all the images with phase angles &lt; 130˚, which is the limit of the phase curve, see <a class="reference internal" href="#vmcstep02"><span class="std std-ref">Step 02</span></a>, then the results are:</p>
 <figure class="align-default" id="id16">
@@ -822,7 +835,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Jul 31, 2024, 10:09:25 PM.
+      <span class="lastupdated">Last updated on Aug 01, 2024, 5:06:19 PM.
       </span></p>
   </div>
 

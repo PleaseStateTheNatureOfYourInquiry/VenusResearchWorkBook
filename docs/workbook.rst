@@ -33,6 +33,13 @@ Workbook
         
 
 
+.. _unresolvedquestionnottoforget:
+
+.. admonition:: unresolved questions not to forget
+
+    - :ref:`Why during the some orbits, in the same orbit different calibration factors where used? <unresolvedquestion1>`
+
+
 
 
 .. _temperaturevsuvbrightness:
@@ -480,7 +487,7 @@ Step 02 - Determine phase curve
 
 In this step, I construct the phase curve. 
 The 1374 selected images from 73 orbits cover a phase angle range between 27˚ and 140˚.
-These images have been selected during :ref:`Step 1<VMCStep01>` above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file"`UsedImages` subfolders for each orbit.
+These images have been selected during :ref:`Step 1<VMCStep01>` above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file`UsedImages` subfolders for each orbit.
 
 For each selected image, I use all the pixels on the visible disk and take the average and the median values.
 By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
@@ -531,9 +538,12 @@ Could this be related to calibration issues? When inspecting more closely the va
      ...
 
 
-Though looking at the resulting radiance values, these seem to be consistent among each other, which could mean these images have been recorded in different amplifier modes? I cannot seem to find information about this in the header or other metadata with the image.
+.. _unresolvedquestion1:
 
-When I ignore different part of data, the phase curve becomes more convincing:
+Though looking at the resulting radiance values, these seem to be consistent among each other, which could mean these images have been recorded in different amplifier modes? I cannot seem to find information about this in the header or other metadata with the image (see :ref:`first unresolved question <unresolvedquestionnottoforget>`).
+
+
+When I ignore different sections of data, the phase curve becomes more convincing:
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step02/plots/PhaseCurveExtension1-4+SPDC_allPhaseAngles.png
     :scale: 75%
@@ -568,9 +578,9 @@ Finally:
     Ignore data from the Nominal and Extension 1 mission section and phase angles >= 130˚ - binned.    
     
 
-The grey area is calculated by varying the value in each bin, by adding a random value to the binned value.
-This random value is normally distributed around the average (the value in the bin).
-The standard deviation I took as the maximum of the standard deviation as calculated from the individual values that make up the average value in the bin, and the uncertainty as be assessed through equation 3.14 of :ref:`Bevington and Robinson (2003) <Bevington2003>`:
+The grey area around the line is the result of estimating the uncertainty.
+To do that I varied the value in each bin by adding a random value to the bin value.
+This random value is taken from a normal distribution: the standard deviation of this normal distribution is the maximum of all the uncertainties on the individual values in the bin and the uncertainty as assessed through equation 3.14 of :ref:`Bevington and Robinson (2003) <Bevington2003>`:
 
 .. math::
 
@@ -587,10 +597,13 @@ with :math:`v` being the average value of :math:`(x_1, x_2, ..., x_N)`, the indi
 
 
 I run this test 1000 times, and for each set of new binned values I recalculate the fit and plot it in light transparent grey. These are the grey areas in the plots, around the fitted phase curves.
-I also keep the values for all these tests to estimate the uncertainties in the fitted phase curve. There are possibly two ways to determine this uncertainty. One would be to calculate the standard deviation of the radiance factors of the 1000 experiments for each phase angle bin, the other to simply take the difference between the maximum and the minimum value of the 1000 experiments for each phase angle bin.
+I also keep the values for all these tests to estimate the uncertainties in the fitted phase curve. There are possibly two ways to determine this uncertainty. One would be to calculate the standard deviation of the radiance factors of the 1000 experiments for each phase angle bin. 
+The other is to simply take the difference between the maximum and the minimum value of the 1000 experiments for each phase angle bin.
+This second method generally results in larger uncertainties, but not always.
 Also, the average value of the 1000 experiments for each phase angle bin should be the same, to within great precision, as the model fit. I verify that this is true to the level of a 0.05% (:math:`100 * (RF_{model} - RF_{average}) / RF_{model}`).
 
-Using the :file:`./scripts/ExtractPhaseCurve.py` I create the :file:`PhaseCurveFit.dat` table file:
+Using the :file:`./scripts/ExtractPhaseCurve.py` I create the :file:`PhaseCurveFit.dat` table file, that contains the results of these experiments and the different ways 
+to determine the uncertainties.
 
 .. code-block::
 
@@ -598,7 +611,7 @@ Using the :file:`./scripts/ExtractPhaseCurve.py` I create the :file:`PhaseCurveF
      File: PhaseCurveFit.dat
      Created at 2024-05-25 at 22:19:37
      
-      RF (pa)= 0.000174 * pa^2 + -0.0216 * pa +   1.174  |  r^2 = 0.956 (pa = phase angle in ˚)
+      RF (pa)  =  0.000174 * pa^2  +  -0.0216 * pa  +  1.174  |  r^2 = 0.956  (pa = phase angle in ˚)
      
      RF (Fit) = Radiance Factor as fit with the quadratic model above
      RF (Average) = average Radiance Factor from 1000 gaussian noise experiments
@@ -637,13 +650,13 @@ Step 03 - Investigate correlation
 It is now the moment to analyse any correlation between the VeRa-derived temperatures at 70km altitude and the VMC-derived UV-brightness in the same area.
 
 For this part, as for the determination of the phase curve in the previous step, I ignore the selected images from the nominal and the extension 1 sections.
-The first orbit in my data set is :file:`Orb1188` from extension 2.
+The first orbit in my data set is :file:`Orb1188` from Extension 2.
 
 The table file :file:`VMCSelectedImages.dat` contains the average radiance factors inside the latitude-longitude-boxes corresponding to the VeRa-sounding at the time of the image, as well as the phase angle at the time of observation and the VeRa-derived temperature at 70km altitude.
 Note that for the South Polar Dynamics Campaign, there are images on both the ingress and egress sections of the orbit, before and after the VeRa sounding.
 See also the :ref:`examples for orbit 2811<orbitimagesexample>` in :ref:`Step 1<VMCStep01>`.
 
-In order to compare the radiance factors between images at different phase angles, they have to be corrected or normalised for the phase angle dependency using the phase curve. 
+In order to compare the radiance factors between images at different phase angles, they have to be corrected, or normalised, for the phase angle dependency using the phase curve. 
 To do this, I normalise the radiance factors to the radiance factor of the phase curve at the same phase angle.
 I call this variable the Radiance Factor Ratio (:math:`RFR`):
 
@@ -672,7 +685,10 @@ First, look at two separate orbits from the South Polar Dynamics Campaign (2811)
 
 
 
-There are two groups of points for the orbit 2811, the RFR values for the egress images very close to the actual VeRa observation in time and place are significantly higher: they are at low phases angle and the amount of points in the boxes is low, *i.e.* the box is very small. Here is print of the values with first the phase angle, next the radiance factor divided by the model phase curve radiance factor, which equals the RFR. The number of points in the latitude-longitude box is the last number:
+There are two groups of points for the orbit 2811. 
+The RFR values for the egress images very close to the actual VeRa observation in time and place are significantly higher: they are at low phases angle and the amount of points in the boxes is low, *i.e.* the boxes are very small.
+Corresponding to the figure on the left above, below are printed the phase angle, the radiance factor divided by the model phase curve radiance factor and the 
+resulting RFR and uncertainty (as per the formula above). The number of points in the latitude-longitude box is the last number on each line:
 
 .. code-block:: console
  
@@ -699,9 +715,9 @@ There are two groups of points for the orbit 2811, the RFR values for the egress
      34˚: 0.8000 / 0.6420 = 1.2461 +/- 0.1610 (# points =  13)
 
 
-It can be seen that the statistics for last three images (which correspond to the  :ref:`last row here<orbitimagesexample>`), is based on very low numbers, compared to the ingress images. The uncertainties in the last three are therefore larger. I am not sure how to compare these two sets properly.
+It can be seen that the statistics for last three images (which correspond to the  :ref:`last row here<orbitimagesexample>`), is based on very low numbers, compared to the ingress images. The uncertainties in the last three are (therefore) larger. I am not sure how to compare these two sets properly.
 
-I can make three plots:
+I can make three types plots:
 
     (1) the RFR of all the images as a function of VeRa-derived temperature;
     (2) the average or median RFR of the images per orbit as a function of VeRa-derived temperatures;
@@ -709,16 +725,17 @@ I can make three plots:
 
 .. admonition:: uncertainties in the case of taking the average of a set RFR values for one orbit
 
-    The uncertainty is the maximum of on the one hand the uncertainty as derived from the :ref:`averaging formula <uncertaintyinaverage>` and on the other hand the standard deviation of the average of the points. The last value is (almost) always the larger one, which means that the error bars represent the spread in the points. For the South Polar Dynamics Campaign (red points in the figures below) the spread is large due to the ingress and egress value differences.    
+    The uncertainty is the maximum of the uncertainty derived from the :ref:`averaging formula <uncertaintyinaverage>` and the standard deviation of the average of the points. 
+    The last value is almost always the larger one. For the South Polar Dynamics Campaign (red points in the figures below) the spread is large due to the ingress and egress value differences.    
     
 
 .. admonition:: uncertainties in the case of taking the median of a set RFR values for one orbit
 
-    The uncertainty in the median can be evaluated by means of changing the data points in the set and recalculate a median at each new instance. Each data point in the set has an uncertainty associated. Take this uncertainty as the standard deviation for that data point around the mean, which is the value of the data point. Using the NumPy *np.random.normal* method create gaussian noise with the standard deviation for each data point and add it to that data point. In this case I do this 1000 times for the whole set, and therefore I get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the the uncertainty in the median. 
+    The uncertainty in the median can be evaluated by means of changing the data points in the set and recalculate a median at each new instance. Each data point in the set has an uncertainty associated. Take this uncertainty as the standard deviation for that data point around the mean, which is the value of the data point. Using the NumPy *np.random.normal* method create gaussian noise with the standard deviation for each data point and add it to that data point. In this case I do this 1000 times for the whole set and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median. 
     
     On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.
     
-    I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, and in other cases the second one.        
+    I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, in other cases the second one.        
  
  
 When I use all the images with phase angles < 130˚, which is the limit of the phase curve, see :ref:`Step 02 <VMCStep02>`, then the results are:
