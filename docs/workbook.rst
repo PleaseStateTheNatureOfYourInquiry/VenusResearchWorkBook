@@ -731,24 +731,31 @@ I can make three types plots:
 
 .. admonition:: uncertainties in the case of taking the median of a set RFR values for one orbit
 
-    The uncertainty in the median can be evaluated by means of changing the data points in the set and recalculate a median at each new instance. Each data point in the set has an uncertainty associated. Take this uncertainty as the standard deviation for that data point around the mean, which is the value of the data point. Using the NumPy *np.random.normal* method create gaussian noise with the standard deviation for each data point and add it to that data point. In this case I do this 1000 times for the whole set and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median. 
+    The uncertainty in the median can be evaluated by means of creating a new set of the data points based on the original set recalculating a median at each new set. Each data point has an associated uncertainty. By taking this uncertainty as the standard deviation for each data point, I use the NumPy `np.random.normal <https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html>`_ method to create gaussian noise and add it to the data point. I do this whole exercise 1000 times and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median. 
     
     On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.
     
     I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, in other cases the second one.        
  
  
-When I use all the images with phase angles < 130˚, which is the limit of the phase curve, see :ref:`Step 02 <VMCStep02>`, then the results are:
+When I use all the images with phase angles < 130˚ (see :ref:`Step 02 <VMCStep02>`), the results are:
     
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_all_images.png    
 
-    The RFR of all the images as a function of VeRa-derived temperature.
+    The RFR of all the images as a function of VeRa-derived temperature at 70km altitude.
 
+
+Below are the results when averaging (left) or taking the median value (right) for all points per orbit.
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_orbits_average.png
     :scale: 75%
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_orbits_median.png
     :scale: 75%
+
+
+In the next two rows are the results when binning (in temperature) the average (left plot above) or median (right plot above) values per orbit and taking the median value for each bin.
+The first bin is centred at 220K, and the next bin is one bin size more, etc.. Depending on the bin size the number of points in the bin is larger or smaller. 
+At all bin sizes (2, 4, and 8K) some bins have 1 point only. Therefore, taking the median value in each bin seems the most cautious approach. 
 
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K.png
@@ -763,7 +770,7 @@ When I use all the images with phase angles < 130˚, which is the limit of the p
     :scale: 75%
 
 
-Note that in the temperature-binned plots, I have applied a simple weighting when determining the least square linear fit: for each temperature-bin the average (or median) value is added the amount of times to the set as there are points in the bin. In this way, the points at the extremes of the temperature range are counted only one time (one value per bin), whereas for the middle values there are more points per bin, which will count more heavily.
+Note that for the temperature-binned least-square fitting, I have applied a simple weighting: for each temperature-bin the average (or median) value is added the number of times to the set as there are points in the bin. In this way, the bin with few points (at the lower and higher extremes of the temperature range) are weighing less, whereas for the middle values there are more points per bin, and will count more heavily.
 
 Also note that the temperature binning could be one way to account for variations in the temperature that exist due to gravity waves and thermal tides. Thermal tides can be on the order of +/- 4K (:ref:`Akiba et al. 2021 <Akiba2021>`), so a bin width of 8K would be necessary:
 
