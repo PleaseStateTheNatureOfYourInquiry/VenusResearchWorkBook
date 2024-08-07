@@ -715,7 +715,9 @@ resulting RFR and uncertainty (as per the formula above). The number of points i
      34˚: 0.8000 / 0.6420 = 1.2461 +/- 0.1610 (# points =  13)
 
 
-It can be seen that the statistics for last three images (which correspond to the  :ref:`last row here<orbitimagesexample>`), is based on very low numbers, compared to the ingress images. The uncertainties in the last three are (therefore) larger. I am not sure how to compare these two sets properly.
+It can be seen that the statistics for the last three images (which correspond to the points with low phase angles in the :ref:`plots here<orbitimagesexample>`), is based on very low numbers, compared to the ingress images. 
+The uncertainties in the last three are (therefore) larger. I see no obvious reason to discard these images at low phase angles from the analyses though. I did experiment with taking a lower limit for the number of points in a latitude-longitude box. This is described and shown :ref:`below <excludinglowphaseangleimages>`.
+
 
 I can make three types plots:
 
@@ -731,7 +733,7 @@ I can make three types plots:
 
 .. admonition:: uncertainties in the case of taking the median of a set RFR values for one orbit
 
-    The uncertainty in the median can be evaluated by means of creating a new set of the data points based on the original set recalculating a median at each new set. Each data point has an associated uncertainty. By taking this uncertainty as the standard deviation for each data point, I use the NumPy `np.random.normal <https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html>`_ method to create gaussian noise and add it to the data point. I do this whole exercise 1000 times and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median. 
+    The uncertainty in the median can be evaluated by means of creating a new set of the data points based on the original set recalculating a median at each new set. Each data point has an associated uncertainty. By taking this uncertainty as the standard deviation for each data point, I use the NumPy `np.random.normal <https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html>`_ method to create gaussian noise and add it to the data point. I do this whole exercise 1000 times and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median (`DataTools.getMedianAndQuantilesPYtoCPP <https://generaltools-for-scientists.readthedocs.io/en/latest/datatools.html#DataTools.DataTools.getMedianAndQuantilesPYtoCPP>_`).
     
     On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.
     
@@ -755,7 +757,46 @@ Below are the results when averaging (left) or taking the median value (right) f
 
 In the next two rows are the results when binning (in temperature) the average (left plot above) or median (right plot above) values per orbit and taking the median value for each bin.
 The first bin is centred at 220K, and the next bin is one bin size more, etc.. Depending on the bin size the number of points in the bin is larger or smaller. 
+I have the :file:`./scripts/CorrelateRadianceFactors_Temperature.py` print these values. Here is the printed output of the script when running it with a bin width of 4K and taking the average values per orbit for the binning (left plot above):
+
+.. code-block:: Python
+
+    -------------
+     From HandyTools.readTable: 
+      file ../../Step01/VMCSelectedImages.dat has been loaded with
+      1374 data lines and 21 columns
+    
+    -------------
+     From HandyTools.readTable: 
+      file ../../Step02/PhaseCurveFit.dat has been loaded with
+      103 data lines and 5 columns
+    
+    -------------
+     From HandyTools.readTable: 
+      file ../../Step04/ThermalTideCorrection.dat has been loaded with
+      73 data lines and 6 columns
+    
+    - Step 1
+    
+    - Step 2
+    average / median  - fit: (-0.006414643559761462, 2.516518170007531, 0.0037711103981126494, 0.8664364802878189, 0.05085630162342647)
+    
+    - Step 3
+      # points bin between 218.0K and 222.0K = 4
+      # points bin between 222.0K and 226.0K = 9
+      # points bin between 226.0K and 230.0K = 18
+      # points bin between 230.0K and 234.0K = 14
+      # points bin between 234.0K and 238.0K = 9
+      # points bin between 238.0K and 242.0K = 1
+      # points bin between 242.0K and 246.0K = 1
+    
+    binned - fit: (-0.004990715508543933, 2.1997286452470526, 0.0014098858465595796, 0.3237496492979553, 0.1883384315949026)
+
+
+(this print corresponds to the left plot of the second row below). 
+
 At all bin sizes (2, 4, and 8K) some bins have 1 point only. Therefore, taking the median value in each bin seems the most cautious approach. 
+
 
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_binned_median_from_average_2K.png
@@ -770,7 +811,7 @@ At all bin sizes (2, 4, and 8K) some bins have 1 point only. Therefore, taking t
     :scale: 75%
 
 
-Note that for the temperature-binned least-square fitting, I have applied a simple weighting: for each temperature-bin the average (or median) value is added the number of times to the set as there are points in the bin. In this way, the bin with few points (at the lower and higher extremes of the temperature range) are weighing less, whereas for the middle values there are more points per bin, and will count more heavily.
+Note that for the temperature-binned least-square fitting, I have applied a simple weighting: for each temperature-bin the average (or median) value is added the number of times to the set as there are points in the bin. In this way, the bin with few points at the lower and higher extremes of the temperature range are weighing less, whereas for the middle values there are more points per bin, and will count more heavily.
 
 Also note that the temperature binning could be one way to account for variations in the temperature that exist due to gravity waves and thermal tides. Thermal tides can be on the order of +/- 4K (:ref:`Akiba et al. 2021 <Akiba2021>`), so a bin width of 8K would be necessary:
 
@@ -778,10 +819,16 @@ Also note that the temperature binning could be one way to account for variation
 
 In :ref:`Step 4 <VMCStep04>` I extract the amplitude of the thermal tide and apply a correction. 
 
+
+
+.. _excludinglowphaseangleimages:
+
+**Excluding the low phase angle images**
+
 From the plots above, where I **include all the images** from the ingress and egress sections of the orbits, it looks like an anti-correlation between the VeRa-derived temperature at 70km altitude and the VMC_derived UV-brightness RFR exists, albeit not a very strong one.
 
 
-When I use the images with phase angles < 130˚ and number of points in the latitude-longitude boxes more then 20, which excludes the egress images that result in more uncertain UV-brightnesses, the results are:
+When I use the images with phase angles < 130˚ and number of points in the latitude-longitude boxes more then 20, which basically excludes the egress images, the results are:
 
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_all_images.png    
 
@@ -809,7 +856,9 @@ When I use the images with phase angles < 130˚ and number of points in the lati
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K.png    
 
 
-The anti-correlation is also clear here, with similar regression values as for the case using all the images.
+The anti-correlation is also clear here, with similar (to within the uncertainty) regression values as for the case using all the images.
+It can also be nicely seen how the uncertainty of each point is less than for the experiment. 
+**Since there is no obvious reason to discard the low phase images, moving forward, I chose to include all the images.**
 
 
 

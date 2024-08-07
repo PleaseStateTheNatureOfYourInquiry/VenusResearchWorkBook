@@ -44,14 +44,14 @@ VMCOrbitBoundaries = [1000, 2811]
 
 # This is the minimum amount of points that need to be present in a latitude-longitude box for this data value to be included.
 #  It is the  - #Points in box -  column in the  VMCSelectedImages.dat  file.
-numberOfPointInLatitudeLongitudeBoxMinimum = 20
+numberOfPointInLatitudeLongitudeBoxMinimum = 0
 
 # Limit the phase angle of the data values to include.
 phaseAngleLimit = 130
 
 # Set here to either take the average of the median of the RFR values for each orbit.
 radianceFactorRatiosStatistics = { 'Use average step2' : True, 
-                                   'Use average step3' : True }
+                                   'Use average step3' : False }
 
 # Correct sub-string to create the plot file names and the plot titles.
 statisticsStringStep2 = 'average'  if radianceFactorRatiosStatistics ['Use average step2'] else  'median'
@@ -59,7 +59,9 @@ statisticsStringStep3 = 'average'  if radianceFactorRatiosStatistics ['Use avera
 
 
 # Temperature bin size for step 3.
-temperatureBinSize = 2
+# temperatureBinSize = 2
+temperatureBinSize = 4
+# temperatureBinSize = 8
 
 # Boolean to control correction for thermal tide.
 thermalTideCorrectionApply = False
@@ -135,6 +137,7 @@ temperatureRange = [215, 250]
 RFRatioRange = [0.6,1.6]
 
 
+print ()
 print ('- Step 1')
 # Step 1
 # Go through all the selected images in the  VMCSelectedImages.dat  table and collect all the valid data points from the selected images and orbits, normalise
@@ -234,6 +237,7 @@ if plotParameters ['create plots'][0]:
 
             
 
+print ()
 print ('- Step 2')
 # Step 2
 # Take all the images / data points from each orbit as collected in the first step and take the average value or the median  (controlled by the  
@@ -283,6 +287,8 @@ if plotParameters ['create plots'][1]:
             else:
             
 
+                # Call the  getMedianAndQuantilesPYtoCPP  function of DataTools, with the uncertainties for each point and a 1000 random experiments:
+                #  the presence of the uncertainties list triggers the estimation of the uncertainty in the median. 
                 radianceFactorRatiosMedian = DataTools.getMedianAndQuantilesPYtoCPP ( radianceFactorRatiosInOrbit, 33, 67, 
                                                                                       uncertainties = dRadianceFactorRatiosInOrbit, 
                                                                                       numberOfUncertaintyExperiments = 1000 )
@@ -341,7 +347,7 @@ if plotParameters ['create plots'][1]:
 
 
         
-
+print ()
 print ('- Step 3')
 # Step 3
 # 
@@ -407,6 +413,7 @@ if plotParameters ['create plots'][2]:
     fit = DataTools.linearLeastSquare(VeRaTemperaturesBinned, radianceFactorRatiosInLatLonBoxBinned)
     x = 220 + np.arange (2) * 25
     y = fit [0] * x + fit [1]
+    print ()
     print ('binned - fit:', fit)
     plt.plot (x, y, label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ))
     plt.legend ( loc = 'upper left', fontsize = 9 )
