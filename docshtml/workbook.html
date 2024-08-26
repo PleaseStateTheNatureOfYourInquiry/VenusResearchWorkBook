@@ -59,6 +59,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#step-01-select-process-vmc-images">Step 01 - Select &amp; process VMC images</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-02-determine-phase-curve">Step 02 - Determine phase curve</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-03-investigate-correlation">Step 03 - Investigate correlation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-03bis-cloud-top-altitudes">Step 03bis - Cloud top altitudes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-04-thermal-tide-correction">Step 04 - Thermal tide correction</a></li>
 </ul>
 </li>
@@ -211,7 +212,7 @@ I use the default settings to calculate profiles between 48km and 104km (56 leve
 <p class="admonition-title">Note</p>
 <p>Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.</p>
 </div>
-<p>As an example below are plots of T(z) and dT/dZ (z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (<code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py</span></code>, also see <span class="xref std std-ref">Step02bis</span> for details on the <code class="code docutils literal notranslate"><span class="pre">.profiles</span></code> files):</p>
+<p>As an example below are plots of T(z) and dT/dZ (z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (<code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py</span></code>, also see <a class="reference internal" href="#verastep02bis"><span class="std std-ref">Step02bis</span></a> for details on the <code class="code docutils literal notranslate"><span class="pre">.profiles</span></code> files):</p>
 <figure class="align-default" id="id6">
 <a class="reference internal image-reference" href="_images/VeRaProfiles_Orb2811_T-z_Figure.png"><img alt="_images/VeRaProfiles_Orb2811_T-z_Figure.png" src="_images/VeRaProfiles_Orb2811_T-z_Figure.png" style="width: 1200.0px; height: 360.0px;" /></a>
 <figcaption>
@@ -223,7 +224,7 @@ I use the default settings to calculate profiles between 48km and 104km (56 leve
 </figure>
 </section>
 <section id="step-02bis-the-profiles-files">
-<h4>Step 02bis - the .profiles files<a class="headerlink" href="#step-02bis-the-profiles-files" title="Link to this heading"></a></h4>
+<span id="verastep02bis"></span><h4>Step 02bis - the .profiles files<a class="headerlink" href="#step-02bis-the-profiles-files" title="Link to this heading"></a></h4>
 <p>In order to make it easier to access all the filtered profiles at once, without the need to recalculate each one of them,
 I create and run the <code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfiles_CreateNumpyArray.py</span></code> script to load the desired original VeRa profiles, filter them and store the results in a Python dictionary variable.  I create two NumPy files (using the <code class="code docutils literal notranslate"><span class="pre">np.save</span></code> function):</p>
 <div class="line-block">
@@ -767,7 +768,7 @@ I have the <code class="file docutils literal notranslate"><span class="pre">./s
 <img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K1.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K1.png" />
 </figure>
 <p>The anti-correlation is also clear here, with similar (to within the uncertainty) regression values as for the case using all the images.
-It can also be nicely seen how the uncertainty of each point is less than for the experiment.
+It can also be nicely seen how the uncertainty of each point is less than for the case of using all the images.
 <strong>Since there is no obvious reason to discard the low phase images, moving forward, I chose to include all the images.</strong></p>
 <p>Finally, it is interesting to look at just the egress data points, which results in the oposite correlation, but much less convincing.</p>
 <figure class="align-default" id="id18">
@@ -782,6 +783,25 @@ It can also be nicely seen how the uncertainty of each point is less than for th
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_2K2.png" style="width: 480.0px; height: 360.0px;" /></a>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_average_4K2.png" style="width: 480.0px; height: 360.0px;" /></a>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K2.png" src="_images/RadianceFactorRatio_vs_Temperature_binned_median_from_median_4K2.png" style="width: 480.0px; height: 360.0px;" /></a>
+</section>
+<section id="step-03bis-cloud-top-altitudes">
+<span id="vmcstep03bis"></span><h4>Step 03bis - Cloud top altitudes<a class="headerlink" href="#step-03bis-cloud-top-altitudes" title="Link to this heading"></a></h4>
+<p>Until now, for simplicity, I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
+However, this is not quite correct.
+For example, <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> analyse SPICAV-UV spectra to retrieve the abundance of SO2 at the cloud tops across Venus.
+SPICAV-UV is sensitive between 170 and 320nm, VMC is sensitive between 325 and 405nm (<a class="reference internal" href="#calibratingvmcimages"><span class="std std-ref">Calibration of VMC images</span></a>).
+From model calculations and fitting to the SPICAV-UV data for the cloud top altitude as a function of latitude they determine the following:</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/Marcq_2020_Figure14.png"><img alt="_images/Marcq_2020_Figure14.png" src="_images/Marcq_2020_Figure14.png" style="width: 495.0px; height: 468.0px;" /></a>
+</figure>
+<p>Emmanuel Marcq sent me a selection of the fits that correspond to the orbits 427 to 2811.
+When I sub-select between 1188 and 2811, the orbits I use here, I get:</p>
+<figure class="align-default" id="id19">
+<a class="reference internal image-reference" href="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png"><img alt="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" src="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" style="width: 448.0px; height: 336.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> Figure 14.</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="step-04-thermal-tide-correction">
 <span id="vmcstep04"></span><h4>Step 04 - Thermal tide correction<a class="headerlink" href="#step-04-thermal-tide-correction" title="Link to this heading"></a></h4>
@@ -811,10 +831,10 @@ The <a class="reference internal" href="#longitudeandlocalsolartime"><span class
 <p>In the script <code class="file docutils literal notranslate"><span class="pre">./scripts/ThermalTideCorrection.dat</span></code> I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table. I apply linear interpolation first in latitude and then in LST of the values in the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>I adapt the <code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code> script in <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> to allow taking into account (subtract) thermal tide amplitude from the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>Also, the uncertainty in the thermal tide amplitude seems to be on the order of <span class="math notranslate nohighlight">\(\pm\)</span> 0.1K (Figure 7 from <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al.</span></a>), but I am trying to verify this value with the authors.</p>
-<figure class="align-default" id="id19">
+<figure class="align-default" id="id20">
 <img alt="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" />
 <figcaption>
-<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" style="width: 480.0px; height: 360.0px;" /></a>
@@ -840,10 +860,10 @@ Referring to <a class="reference internal" href="#archinal2018"><span class="std
 <li><p>If the rotation of the planet is <em>retrograde</em> (clockwise seen from the North), then <strong>W</strong> decreases with time. This is the case for the Venus. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude increases with time.</p></li>
 </ul>
 <p>This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise, and the (East) longitude increases in the clockwise direction. This is the case (see also <a class="reference external" href="https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube">VMCTools.readVMCImageAndGeoCube</a>):</p>
-<figure class="align-default" id="id20">
+<figure class="align-default" id="id21">
 <a class="reference internal image-reference" href="_images/longitudeTransformationCheck.png"><img alt="_images/longitudeTransformationCheck.png" src="_images/longitudeTransformationCheck.png" style="width: 1000.0px; height: 408.8px;" /></a>
 <figcaption>
-<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
+<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>It also follows that the <strong>Local Solar Time increases</strong> in the direction of <strong>decreasing East longitude</strong>.
@@ -859,6 +879,7 @@ The <strong>zonal wind</strong> moves the clouds in the direction of <strong>inc
 <p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> <em>et al.</em>, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
 <p id="lee2015"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
 <p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> <em>et al.</em>, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
+<p id="marcq2020"><strong>Marcq, R.</strong> <em>et al.</em>, 2020. Climatology of SO2 and UV absorber at Venus’ cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, <a class="reference external" href="https://doi.org/10.1016/j.icarus.2019.07.002">DOI 10.1016/j.icarus.2019.07.002</a>.</p>
 <p id="shalygina2015"><strong>Shalygina, Y.J.</strong> <em>et al.</em>, 2015. Optical properties of the Venus upper clouds from the data obtained
 by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 113-114, 135-158. <a class="reference external" href="https://doi.org/10.1016/j.pss.2014.11.012">DOI 10.1016/j.pss.2014.11.012</a>.</p>
 </section>
@@ -877,7 +898,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Aug 07, 2024, 3:56:35 PM.
+      <span class="lastupdated">Last updated on Aug 26, 2024, 7:26:59 PM.
       </span></p>
   </div>
 

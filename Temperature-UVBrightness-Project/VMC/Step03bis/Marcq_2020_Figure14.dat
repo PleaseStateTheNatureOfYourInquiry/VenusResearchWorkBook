@@ -1,0 +1,45 @@
+ 
+ File: Marcq_2020_Figure14.dat
+ Created at 2024-08-26
+ 
+ Emmanuel Marcq kindly sent the data points (red line) of his figure 14 from the paper:
+  Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. 
+  Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002)
+  
+ The figure caption reads:
+ 
+  Cloud top altitude with respect to latitude. The red line stands for the 10° binned moving boxcar median value,
+  and red error bars for the 1-σ statistical dispersion.
+  (For interpretation of the references to color in this figure legend, the reader is referred to the web version of this article.) 
+ 
+ The values of Zinf and Zsup are the 1-σ uncertainty levels. Zmed is the median value of cloud top in the latitude bin.
+ 
+ 
+ Latitude = Central latitude of the bin (10˚ wide)
+ Zinf = inferior altitude of the cloud tops
+ Zmed = median altitude of the cloud tops
+ Zsup = superior altitude of the cloud tops
+ 
+
+
+Latitude    Zinf    Zmed    Zsup
+  (˚)       (km)    (km)    (km)
+C_END
+  -85      64.95   64.99   65.33
+  -75      64.95   65.05   65.29
+  -65      64.95   65.00   66.42
+  -55      67.31   71.31   72.88
+  -45      69.17   71.41   73.54
+  -35      70.90   73.03   74.42
+  -25      71.17   73.08   74.58
+  -15      70.45   73.22   74.96
+   -5      71.43   73.61   75.96
+    5      72.05   73.58   75.49
+   15      71.41   73.00   74.85
+   25      71.15   73.15   74.73
+   35      70.17   71.97   73.70
+   45      67.32   69.77   71.84
+   55      65.07   66.96   70.19
+   65      64.98   65.33   68.93
+   75      64.97   65.05   65.83
+   85      64.98   65.07   67.73

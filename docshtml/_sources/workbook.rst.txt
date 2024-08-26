@@ -138,7 +138,7 @@ As an example below are plots of T(z) and dT/dZ (z) to show the results for the 
 
 
 
-.. VeRaStep02bis:
+.. _VeRaStep02bis:
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Step 02bis - the .profiles files
@@ -857,7 +857,7 @@ When I use the images with phase angles < 130˚ and number of points in the lati
 
 
 The anti-correlation is also clear here, with similar (to within the uncertainty) regression values as for the case using all the images.
-It can also be nicely seen how the uncertainty of each point is less than for the experiment. 
+It can also be nicely seen how the uncertainty of each point is less than for the case of using all the images. 
 **Since there is no obvious reason to discard the low phase images, moving forward, I chose to include all the images.**
 
 
@@ -888,7 +888,33 @@ Finally, it is interesting to look at just the egress data points, which results
     :scale: 75%
 
 
+.. _VMCStep03bis:
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 03bis - Cloud top altitudes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Until now, for simplicity, I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
+However, this is not quite correct.
+For example, :ref:`Marcq et al. 2020 <Marcq2020>` analyse SPICAV-UV spectra to retrieve the abundance of SO2 at the cloud tops across Venus.
+SPICAV-UV is sensitive between 170 and 320nm, VMC is sensitive between 325 and 405nm (:ref:`Calibration of VMC images <calibratingvmcimages>`).
+From model calculations and fitting to the SPICAV-UV data for the cloud top altitude as a function of latitude they determine the following:
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03bis/Marcq_2020_Figure14.png
+    :scale: 50%
+
+Emmanuel Marcq sent me a selection of the fits that correspond to the orbits 427 to 2811. 
+When I sub-select between 1188 and 2811, the orbits I use here, I get:
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png
+    :scale: 70%
+
+    The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from :ref:`Marcq et al. 2020 <Marcq2020>` Figure 14.
+
+
 .. _VMCStep04:
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Step 04 - Thermal tide correction
@@ -1015,6 +1041,11 @@ References
 .. _Markiewicz2007:
 
 **Markiewicz, W.J.** *et al.*, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. `DOI 10.1016/j.pss.2007.01.004 <https://doi.org/10.1016/j.pss.2007.01.004>`_.
+
+
+.. _Marcq2020:
+
+**Marcq, R.** *et al.*, 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, `DOI 10.1016/j.icarus.2019.07.002 <https://doi.org/10.1016/j.icarus.2019.07.002>`_.
 
 
 .. _Shalygina2015:
