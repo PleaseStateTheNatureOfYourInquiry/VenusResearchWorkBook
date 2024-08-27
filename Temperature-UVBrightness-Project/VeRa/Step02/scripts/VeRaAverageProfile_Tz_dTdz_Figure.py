@@ -5,9 +5,16 @@
 
 
 # Standard imports.
+import sys
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from HandyTools import HandyTools
+
+
+# Import the analysis configuration settings.
+sys.path.append ( os.path.abspath ('../../../') ) 
+from analysisConfiguration import *
 
 
 VeRaProfiles = np.load ('../VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
@@ -45,11 +52,11 @@ axis2 = plt.subplot2grid ( shape = (1, 4), loc = (0, 2), colspan = 1 )
 axis3 = plt.subplot2grid ( shape = (1, 4), loc = (0, 3), colspan = 1 )
 
 
-# The radius of Venus = 6051.8km, hence 6098km ~ 48km altitude
+# The radius is from the  analysisConfiguration  file and set to 6052km.
 # Left plot: filtered temperature profile example between 50-100km. Unfiltered profile in red.
-axis1.scatter ( VeRaFilteredProfile [1], VeRaFilteredProfile [0] - 6098 + 48, marker = 'o', c = 'blue' )
-axis1.plot ( VeRaFilteredProfile [1], VeRaFilteredProfile [0] - 6098 + 48, c = 'blue', label = 'filtered' )
-axis1.plot ( VeraOriginalProfile [1], VeraOriginalProfile [0] - 6098 + 48, c = 'orange', label = 'original' )
+axis1.scatter ( VeRaFilteredProfile [1], VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
+axis1.plot ( VeRaFilteredProfile [1], VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue', label = 'filtered' )
+axis1.plot ( VeraOriginalProfile [1], VeraOriginalProfile [0] - radiusOfVenus, c = 'orange', label = 'original' )
 axis1.legend ()
 
 axis1.set_ylim (50,100)
@@ -58,16 +65,16 @@ axis1.set_ylabel ('Altitude (km)')
 axis1.set_title ( 'VeRa VEX Orbit {} - {}, LST {}h, Lat {}˚'.format ( VeRaProfiles ['OrbitID'][iProfile],  VeRaProfiles ['DayOfYear'][iProfile], VeRaProfiles ['LocalSolarTime'][iProfile], VeRaProfiles ['LatitudeOneBar'][iProfile] ) )
 
 # Middle plot: The uncertainty in the average values in the filtered 
-axis2.scatter ( VeRaFilteredProfile [2], VeRaFilteredProfile [0] - 6098 + 48, marker = 'o', c = 'blue' )
-axis2.plot ( VeRaFilteredProfile [2], VeRaFilteredProfile [0] - 6098 + 48, c = 'blue' )
+axis2.scatter ( VeRaFilteredProfile [2], VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
+axis2.plot ( VeRaFilteredProfile [2], VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue' )
 axis2.set_ylim (50,100)
 axis2.set_xlabel ('Uncertainty (standard deviation) T (K)')
 
 # Right plot: 
-axis3.scatter ( VeRaFilteredProfile [9], VeRaFilteredProfile [0] - 6098 + 48, marker = 'o', c = 'blue' )
+axis3.scatter ( VeRaFilteredProfile [9], VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
 iOne = np.where ( VeRaFilteredProfile [9] == 1 )[0]
-axis3.scatter ( VeRaFilteredProfile [9][iOne], VeRaFilteredProfile [0][iOne] - 6098 + 48, marker = 'x', c = 'red', label = 'one point' )
-axis3.plot ( VeRaFilteredProfile [9], VeRaFilteredProfile [0] - 6098 + 48, c = 'blue')
+axis3.scatter ( VeRaFilteredProfile [9][iOne], VeRaFilteredProfile [0][iOne] - radiusOfVenus, marker = 'x', c = 'red', label = 'one point' )
+axis3.plot ( VeRaFilteredProfile [9], VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue')
 axis3.legend ()
 axis3.set_ylim (50,100)
 axis3.set_xlabel ('# points')
@@ -101,8 +108,8 @@ for iLevel in range (VeRaProfiles ['NumberOfFilteredLevels'][iProfile]):
         gamma.append ( gamma2 + (VeRaFilteredProfile [1][iLevel] - 250.) * (gamma3 - gamma2) / (350. - 250.) )
 
                 
-plt.scatter ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - 6098 + 48, marker = 'o', c = 'blue' )
-plt.plot ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - 6098 + 48, c = 'blue' )
+plt.scatter ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
+plt.plot ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue' )
 plt.ylim (50,100)
 plt.xlabel ('Static stability (K/km)')
 plt.ylabel ('Altitude (km)')

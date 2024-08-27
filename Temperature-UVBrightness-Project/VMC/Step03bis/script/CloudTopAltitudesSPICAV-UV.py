@@ -72,7 +72,6 @@ for fitsFiles in fitsFilesRuns:
         numberOfDataPoints = len (retrievedParameters)
         for iData in range (numberOfDataPoints):
         
-    #         print (' {:3d}: {:6.2f}, {:6.2f} +/- {:7.3f}'.format (iData, geoParameters [iData][0], retrievedParameters [iData][0][2], retrievedParameters [iData][1][2]))
             if not np.isnan ( retrievedParameters [iData][0][2] ):
     
                 latitudes.append ( geoParameters [iData][0] )
@@ -100,6 +99,7 @@ for fitsFiles in fitsFilesRuns:
     latitudesBinned =  -90 + binSize / 2 + np.arange (numberOfBins) * binSize
     
     plt.clf ()
+    
     plt.scatter (latitudes, altitudes, c = 'lightblue', s = 10)
     plt.scatter ( latitudesBinned, altitudesBinned, c = 'orange', s = 30, label = 'median (bin size {}˚)'.format (binSize) )
     plt.xlim (-95,90)

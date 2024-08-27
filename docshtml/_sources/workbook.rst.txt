@@ -40,6 +40,30 @@ Workbook
     - :ref:`Why during the some orbits, in the same orbit different calibration factors where used? <unresolvedquestion1>`
 
 
+.. _analysisconfigurationfile:
+
+.. admonition:: analysisConfiguration.py file
+
+    This file contains some configuration settings that are needed for the scripts in this analysis project to run.
+
+    .. code-block:: Python
+    
+        VeRaDataDirectory = '/Users/maarten/Science/Venus/Data/VEX/VeRa'
+        VMCDataDictectory = '/Users/maarten/Science/Venus/Data/VEX/VMC'
+        AkatsukiDataDirectory = '/Users/maarten/Science/Venus/Data/Akatsuki'
+        SPICAVUCDataDirectory = '/Users/maarten/Science/Venus/Data/EmmanuelMarcq2020'
+        
+        radiusOfVenus = 6052 #km
+        
+    It can be loaded in scripts using:
+ 
+    .. code-block:: Python
+    
+        sys.path.append ( os.path.abspath ('../../../') ) 
+        from analysisConfiguration import *
+
+        
+    
 
 
 .. _temperaturevsuvbrightness:
@@ -119,11 +143,11 @@ I take the standard deviation in each bin as the uncertainty of the average temp
 If there is only one value in the bin, then the uncertainty is not calculated (set to NaN). This occurs higher in the atmosphere, above 80km altitude, a region that is not important for this study.
 
 The `VeRaTools.getFilteredVeRaProfile <https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.getFilteredVeRaProfile>`_ method of the `VeraTools pseudo class <https://venustools.readthedocs.io/en/latest/veratools.html#>`_ is designed to create a filtered (vertically averaged) profile from an original VeRa profile.
-I use the default settings to calculate profiles between 48km and 104km (56 levels) at a 1km vertical resolution.
+I use the default settings to calculate profiles between 46km and 102km (56 levels) at a 1km vertical resolution.
 
 .. note::
 
-    Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.
+    Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 46km altitude.
 
 
 As an example below are plots of T(z) and dT/dZ (z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`, also see :ref:`Step02bis <VeRaStep02bis>` for details on the :code:`.profiles` files):
@@ -895,6 +919,16 @@ Finally, it is interesting to look at just the egress data points, which results
 Step 03bis - Cloud top altitudes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. admonition:: directory, scripts & files
+
+    | top directory: :file:`VMC/Step03bis`
+    | scripts:
+    | :file:`./scripts/CloudTopAltitudesSPICAV-UV.py`
+    | files: 
+    | :file:`Marcq_2020_Figure14.dat`
+    | :file:`Marcq_2020_Figure14.png`
+
+
 Until now, for simplicity, I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
 However, this is not quite correct.
 For example, :ref:`Marcq et al. 2020 <Marcq2020>` analyse SPICAV-UV spectra to retrieve the abundance of SO2 at the cloud tops across Venus.
@@ -904,13 +938,15 @@ From model calculations and fitting to the SPICAV-UV data for the cloud top alti
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step03bis/Marcq_2020_Figure14.png
     :scale: 50%
 
-Emmanuel Marcq sent me a selection of the fits that correspond to the orbits 427 to 2811. 
-When I sub-select between 1188 and 2811, the orbits I use here, I get:
+Emmanuel Marcq sent me a selection of the fits that correspond to the orbits 427 to 2811, as well as the values of the red median line of their Figure 14 above (:file:`Marcq_2020_Figure14.dat`). When I sub-select between 1188 and 2811, the orbits I use here, I get:
 
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png
     :scale: 70%
 
     The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from :ref:`Marcq et al. 2020 <Marcq2020>` Figure 14.
+
+It can be seen that the sub-set gives very similar results as the full set, with the advantage that the full set has more data points, especially around -40˚ latitude. It therefore seems reasonable to use the full set results and use these cloud top altitudes to get the corresponding atmospheric temperatures for VeRa data in the latitude bin the VeRa data has been recorded. The bins are 10˚ wide and start at whole latitude numbers. 
+
 
 
 .. _VMCStep04:

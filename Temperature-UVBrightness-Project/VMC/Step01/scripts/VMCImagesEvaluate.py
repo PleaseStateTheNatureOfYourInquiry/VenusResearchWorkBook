@@ -144,7 +144,7 @@ def processOrbit ( listOfImageFiles,
     
     
         # Extract the latitude, longitude, temperature and pressure at the target altitude from the filtered VeRa profile.
-        radiusOfVenus = 6052 #km
+        # Note that the  radiusOfVenus  is from the  analysisConfiguration  file.
         iCloudTopLevel = 0
         for iLevel in range (VeRaProfileSpecs [8]):
         
@@ -159,11 +159,11 @@ def processOrbit ( listOfImageFiles,
     
     
         print (' lat, lon, T, dT, p @ {:5.2f}km altitude: {:6.2f}˚, {:6.2f}˚, {:6.2f}K, {:6.2f}K, {:8.5f}bar'.format ( targetAltitude, 
-                                                                                                                      latitudeAtTargetAltitude,
-                                                                                                                      longitudeAtTargetAltitude,
-                                                                                                                      temperatureAtTargetAltitude,
-                                                                                                                      oneSigmaTemperateAtTargetAltitude,
-                                                                                                                      pressureAtTargetAltitude ) )
+                                                                                                                       latitudeAtTargetAltitude,
+                                                                                                                       longitudeAtTargetAltitude,
+                                                                                                                       temperatureAtTargetAltitude,
+                                                                                                                       oneSigmaTemperateAtTargetAltitude,
+                                                                                                                       pressureAtTargetAltitude ) )
         
         
         # Check if the VMC image is acquired at same day as the VeRa profile.
@@ -343,7 +343,7 @@ oneSigmaMeridionalWind = 12 #m/s - the uncertainty in the meridional wind.
 
 # Open and create the header of the table file that will contain information about the selected images.
 VMCSelectedImagesFileName = 'VMCSelectedImages.dat'
-fileOpen = open ( os.path.join ('..', VMCSelectedImagesFileName), 'w')
+fileOpen = open ( os.path.join ('..', VMCSelectedImagesFileName), 'w' )
 
 print (' ', file = fileOpen)
 print (' File: {}'.format (VMCSelectedImagesFileName), file = fileOpen)

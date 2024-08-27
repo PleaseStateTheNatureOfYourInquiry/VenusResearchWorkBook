@@ -40,6 +40,30 @@ Workbook
     - :ref:`Why during the some orbits, in the same orbit different calibration factors where used? <unresolvedquestion1>`
 
 
+.. _analysisconfigurationfile:
+
+.. admonition:: analysisConfiguration.py file
+
+    This file contains some configuration settings that are needed for the scripts in this analysis project to run.
+
+    .. code-block:: Python
+    
+        VeRaDataDirectory = '/Users/maarten/Science/Venus/Data/VEX/VeRa'
+        VMCDataDictectory = '/Users/maarten/Science/Venus/Data/VEX/VMC'
+        AkatsukiDataDirectory = '/Users/maarten/Science/Venus/Data/Akatsuki'
+        SPICAVUCDataDirectory = '/Users/maarten/Science/Venus/Data/EmmanuelMarcq2020'
+        
+        radiusOfVenus = 6052 #km
+        
+    It can be loaded at the top of a scripts using:
+ 
+    .. code-block:: Python
+    
+        sys.path.append ( os.path.abspath ('../../../') ) 
+        from analysisConfiguration import *
+
+        
+    
 
 
 .. _temperaturevsuvbrightness:
@@ -119,11 +143,11 @@ I take the standard deviation in each bin as the uncertainty of the average temp
 If there is only one value in the bin, then the uncertainty is not calculated (set to NaN). This occurs higher in the atmosphere, above 80km altitude, a region that is not important for this study.
 
 The `VeRaTools.getFilteredVeRaProfile <https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.getFilteredVeRaProfile>`_ method of the `VeraTools pseudo class <https://venustools.readthedocs.io/en/latest/veratools.html#>`_ is designed to create a filtered (vertically averaged) profile from an original VeRa profile.
-I use the default settings to calculate profiles between 48km and 104km (56 levels) at a 1km vertical resolution.
+I use the default settings to calculate profiles between 46km and 101km (56 levels) at a 1km vertical resolution.
 
 .. note::
 
-    Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 48km altitude.
+    Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 46km altitude.
 
 
 As an example below are plots of T(z) and dT/dZ (z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`, also see :ref:`Step02bis <VeRaStep02bis>` for details on the :code:`.profiles` files):
@@ -894,6 +918,16 @@ Finally, it is interesting to look at just the egress data points, which results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Step 03bis - Cloud top altitudes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. admonition:: directory, scripts & files
+
+    | top directory: :file:`VMC/Step03bis`
+    | scripts:
+    | :file:`./scripts/CloudTopAltitudesSPICAV-UV.py`
+    | files: 
+    | :file:`Marcq_2020_Figure14.dat`
+    | :file:`Marcq_2020_Figure14.png`
+
 
 Until now, for simplicity, I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
 However, this is not quite correct.
