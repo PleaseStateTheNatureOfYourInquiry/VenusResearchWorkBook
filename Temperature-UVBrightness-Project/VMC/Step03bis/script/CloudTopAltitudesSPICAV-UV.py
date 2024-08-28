@@ -3,6 +3,10 @@
 
 # Version: v20240826
 
+# Extract the fitted values from the SPICAV-UV data as obtained by Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. 
+#  Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002).
+# Emmanuel Marcq sent his files corresponding to orbits 427 to 2811. In this script I only use between 1188 and 2811, the ones corresponding to what I actually use for 
+#  analysis in this study.
 
 # Standard imports.
 import os
@@ -80,10 +84,8 @@ for fitsFiles in fitsFilesRuns:
                 dAltitudes.append ( retrievedParameters [iData][1][2] )
             
     
-    
-
         
-               
+    # Bin the altitudes in bins with width  binSize  (10˚ is default), the first bin start with lower border at -90˚. 
     latitudeBinnings = [ []  for iBin in range (numberOfBins) ]    
     for latitude, altitude in zip (latitudes, altitudes):
     
@@ -94,9 +96,11 @@ for fitsFiles in fitsFilesRuns:
         
         latitudeBinnings [iBin].append (altitude)
     
-            
+    
+    # Take the median of the values in all bins.           
     altitudesBinned = [ np.median (latitudeBinning)  for latitudeBinning in latitudeBinnings ]
     latitudesBinned =  -90 + binSize / 2 + np.arange (numberOfBins) * binSize
+    
     
     plt.clf ()
     

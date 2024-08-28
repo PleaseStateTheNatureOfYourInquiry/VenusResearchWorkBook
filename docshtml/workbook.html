@@ -168,7 +168,7 @@ see also the link to <a class="reference external" href="https://www.cosmos.esa.
 <span class="n">radiusOfVenus</span> <span class="o">=</span> <span class="mi">6052</span> <span class="c1">#km</span>
 </pre></div>
 </div>
-<p>It can be loaded in scripts using:</p>
+<p>It can be loaded at the top of a scripts using:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span> <span class="p">(</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span> <span class="p">(</span><span class="s1">&#39;../../../&#39;</span><span class="p">)</span> <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">analysisConfiguration</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
@@ -224,7 +224,7 @@ I create vertically <strong>averaged</strong> profiles, where I average the temp
 I take the standard deviation in each bin as the uncertainty of the average temperature for that bin.
 If there is only one value in the bin, then the uncertainty is not calculated (set to NaN). This occurs higher in the atmosphere, above 80km altitude, a region that is not important for this study.</p>
 <p>The <a class="reference external" href="https://venustools.readthedocs.io/en/latest/veratools.html#VeRaTools.VeRaTools.getFilteredVeRaProfile">VeRaTools.getFilteredVeRaProfile</a> method of the <a class="reference external" href="https://venustools.readthedocs.io/en/latest/veratools.html#">VeraTools pseudo class</a> is designed to create a filtered (vertically averaged) profile from an original VeRa profile.
-I use the default settings to calculate profiles between 46km and 102km (56 levels) at a 1km vertical resolution.</p>
+I use the default settings to calculate profiles between 46km and 101km (56 levels) at a 1km vertical resolution.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 46km altitude.</p>
@@ -809,6 +809,9 @@ It can also be nicely seen how the uncertainty of each point is less than for th
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step03bis</span></code></div>
 <div class="line">scripts:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CloudTopAltitudesSPICAV-UV.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCImagesEvaluate_CloudTopAltitudes.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaCloudTopTemperatures.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.png</span></code></div>
@@ -822,14 +825,38 @@ From model calculations and fitting to the SPICAV-UV data for the cloud top alti
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/Marcq_2020_Figure14.png"><img alt="_images/Marcq_2020_Figure14.png" src="_images/Marcq_2020_Figure14.png" style="width: 495.0px; height: 468.0px;" /></a>
 </figure>
-<p>Emmanuel Marcq sent me a selection of the fits that correspond to the orbits 427 to 2811, as well as the values of the red median line of their Figure 14 above (<code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.dat</span></code>). When I sub-select between 1188 and 2811, the orbits I use here, I get:</p>
-<figure class="align-default" id="id19">
+<p>Emmanuel Marcq sent me a selection of the fits that correspond to the orbits 427 to 2811, as well as the values of the red median line of their Figure 14 above (<code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.dat</span></code>). When I sub-select orbits between 1188 and 2811, the ones I finally use in this analysis, and taking the median in 10˚ wide bins centered
+at -85˚, -75˚, etc., I get (<code class="file docutils literal notranslate"><span class="pre">./scripts/CloudTopAltitudesSPICAV-UV.py</span></code>):</p>
 <a class="reference internal image-reference" href="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png"><img alt="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" src="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" style="width: 448.0px; height: 336.0px;" /></a>
+<a class="reference internal image-reference" href="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png"><img alt="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png" src="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png" style="width: 448.0px; height: 336.0px;" /></a>
+<p>The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> Figure 14.</p>
+<p>It can be seen that the sub-set with O3 gives similar results when compared with the full-set, with the advantage that the full set has more data points, especially around -40˚ latitude.
+The results without O3 also give good results except for the higher latitudes regions both in the North and South.
+This is expected (<a class="reference internal" href="#marcq2019"><span class="std std-ref">Marcq et al. 2019</span></a>, Marcq 2024, private communication).
+All in all it seems reasonable to use the full-set results, the difference with the sub-sets is within the uncertainties.</p>
+<p>I use these cloud top altitudes as a function of latitude to extract the atmospheric temperatures from the VeRa temperature profiles.
+in the latitude bin the VeRa data has been recorded.</p>
+<p>I can now re-build the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_CloudTopAltitudes.dat</span></code> table that I created in <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step01</span></a>, where I was using a fixed cloud top altitude of 70km, using these cloud top altitudes as a function of latitude. I put together the script <code class="file docutils literal notranslate"><span class="pre">VMCImagesEvaluate_CloudTopAltitudes.py</span></code> to perform this task.
+I take the latitudes to be those of the VeRa soundings at 70km altitude. The corresponding VMC latitude-longitude box central latitudes are very similar.
+In addition, to that with a 10˚-latitude binning (bins are 10˚ wide and centred at -85˚, -75˚, etc.) in <code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.dat</span></code>, choosing either the VeRa latitude at 70km (or even 60km or 80km altitude) or the VMC latitude results in the same choice of altitude level.
+I extract the VeRa temperatures at these levels and place them in the adapted <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_CloudTopAltitudes.dat</span></code> table.</p>
+<p>It is useful to look at how the cloud top temperatures as a function of latitude extracted from the VeRa profiles are distributed (<code class="file docutils literal notranslate"><span class="pre">VeRaCloudTopTemperatures.py</span></code>):</p>
+<figure class="align-default" id="id19">
+<a class="reference internal image-reference" href="_images/cloudTopTemperatureVeRa.png"><img alt="_images/cloudTopTemperatureVeRa.png" src="_images/cloudTopTemperatureVeRa.png" style="width: 576.0px; height: 432.0px;" /></a>
 <figcaption>
-<p><span class="caption-text">The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> Figure 14.</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+<p><span class="caption-text">Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for orbitIDs &gt;= 1188. The cloud top altitudes are from <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> Figure 14.</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>It can be seen that the sub-set gives very similar results as the full set, with the advantage that the full set has more data points, especially around -40˚ latitude. It therefore seems reasonable to use the full set results and use these cloud top altitudes to get the corresponding atmospheric temperatures for VeRa data in the latitude bin the VeRa data has been recorded. The bins are 10˚ wide and start at whole latitude numbers.</p>
+<p>From this figure and of course Figure 14 from <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> it seems there are roughly two latitude regions:
+<code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&lt;</span> <span class="pre">+50˚</span></code> with cloud tops around 72km and cloud top temperatures between 215 and 220K, and <code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&gt;</span> <span class="pre">+50˚</span></code> with clouds tops near 65km, but cloud top temperatures that change between 220K to 235K, with a few low temperature exceptions.</p>
+<p>I am not sure (yet), but perhaps this figure is a rather new result?
+I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures. This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?</p>
+<p>From pure visual inspection of the figure, there seems to be a linear-ish variation in the cloud top temperatures with latitude.
+To my knowledge there is not obvious physical reason to expect any correlation of this kind though.
+Some of the variation in the temperatures could be due to the UV-absorber, the very topic of this study? Or something else?</p>
+<p>The next step would be to run the <code class="file docutils literal notranslate"><span class="pre">CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py</span></code>, which is the same script as in the previous <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> above, but using the new <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_CloudTopAltitudes.dat</span></code> table as entry.</p>
+<p>How to “correct” for the effect seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the two latitude sections?</p>
+<p>… THINKING …</p>
 </section>
 <section id="step-04-thermal-tide-correction">
 <span id="vmcstep04"></span><h4>Step 04 - Thermal tide correction<a class="headerlink" href="#step-04-thermal-tide-correction" title="Link to this heading"></a></h4>
@@ -907,6 +934,7 @@ The <strong>zonal wind</strong> moves the clouds in the direction of <strong>inc
 <p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> <em>et al.</em>, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
 <p id="lee2015"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
 <p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> <em>et al.</em>, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
+<p id="marcq2019"><strong>Marcq, R.</strong> <em>et al.</em>, 2019. Discovery of cloud top ozone on Venus. Icarus 319, 419-498, <a class="reference external" href="https://doi.org/10.1016/j.icarus.2018.10.006">DOI 10.1016/j.icarus.2018.10.006</a>.</p>
 <p id="marcq2020"><strong>Marcq, R.</strong> <em>et al.</em>, 2020. Climatology of SO2 and UV absorber at Venus’ cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, <a class="reference external" href="https://doi.org/10.1016/j.icarus.2019.07.002">DOI 10.1016/j.icarus.2019.07.002</a>.</p>
 <p id="shalygina2015"><strong>Shalygina, Y.J.</strong> <em>et al.</em>, 2015. Optical properties of the Venus upper clouds from the data obtained
 by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 113-114, 135-158. <a class="reference external" href="https://doi.org/10.1016/j.pss.2014.11.012">DOI 10.1016/j.pss.2014.11.012</a>.</p>
@@ -926,7 +954,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Aug 27, 2024, 9:52:58 AM.
+      <span class="lastupdated">Last updated on Aug 28, 2024, 10:56:02 AM.
       </span></p>
   </div>
 
