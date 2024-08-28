@@ -1,9 +1,11 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240827
+# Version: v20240828
 
-# 
+# Read the data from Figure 14 of Marcq et al. 2020 Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. 
+#  Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002). 
+# For each of the VeRa profiles used in this study, limited to orbits 
 
 # Standard imports.
 import os
@@ -24,8 +26,7 @@ sys.path.append ( os.path.abspath ('../../../') )
 from analysisConfiguration import *
 
 
-# Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. 
-#  Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002).
+# Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020.
 figure14Data = HandyTools.readTable ('../Marcq_2020_Figure14.dat')
 
 # Load the profiles of both the nominal and extended mission as well as the South Polar Dynamics Campaign from the  .profiles  NumPy files created
@@ -48,7 +49,7 @@ for profileSet in profileSets:
     
     for iProfile in range ( len ( profileSet ['OrbitID'] ) ):
     
-        if int ( profileSet ['OrbitID'][iProfile].split ('_')[0] ) >= 1188:
+        if int ( profileSet ['OrbitID'][iProfile].split ('_')[0] ) >= 100:
                 
             profileVeRa = profileSet ['FilteredProfiles'][iProfile]
             

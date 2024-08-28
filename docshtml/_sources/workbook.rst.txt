@@ -3,6 +3,11 @@
 Workbook 
 ========
 
+Go to :ref:`last point of work <lastPointOfWork>`.
+
+.. image:: ./images/construction.png
+    :scale: 50%
+
 .. _abbrevations:
 
 .. admonition:: abbreviations
@@ -915,9 +920,16 @@ Finally, it is interesting to look at just the egress data points, which results
 .. _VMCStep03bis:
 
 
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Step 03bis - Cloud top altitudes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _lastPointOfWork:
+
+.. image:: ./images/construction.png
+    :scale: 50%
+
 
 .. admonition:: directory, scripts & files
 
@@ -930,6 +942,8 @@ Step 03bis - Cloud top altitudes
     | files: 
     | :file:`Marcq_2020_Figure14.dat`
     | :file:`Marcq_2020_Figure14.png`
+
+
 
 
 Until now, for simplicity, I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
@@ -987,7 +1001,9 @@ The next step would be to run the :file:`CorrelateRadianceFactors_Temperature_Cl
 
 How to "correct" for the effect seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the two latitude sections? 
 
-... THINKING ...
+
+.. image:: ./images/thinking.png
+
 
 
 .. _VMCStep04:
