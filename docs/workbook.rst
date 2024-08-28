@@ -963,7 +963,7 @@ at -85˚, -75˚, etc., I get (:file:`./scripts/CloudTopAltitudesSPICAV-UV.py`):
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png
     :scale: 70%
 
-The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from :ref:`Marcq et al. 2020 <Marcq2020>` Figure 14.
+*The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from :ref:`Marcq et al. 2020 <Marcq2020>` Figure 14.*
 
 
 It can be seen that the sub-set with O3 gives similar results when compared with the full-set, with the advantage that the full set has more data points, especially around -40˚ latitude. 
@@ -981,10 +981,15 @@ I extract the VeRa temperatures at these levels and place them in the adapted :f
 
 It is useful to look at how the cloud top temperatures as a function of latitude extracted from the VeRa profiles are distributed (:file:`VeRaCloudTopTemperatures.py`):
 
-.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureVeRa.png
-    :scale: 90%
 
-    Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for orbitIDs >= 1188. The cloud top altitudes are from :ref:`Marcq et al. 2020 <marcq2020>` Figure 14.
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureVeRa_orbitLimit_0.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureVeRa_orbitLimit_1188.png
+    :scale: 70%
+
+
+*Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDS in this study (>= 260, left) and orbitIDs >= 1188 (right). The cloud top altitudes are from :ref:`Marcq et al. 2020 <marcq2020>` Figure 14.*
 
 From this figure and of course Figure 14 from :ref:`Marcq et al. 2020 <marcq2020>` it seems there are roughly two latitude regions: 
 :code:`|latitude| < +50˚` with cloud tops around 72km and cloud top temperatures between 215 and 220K, and :code:`|latitude| > +50˚` with clouds tops near 65km, but cloud top temperatures that change between 220K to 235K, with a few low temperature exceptions.

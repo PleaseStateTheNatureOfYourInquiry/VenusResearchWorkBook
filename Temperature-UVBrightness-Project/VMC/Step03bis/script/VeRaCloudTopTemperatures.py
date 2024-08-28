@@ -43,13 +43,17 @@ altitudesCloudTop = []
 cloudTopTemperatureVeRa = []
 dCloudTopTemperatureVeRa = []
 
+orbitIDLimit = [0, 'All orbits']
+# orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
+
+
 for profileSet in profileSets:
 
     iLatitudeLevel = int ( radiusOfVenus + latitudeLevel - profileSet ['FilteredProfiles'][0][0][0] )
     
     for iProfile in range ( len ( profileSet ['OrbitID'] ) ):
     
-        if int ( profileSet ['OrbitID'][iProfile].split ('_')[0] ) >= 100:
+        if int ( profileSet ['OrbitID'][iProfile].split ('_')[0] ) >= orbitIDLimit [0]:
                 
             profileVeRa = profileSet ['FilteredProfiles'][iProfile]
             
@@ -76,13 +80,13 @@ plt.clf ()
 fig, ax1 = plt.subplots ()
 
 colour = 'tab:blue'
-ax1.set_title ('Cloud top VeRa temperatures (blue) and altitudes (green)')
+ax1.set_title ( '{} (# of point {})'.format (orbitIDLimit [1], len (latitudesVeRa)) )
 ax1.set_xlabel ( 'latitude (˚)' )
 ax1.set_xlim (-95,0)
 ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 10)] )
 ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 5)], minor = True )
 
-ax1.set_ylabel ('cloud top temperature (km)', color = colour)
+ax1.set_ylabel ('Cloud top temperature (K) (VeRa)', color = colour)
 ax1.scatter (latitudesVeRa, cloudTopTemperatureVeRa, c = 'blue', s = 25)
 ax1.tick_params (axis='y', labelcolor = colour)
 
@@ -99,7 +103,7 @@ ax2.set_ylabel ('altitude cloud top (km)', color = colour)
 ax2.scatter (latitudesVeRa, altitudesCloudTop, color = 'lightgreen', marker = 'D', s = 10)
 ax2.tick_params (axis='y', labelcolor = colour)
 
-plt.savefig ( '../plots/cloudTopTemperatureVeRa.png' )
+plt.savefig ( '../plots/cloudTopTemperatureVeRa_orbitLimit_{}.png'.format ( orbitIDLimit [0] ) )
 
 plt.close (1)
 plt.close (2)
