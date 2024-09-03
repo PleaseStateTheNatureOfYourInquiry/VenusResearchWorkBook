@@ -813,7 +813,7 @@ It can also be nicely seen how the uncertainty of each point is less than for th
 <div class="line">scripts:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CloudTopAltitudesSPICAV-UV.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCImagesEvaluate_CloudTopAltitudes.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaCloudTopTemperatures.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">Latitude_variability.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.dat</span></code></div>
@@ -833,6 +833,8 @@ at -85˚, -75˚, etc., I get (<code class="file docutils literal notranslate"><s
 <a class="reference internal image-reference" href="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png"><img alt="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" src="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" style="width: 448.0px; height: 336.0px;" /></a>
 <a class="reference internal image-reference" href="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png"><img alt="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png" src="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png" style="width: 448.0px; height: 336.0px;" /></a>
 <p><em>The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from :ref:`Marcq et al. 2020 &lt;Marcq2020&gt;` Figure 14.</em></p>
+<p>It can be seen there are roughly two latitude regions: <code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&lt;</span> <span class="pre">+50˚</span></code> with cloud tops around 72km and <code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&gt;</span> <span class="pre">+50˚</span></code> with clouds tops near 65km.
+This distribution has been known for quite a while and the above result confirms it.</p>
 <p>It can be seen that the sub-set with O3 gives similar results when compared with the full-set, with the advantage that the full set has more data points, especially around -40˚ latitude.
 The results without O3 also give good results except for the higher latitudes regions both in the North and South.
 This is expected (<a class="reference internal" href="#marcq2019"><span class="std std-ref">Marcq et al. 2019</span></a>, Marcq 2024, private communication).
@@ -843,17 +845,25 @@ in the latitude bin the VeRa data has been recorded.</p>
 I take the latitudes to be those of the VeRa soundings at 70km altitude. The corresponding VMC latitude-longitude box central latitudes are very similar.
 In addition, to that with a 10˚-latitude binning (bins are 10˚ wide and centred at -85˚, -75˚, etc.) in <code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.dat</span></code>, choosing either the VeRa latitude at 70km (or even 60km or 80km altitude) or the VMC latitude results in the same choice of altitude level.
 I extract the VeRa temperatures at these levels and place them in the adapted <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_CloudTopAltitudes.dat</span></code> table.</p>
-<p>It is useful to look at how the cloud top temperatures as a function of latitude extracted from the VeRa profiles are distributed (<code class="file docutils literal notranslate"><span class="pre">VeRaCloudTopTemperatures.py</span></code>):</p>
+<p>It is useful to look at how the cloud top temperatures extracted from the VeRa profiles and the VMC-UV Radiance Factors as a function of latitude are distributed (<code class="file docutils literal notranslate"><span class="pre">Latitude_variability.py</span></code>):</p>
 <a class="reference internal image-reference" href="_images/cloudTopTemperatureVeRa_orbitLimit_0.png"><img alt="_images/cloudTopTemperatureVeRa_orbitLimit_0.png" src="_images/cloudTopTemperatureVeRa_orbitLimit_0.png" style="width: 448.0px; height: 336.0px;" /></a>
 <a class="reference internal image-reference" href="_images/cloudTopTemperatureVeRa_orbitLimit_1188.png"><img alt="_images/cloudTopTemperatureVeRa_orbitLimit_1188.png" src="_images/cloudTopTemperatureVeRa_orbitLimit_1188.png" style="width: 448.0px; height: 336.0px;" /></a>
-<p><em>Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDS in this study (&gt;= 260, left) and orbitIDs &gt;= 1188 (right). The cloud top altitudes are from :ref:`Marcq et al. 2020 &lt;marcq2020&gt;` Figure 14.</em></p>
-<p>From this figure and of course Figure 14 from <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> it seems there are roughly two latitude regions:
-<code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&lt;</span> <span class="pre">+50˚</span></code> with cloud tops around 72km and cloud top temperatures between 215 and 220K, and <code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&gt;</span> <span class="pre">+50˚</span></code> with clouds tops near 65km, but cloud top temperatures that change between 220K to 235K, with a few low temperature exceptions.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<a class="reference internal image-reference" href="_images/radianceFactorsVMCPerOrbit_orbitLimit_0.png"><img alt="_images/radianceFactorsVMCPerOrbit_orbitLimit_0.png" src="_images/radianceFactorsVMCPerOrbit_orbitLimit_0.png" style="width: 448.0px; height: 336.0px;" /></a>
+<a class="reference internal image-reference" href="_images/radianceFactorsVMCPerOrbit_orbitLimit_1188.png"><img alt="_images/radianceFactorsVMCPerOrbit_orbitLimit_1188.png" src="_images/radianceFactorsVMCPerOrbit_orbitLimit_1188.png" style="width: 448.0px; height: 336.0px;" /></a>
+<p><em>Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDS in this study (&gt;= 260, left) and orbitIDs &gt;= 1188 (right). The cloud top altitudes are from</em> <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> <em>Figure 14. Note that there a few more VeRa profiles compared to the VMC-UV Radiance Factors, because not all orbits for which there were VeRa and VMC measurements have VMC data that was deemed good enough</em> (<a class="reference internal" href="#vmcstep01"><span class="std std-ref">VMC/Step01</span></a>).</p>
+<p>Also the cloud top temperatures distribute roughly in two latitude regions (top two figures):
+<code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&lt;</span> <span class="pre">+50˚</span></code> (cloud tops around 72km) with cloud top temperatures between 215 and 220K, and <code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&gt;</span> <span class="pre">+50˚</span></code> (clouds tops near 65km), with cloud top temperatures that change between 220K to 235K, with a few low temperature exceptions.</p>
 <p>I am not sure (yet), but perhaps this figure is a rather new result?
-I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures. This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?</p>
+I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures, was this ever done before in this manner? I need to check the literature!
+This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?</p>
 <p>From pure visual inspection of the figure, there seems to be a linear-ish variation in the cloud top temperatures with latitude.
-To my knowledge there is not obvious physical reason to expect any correlation of this kind though.
-Some of the variation in the temperatures could be due to the UV-absorber, the very topic of this study? Or something else?</p>
+To my knowledge there is not obvious physical reason to expect any correlation of this kind though.</p>
+<p>Some of the variation in the temperatures could be due to the UV-absorber?
+In two bottom figures however, there is no obvious variation of the UV radiance factors as a function of latitude, in particular when considering the valid orbits
+(conclusion of previous <a class="reference internal" href="#vmcstep02"><span class="std std-ref">Step03</span></a>) only in the bottom right figure.</p>
 <p>The next step would be to run the <code class="file docutils literal notranslate"><span class="pre">CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py</span></code>, which is the same script as in the previous <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> above, but using the new <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_CloudTopAltitudes.dat</span></code> table as entry.</p>
 <p>How to “correct” for the effect seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the two latitude sections?</p>
 <img alt="_images/thinking.png" src="_images/thinking.png" />
@@ -954,7 +964,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Aug 28, 2024, 1:03:02 PM.
+      <span class="lastupdated">Last updated on Sep 03, 2024, 9:59:45 AM.
       </span></p>
   </div>
 
