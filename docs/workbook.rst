@@ -1011,6 +1011,16 @@ In terms of the cloud top altitudes, there are four levels, indicated by the gre
 The temperature gradient in this altitude range is rather complex, changing from negative to positive and back.
 It is not straight forward to know how much of the change in cloud top temperatures is due to the temperature gradient. 
 
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureLapseRateVeRa_orbitLimit_0.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureLapseRateVeRa_orbitLimit_1188.png
+    :scale: 70%
+
+
+
 and this of course reflects in the overall temperatures for each of these levels.
 However, 
 This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?

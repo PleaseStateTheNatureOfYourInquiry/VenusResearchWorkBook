@@ -1,7 +1,7 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240903
+# Version: v20240908
 
 # Create plots of the cloud top temperatures from the VeRa derived temperature profiles and the results from Marcq et al. 2020 
 #  (Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002)) 
@@ -10,7 +10,8 @@
 
 # Set which plots to produce.
 plotToProduce = { 'Cloud top temperature vs latitude': False,
-                  'Radiance factors vs latitude': True }
+                  'Cloud top temperature lapse rate vs latitude' : True,
+                  'Radiance factors vs latitude': False }
 
 
 # Chose the desired limitation in orbitIDs.
@@ -90,10 +91,12 @@ latitudeLevel = 70 #km
 
 latitudesVeRa = []
 altitudesCloudTop = []
+
 cloudTopTemperatureVeRa = []
 dCloudTopTemperatureVeRa = []
 
-
+cloudTopTemperatureLapseRateVeRa = []
+dCloudTopTemperatureLapseRateVeRa = []
 
 for profileSet in profileSets:
 
@@ -118,6 +121,9 @@ for profileSet in profileSets:
             
             cloudTopTemperatureVeRa.append ( profileVeRa [1][iAltitudeCloudTopInVeRaProfile] )
             dCloudTopTemperatureVeRa.append ( profileVeRa [2][iAltitudeCloudTopInVeRaProfile] )
+            
+            cloudTopTemperatureLapseRateVeRa.append ( profileVeRa [7][iAltitudeCloudTopInVeRaProfile] )
+            dCloudTopTemperatureLapseRateVeRa.append ( profileVeRa [8][iAltitudeCloudTopInVeRaProfile] )
 
 
 
@@ -159,7 +165,54 @@ if plotToProduce ['Cloud top temperature vs latitude']:
     
     plt.close (1)
     plt.close (2)
+
+
+if plotToProduce ['Cloud top temperature lapse rate vs latitude']:
+
+    # From  DataTools.QQPlot ( DataTools.getNanFreeNumpyArray (cloudTopTemperatureLapseRateVeRa) ) I see that the  values of  cloudTopTemperatureLapseRateVeRa  are
+    #  distributed in a Gaussian way, so that taking the average is a valid approach.
     
+    
+    averageTemperatureLapseRate = DataTools.getAverageVarAndSDPYtoCPP ( DataTools.getNanFreeNumpyArray (cloudTopTemperatureLapseRateVeRa) )
+    medianTemperatureLapseRate = DataTools.getMedianAndQuantilesPYtoCPP ( DataTools.getNanFreeNumpyArray (cloudTopTemperatureLapseRateVeRa), 
+                                                                          uncertainties = DataTools.getNanFreeNumpyArray (dCloudTopTemperatureLapseRateVeRa) )
+
+    plt.clf () 
+    
+    fig, ax1 = plt.subplots ()
+    
+    colour = 'tab:blue'
+    ax1.set_title ( '{} (# of point {})'.format (orbitIDLimit [1], len (latitudesVeRa)) )
+    ax1.set_xlabel ( 'latitude (˚)' )
+    ax1.set_xlim (-95,0)
+    ax1.set_ylim (-11,20)
+    ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 10)] )
+    ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 5)], minor = True )
+    
+    ax1.set_ylabel ('Cloud top temperature lapse rate (K/km) (VeRa)', color = colour)
+    ax1.scatter (latitudesVeRa, cloudTopTemperatureLapseRateVeRa, c = 'blue', s = 25)
+    ax1.tick_params (axis='y', labelcolor = colour)
+    
+    HandyTools.plotErrorBars (latitudesVeRa, cloudTopTemperatureLapseRateVeRa, yErrors = dCloudTopTemperatureLapseRateVeRa, colours = 'blue')
+
+    ax1.text (-50, 13, 'Average: {:5.2f} +/- {:5.2f} K/km'.format (averageTemperatureLapseRate [0], averageTemperatureLapseRate [1]), c = 'orange', fontsize = 10 )
+    ax1.text (-50, 11, 'Median: {:5.2f} +/- {:5.2f} K/km'.format (medianTemperatureLapseRate [0], medianTemperatureLapseRate [3]), c = 'orange', fontsize = 10 )
+
+    
+    # instantiate a second Axes that shares the same x-axis
+    ax2 = ax1.twinx ()  
+    
+    colour = 'tab:green'
+    ax2.set_ylabel ('altitude cloud top (km)', color = colour)
+    ax2.scatter (latitudesVeRa, altitudesCloudTop, color = 'lightgreen', marker = 'D', s = 10)
+    ax2.tick_params (axis='y', labelcolor = colour)
+    
+    plt.savefig ( '../plots/cloudTopTemperatureLapseRateVeRa_orbitLimit_{}.png'.format ( orbitIDLimit [0] ) )
+    
+    plt.close (1)
+    plt.close (2)
+
+
 
 if plotToProduce ['Radiance factors vs latitude']:
 
