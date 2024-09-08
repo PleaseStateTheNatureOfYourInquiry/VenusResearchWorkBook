@@ -16,8 +16,8 @@ plotToProduce = { 'Cloud top temperature vs latitude': False,
 
 # Chose the desired limitation in orbitIDs.
 
-# orbitIDLimit = [0, 'All orbits']
-orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
+orbitIDLimit = [0, 'All orbits']
+# orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
 
 
 # Standard imports.
@@ -98,9 +98,19 @@ dCloudTopTemperatureVeRa = []
 cloudTopTemperatureLapseRateVeRa = []
 dCloudTopTemperatureLapseRateVeRa = []
 
+cloudTopTemperatureLapseRateVeRaAverage = []
+dCloudTopTemperatureLapseRateVeRaAverage = []
+
+cloudTopTemperatureLapseRateVeRaMedian = []
+dCloudTopTemperatureLapseRateVeRaMedian = []
+
 for profileSet in profileSets:
 
     iLatitudeLevel = int ( radiusOfVenus + latitudeLevel - profileSet ['FilteredProfiles'][0][0][0] )
+
+    # This list will be used to extract the temperature lapse rates in the region where all the cloud tops fall: 65 - 74km.
+    #  I use it to calculate an average temperature lapse rate, as compared to the lapse rate at the cloud top level.
+    iLatitudeLevels = np.asarray ( [ int ( radiusOfVenus + latitudeLevel - profileSet ['FilteredProfiles'][0][0][0] )  for latitudeLevel in range (65,75) ] )
     
     for iProfile in range ( len ( profileSet ['OrbitID'] ) ):
     
@@ -118,13 +128,34 @@ for profileSet in profileSets:
             
             # Determine the index in the filtered VeRa temperature profile that corresponds to the cloud top altitude.
             iAltitudeCloudTopInVeRaProfile = ( radiusOfVenus + altitudesCloudTop [-1] ) - int ( profileVeRa [0][0] )
-            
+
+            # Store the cloud top temperature and its uncertainty.            
             cloudTopTemperatureVeRa.append ( profileVeRa [1][iAltitudeCloudTopInVeRaProfile] )
             dCloudTopTemperatureVeRa.append ( profileVeRa [2][iAltitudeCloudTopInVeRaProfile] )
             
+            
+            # Store the cloud top temperature lapse rate and its uncertainty.
             cloudTopTemperatureLapseRateVeRa.append ( profileVeRa [7][iAltitudeCloudTopInVeRaProfile] )
             dCloudTopTemperatureLapseRateVeRa.append ( profileVeRa [8][iAltitudeCloudTopInVeRaProfile] )
 
+
+            # Calculate and store the average temperature lapse rate and its uncertainty in the 65 - 74km altitude range.
+            averageTemperatureLapseRatePerProfile = DataTools.getAverageVarAndSDPYtoCPP ( DataTools.getNanFreeNumpyArray (profileVeRa [7][iLatitudeLevels]) )
+            cloudTopTemperatureLapseRateVeRaAverage.append ( averageTemperatureLapseRatePerProfile [0] )
+           
+            cloudTopTemperatureLapseRateVeRaUncertainties = DataTools.getNanFreeNumpyArray (profileVeRa [8][iLatitudeLevels])
+            dCloudTopTemperatureLapseRateVeRaAverage.append ( 
+             max ( np.sum ( cloudTopTemperatureLapseRateVeRaUncertainties ** 2 ) / len (cloudTopTemperatureLapseRateVeRaUncertainties), 
+                   averageTemperatureLapseRatePerProfile [1] ) )
+
+
+            # Calculate and store the median temperature lapse rate and its uncertainty in the 65 - 74km altitude range.
+            medianTemperatureLapseRatePerProfile = DataTools.getMedianAndQuantilesPYtoCPP ( 
+             DataTools.getNanFreeNumpyArray ( profileVeRa [7][iLatitudeLevels] ), 
+             uncertainties = DataTools.getNanFreeNumpyArray ( profileVeRa [8][iLatitudeLevels] ) )
+            
+            cloudTopTemperatureLapseRateVeRaMedian.append ( medianTemperatureLapseRatePerProfile [0] ) 
+            dCloudTopTemperatureLapseRateVeRaMedian.append ( medianTemperatureLapseRatePerProfile [3] )
 
 
 # Produce the plots chosen at the top of this script.
@@ -190,13 +221,57 @@ if plotToProduce ['Cloud top temperature lapse rate vs latitude']:
     ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 5)], minor = True )
     
     ax1.set_ylabel ('Cloud top temperature lapse rate (K/km) (VeRa)', color = colour)
+
     ax1.scatter (latitudesVeRa, cloudTopTemperatureLapseRateVeRa, c = 'blue', s = 25)
+    HandyTools.plotErrorBars (latitudesVeRa, cloudTopTemperatureLapseRateVeRa, yErrors = dCloudTopTemperatureLapseRateVeRa, colours = 'blue')
+    
+    ax1.tick_params (axis='y', labelcolor = colour)
+
+    ax1.text (-50, 13, 'Average: {:5.2f} +/- {:5.2f} K/km'.format (averageTemperatureLapseRate [0], averageTemperatureLapseRate [1]), c = 'blue', fontsize = 10 )
+    ax1.text (-50, 11, 'Median: {:5.2f} +/- {:5.2f} K/km'.format (medianTemperatureLapseRate [0], medianTemperatureLapseRate [3]), c = 'blue', fontsize = 10 )
+    
+    # instantiate a second Axes that shares the same x-axis
+    ax2 = ax1.twinx ()  
+    
+    colour = 'tab:green'
+    ax2.set_ylabel ('altitude cloud top (km)', color = colour)
+    ax2.scatter (latitudesVeRa, altitudesCloudTop, color = 'lightgreen', marker = 'D', s = 10)
+    ax2.tick_params (axis='y', labelcolor = colour)
+    
+    plt.savefig ( '../plots/temperatureLapseRateVeRa_CloudTops_orbitLimit_{}.png'.format ( orbitIDLimit [0] ) )
+    
+    plt.close (1)
+    plt.close (2)
+
+
+
+    # The average lapse rates in the 65 - 74 km altitude range
+    averageTemperatureLapseRate = DataTools.getAverageVarAndSDPYtoCPP ( DataTools.getNanFreeNumpyArray (cloudTopTemperatureLapseRateVeRaAverage) )
+    medianTemperatureLapseRate = DataTools.getMedianAndQuantilesPYtoCPP ( DataTools.getNanFreeNumpyArray (cloudTopTemperatureLapseRateVeRaAverage), 
+                                                                          uncertainties = DataTools.getNanFreeNumpyArray (dCloudTopTemperatureLapseRateVeRaAverage) )
+
+    plt.clf () 
+    
+    fig, ax1 = plt.subplots ()
+    
+    colour = 'tab:blue'
+    ax1.set_title ( '{} (# of point {})'.format (orbitIDLimit [1], len (latitudesVeRa)) )
+    ax1.set_xlabel ( 'latitude (˚)' )
+    ax1.set_xlim (-95,0)
+    ax1.set_ylim (-11,20)
+    ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 10)] )
+    ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 5)], minor = True )
+    
+    ax1.set_ylabel ('Average temperature lapse rate 65-74km (K/km) (VeRa)', color = colour)
+
+    ax1.scatter (latitudesVeRa, cloudTopTemperatureLapseRateVeRaAverage, c = 'blue', s = 25)
+    HandyTools.plotErrorBars (latitudesVeRa, cloudTopTemperatureLapseRateVeRaAverage, yErrors = dCloudTopTemperatureLapseRateVeRaAverage, colours = 'blue')
+    
     ax1.tick_params (axis='y', labelcolor = colour)
     
-    HandyTools.plotErrorBars (latitudesVeRa, cloudTopTemperatureLapseRateVeRa, yErrors = dCloudTopTemperatureLapseRateVeRa, colours = 'blue')
 
-    ax1.text (-50, 13, 'Average: {:5.2f} +/- {:5.2f} K/km'.format (averageTemperatureLapseRate [0], averageTemperatureLapseRate [1]), c = 'orange', fontsize = 10 )
-    ax1.text (-50, 11, 'Median: {:5.2f} +/- {:5.2f} K/km'.format (medianTemperatureLapseRate [0], medianTemperatureLapseRate [3]), c = 'orange', fontsize = 10 )
+    ax1.text (-50, 13, 'Average: {:5.2f} +/- {:5.2f} K/km'.format (averageTemperatureLapseRate [0], averageTemperatureLapseRate [1]), c = 'blue', fontsize = 10 )
+    ax1.text (-50, 11, 'Median: {:5.2f} +/- {:5.2f} K/km'.format (medianTemperatureLapseRate [0], medianTemperatureLapseRate [3]), c = 'blue', fontsize = 10 )
 
     
     # instantiate a second Axes that shares the same x-axis
@@ -207,7 +282,51 @@ if plotToProduce ['Cloud top temperature lapse rate vs latitude']:
     ax2.scatter (latitudesVeRa, altitudesCloudTop, color = 'lightgreen', marker = 'D', s = 10)
     ax2.tick_params (axis='y', labelcolor = colour)
     
-    plt.savefig ( '../plots/cloudTopTemperatureLapseRateVeRa_orbitLimit_{}.png'.format ( orbitIDLimit [0] ) )
+    plt.savefig ( '../plots/temperatureLapseRateVeRa_Average65-74km_orbitLimit_{}.png'.format ( orbitIDLimit [0] ) )
+    
+    plt.close (1)
+    plt.close (2)
+
+
+
+    # The median lapse rates in the 65 - 74 km altitude range
+    averageTemperatureLapseRate = DataTools.getAverageVarAndSDPYtoCPP ( DataTools.getNanFreeNumpyArray (cloudTopTemperatureLapseRateVeRaMedian) )
+    medianTemperatureLapseRate = DataTools.getMedianAndQuantilesPYtoCPP ( DataTools.getNanFreeNumpyArray (cloudTopTemperatureLapseRateVeRaMedian), 
+                                                                          uncertainties = DataTools.getNanFreeNumpyArray (dCloudTopTemperatureLapseRateVeRaMedian) )
+
+    plt.clf () 
+    
+    fig, ax1 = plt.subplots ()
+    
+    colour = 'tab:blue'
+    ax1.set_title ( '{} (# of point {})'.format (orbitIDLimit [1], len (latitudesVeRa)) )
+    ax1.set_xlabel ( 'latitude (˚)' )
+    ax1.set_xlim (-95,0)
+    ax1.set_ylim (-11,20)
+    ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 10)] )
+    ax1.set_xticks ( ticks = [tick  for tick in range (-90, 0, 5)], minor = True )
+    
+    ax1.set_ylabel ('Median temperature lapse rate 65-74km (K/km) (VeRa)', color = colour)
+
+    ax1.scatter (latitudesVeRa, cloudTopTemperatureLapseRateVeRaMedian, c = 'blue', s = 25)
+    HandyTools.plotErrorBars (latitudesVeRa, cloudTopTemperatureLapseRateVeRaMedian, yErrors = dCloudTopTemperatureLapseRateVeRaMedian, colours = 'blue')
+    
+    ax1.tick_params (axis='y', labelcolor = colour)
+    
+
+    ax1.text (-50, 13, 'Average: {:5.2f} +/- {:5.2f} K/km'.format (averageTemperatureLapseRate [0], averageTemperatureLapseRate [1]), c = 'blue', fontsize = 10 )
+    ax1.text (-50, 11, 'Median: {:5.2f} +/- {:5.2f} K/km'.format (medianTemperatureLapseRate [0], medianTemperatureLapseRate [3]), c = 'blue', fontsize = 10 )
+
+    
+    # instantiate a second Axes that shares the same x-axis
+    ax2 = ax1.twinx ()  
+    
+    colour = 'tab:green'
+    ax2.set_ylabel ('altitude cloud top (km)', color = colour)
+    ax2.scatter (latitudesVeRa, altitudesCloudTop, color = 'lightgreen', marker = 'D', s = 10)
+    ax2.tick_params (axis='y', labelcolor = colour)
+    
+    plt.savefig ( '../plots/temperatureLapseRateVeRa_Median65-74km_orbitLimit_{}.png'.format ( orbitIDLimit [0] ) )
     
     plt.close (1)
     plt.close (2)

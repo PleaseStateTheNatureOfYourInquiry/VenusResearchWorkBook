@@ -1002,30 +1002,6 @@ It is useful to look at how the cloud top temperatures extracted from the VeRa p
 
 *Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDs in this study (>= 260, left column) and orbitIDs >= 1188 (right column). The cloud top altitudes are from* :ref:`Marcq et al. 2020 <marcq2020>` *their Figure 14. Note that there a few more VeRa profiles compared to the VMC-UV Radiance Factors, because not all orbits for which there were VeRa and VMC measurements have VMC data that was deemed good enough* (:ref:`VMC/Step01 <VMCStep01>`).
 
-Also the cloud top temperatures distribute roughly in two latitude regions (top two figures): 
-:code:`|latitude| < +50˚` (cloud tops around 72km) with cloud top temperatures between 215 and 220K, and :code:`|latitude| > +50˚` (clouds tops near 65km), with cloud top temperatures that change between 220K to 235K, with a few low temperature exceptions.
-
-Not sure (yet), but perhaps this figure is a rather new result? 
-I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures, was this ever done before in this manner? Need to check the literature!
-In terms of the cloud top altitudes, there are four levels, indicated by the green circles: 65km, 71km, 73km and 74km, though for the last level there are only two data points.
-The temperature gradient in this altitude range is rather complex, changing from negative to positive and back.
-It is not straight forward to know how much of the change in cloud top temperatures is due to the temperature gradient. 
-
-
-
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureLapseRateVeRa_orbitLimit_0.png
-    :scale: 70%
-
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureLapseRateVeRa_orbitLimit_1188.png
-    :scale: 70%
-
-
-
-and this of course reflects in the overall temperatures for each of these levels.
-However, 
-This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?
-
-
 
 From pure visual inspection of the figure, there seems to be a linear-ish variation in the cloud top temperatures with latitude. 
 To my knowledge there is not obvious physical reason to expect any correlation of this kind though. 
@@ -1034,13 +1010,52 @@ Could some of the variation in the temperatures be due to the UV-absorber?
 In two bottom figures however, there is no obvious variation of the UV radiance factors as a function of latitude, in particular when considering the valid orbits 
 (conclusion of previous :ref:`Step03 <VMCStep02>`) only in the bottom right figure.
 
+
+Not sure (yet), but perhaps this figure is a rather new result? 
+I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures, was this ever done before in this manner? Need to check the literature!
+In terms of the cloud top altitudes, there are four levels, indicated by the green circles: 65km, 71km, 73km and 74km, though for the last level there are only two data points.
+The temperature gradient in this altitude range is rather complex, changing from negative to positive and back.
+It is not straight forward to know how much of the change in cloud top temperatures is due to the temperature gradient. 
+I plot the temperature lapse rate the the cloud top level, the average and the median temperature lapse rate in the 65 - 74km altitude region to get a feel of what the values for the temperature lapse rates really are (:file:`Latitude_variability.py`):
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_CloudTops_orbitLimit_0.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_CloudTops_orbitLimit_1188.png
+    :scale: 70%
+
+|
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Average65-74km_orbitLimit_0.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Average65-74km_orbitLimit_1188.png
+    :scale: 70%
+
+|
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Median65-74km_orbitLimit_0.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Median65-74km_orbitLimit_1188.png
+    :scale: 70%
+
+
+What I see from this analysis and the figures and values above is that the temperature lapse rate in the relevant altitude range is around -1 K/km.
+However, there is a 20K cloud top temperature variation in the 65 - 74km altitude range with latitude, which would require a lapse rate on the order of -2 K/km.
+So i think it is safe to state that about half of the temperature variation in the cloud top temperatures as a function of latitude is due to the temperature lapse rate.
+
+This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?
+
+
+
 The next step would be to run the :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`, which is the same script as in the previous :ref:`Step03 <VMCStep03>` above, but using the new :file:`VMCSelectedImages_CloudTopAltitudes.dat` table as entry.
 
-How to "correct" for the change in temperate 
-effect seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the two latitude sections? 
+How to "correct" for the apparent change in temperature as a function of latitude seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the several latitude sections? Should I correct by subtracting an expected variation based on the -1 K/km temperature lapse rate in the 65 - 74km altitude region?
 
 
 .. image:: ./images/thinking.png
+    :scale: 70%
 
 
 
