@@ -50,23 +50,29 @@ iLine = 0
 orbitIDs = []
 latitudesPerOrbit = []
 radiadanceFactorsPerOrbit = []
+radiadanceFactorsUncertaintiesPerOrbit  = []
 while iLine < numberOfImages:
 
     orbitIDs.append ( tableContent[0][0][iLine] )
     latitudesInOrbit = []
     radiadanceFactorsInOrbit = []
+    radiadanceFactorsUncertaintiesInOrbit = []
     while iLine < numberOfImages and tableContent[0][0][iLine] == orbitIDs [-1]:
 
         latitudesInOrbit.append ( tableContent[0][8][iLine] )
         radiadanceFactorsInOrbit.append ( tableContent[0][16][iLine] )
+        radiadanceFactorsUncertaintiesInOrbit.append ( tableContent[0][17][iLine] )
         iLine += 1
 
-    latitudesPerOrbit.append ( np.median (latitudesInOrbit) )   
-    radiadanceFactorsPerOrbit.append ( np.median (radiadanceFactorsInOrbit) )
+    latitudesPerOrbit.append ( DataTools.getMedianAndQuantilesPYtoCPP (latitudesInOrbit)[0] )
+    radianceFactorsMedian = DataTools.getMedianAndQuantilesPYtoCPP (radiadanceFactorsInOrbit, uncertainties = radiadanceFactorsUncertaintiesInOrbit)
+    radiadanceFactorsPerOrbit.append ( radianceFactorsMedian [0] )
+    radiadanceFactorsUncertaintiesPerOrbit.append ( radianceFactorsMedian [-1] )
 
 orbitIDs  = np.asarray (orbitIDs)
 latitudesPerOrbit = np.asarray (latitudesPerOrbit)
 radiadanceFactorsPerOrbit = np.asarray (radiadanceFactorsPerOrbit)
+radiadanceFactorsUncertaintiesPerOrbit = np.asarray (radiadanceFactorsUncertaintiesPerOrbit)
 
 
 # Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020.
@@ -176,6 +182,9 @@ if plotToProduce ['Radiance factors vs latitude']:
     ax1.set_ylabel ('Median Radiance Factors per VMC Orbit', color = colour)
     ax1.scatter (latitudesPerOrbit [iValidOrbits], radiadanceFactorsPerOrbit [iValidOrbits], c = 'blue', s = 25)
     ax1.tick_params (axis='y', labelcolor = colour)
+
+    HandyTools.plotErrorBars (latitudesPerOrbit [iValidOrbits], radiadanceFactorsPerOrbit [iValidOrbits], yErrors = radiadanceFactorsUncertaintiesPerOrbit [iValidOrbits], colours = 'blue')
+
     
     # instantiate a second Axes that shares the same x-axis
     ax2 = ax1.twinx ()  

@@ -155,7 +155,7 @@ I use the default settings to calculate profiles between 46km and 101km (56 leve
     Radius of Venus = 6051.8km, we adopt 6052km, hence 6098km ~ 46km altitude.
 
 
-As an example below are plots of T(z) and dT/dZ (z) to show the results for the last VeRa profile from the South Polar Dynamics Campaign (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`, also see :ref:`Step02bis <VeRaStep02bis>` for details on the :code:`.profiles` files):
+As an example plots of T(z), dT/dZ (z) and the static stability are shown below with the results for the last VeRa profile from the South Polar Dynamics Campaign (:file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`, also see :ref:`Step02bis <VeRaStep02bis>` for details on the :code:`.profiles` files):
 
 .. figure:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_T-z_Figure.png
     :scale: 60%
@@ -165,6 +165,7 @@ As an example below are plots of T(z) and dT/dZ (z) to show the results for the 
 .. figure:: ../Temperature-UVBrightness-Project/VeRa/Step02/plots/VeRaProfiles_Orb2811_dTdz-z_Figure.png
     :scale: 60%
 
+    (left) Averaged temperature profile dT/dz between 50 and 100km altitude (blue); (middle) parametrised adiabatic lapse rate from Figure 18 in :ref:`Seiff et al. (1980) <Seiff1980>`; (right) static stability = lapse rate + adiabatic lapse rate.
 
 
 .. _VeRaStep02bis:
@@ -976,7 +977,7 @@ All in all it seems reasonable to use the full-set results, the difference with 
 I use these cloud top altitudes as a function of latitude to extract the atmospheric temperatures from the VeRa temperature profiles.
 in the latitude bin the VeRa data has been recorded. 
 
-I can now re-build the :file:`VMCSelectedImages_CloudTopAltitudes.dat` table that I created in :ref:`Step01 <VMCStep01>`, where I was using a fixed cloud top altitude of 70km, using these cloud top altitudes as a function of latitude. I put together the script :file:`VMCImagesEvaluate_CloudTopAltitudes.py` to perform this task. 
+I can now re-build the :file:`VMCSelectedImages.dat` table that I created in :ref:`Step01 <VMCStep01>`, where I was using a fixed cloud top altitude of 70km, using these cloud top altitudes as a function of latitude. I put together the script :file:`VMCImagesEvaluate_CloudTopAltitudes.py` to perform this task. 
 I take the latitudes to be those of the VeRa soundings at 70km altitude. The corresponding VMC latitude-longitude box central latitudes are very similar.
 In addition, to that with a 10˚-latitude binning (bins are 10˚ wide and centred at -85˚, -75˚, etc.) in :file:`Marcq_2020_Figure14.dat`, choosing either the VeRa latitude at 70km (or even 60km or 80km altitude) or the VMC latitude results in the same choice of altitude level. 
 I extract the VeRa temperatures at these levels and place them in the adapted :file:`VMCSelectedImages_CloudTopAltitudes.dat` table.
@@ -999,25 +1000,34 @@ It is useful to look at how the cloud top temperatures extracted from the VeRa p
     :scale: 70%
 
 
-*Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDS in this study (>= 260, left) and orbitIDs >= 1188 (right). The cloud top altitudes are from* :ref:`Marcq et al. 2020 <marcq2020>` *Figure 14. Note that there a few more VeRa profiles compared to the VMC-UV Radiance Factors, because not all orbits for which there were VeRa and VMC measurements have VMC data that was deemed good enough* (:ref:`VMC/Step01 <VMCStep01>`).
+*Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDs in this study (>= 260, left column) and orbitIDs >= 1188 (right column). The cloud top altitudes are from* :ref:`Marcq et al. 2020 <marcq2020>` *their Figure 14. Note that there a few more VeRa profiles compared to the VMC-UV Radiance Factors, because not all orbits for which there were VeRa and VMC measurements have VMC data that was deemed good enough* (:ref:`VMC/Step01 <VMCStep01>`).
 
 Also the cloud top temperatures distribute roughly in two latitude regions (top two figures): 
 :code:`|latitude| < +50˚` (cloud tops around 72km) with cloud top temperatures between 215 and 220K, and :code:`|latitude| > +50˚` (clouds tops near 65km), with cloud top temperatures that change between 220K to 235K, with a few low temperature exceptions.
 
-I am not sure (yet), but perhaps this figure is a rather new result? 
-I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures, was this ever done before in this manner? I need to check the literature!
+Not sure (yet), but perhaps this figure is a rather new result? 
+I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures, was this ever done before in this manner? Need to check the literature!
+In terms of the cloud top altitudes, there are four levels, indicated by the green circles: 65km, 71km, 73km and 74km, though for the last level there are only two data points.
+The temperature gradient in this altitude range is rather complex, changing from negative to positive and back.
+It is not straight forward to know how much of the change in cloud top temperatures is due to the temperature gradient. 
+
+and this of course reflects in the overall temperatures for each of these levels.
+However, 
 This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?
+
+
 
 From pure visual inspection of the figure, there seems to be a linear-ish variation in the cloud top temperatures with latitude. 
 To my knowledge there is not obvious physical reason to expect any correlation of this kind though. 
 
-Some of the variation in the temperatures could be due to the UV-absorber?
+Could some of the variation in the temperatures be due to the UV-absorber?
 In two bottom figures however, there is no obvious variation of the UV radiance factors as a function of latitude, in particular when considering the valid orbits 
 (conclusion of previous :ref:`Step03 <VMCStep02>`) only in the bottom right figure.
 
 The next step would be to run the :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`, which is the same script as in the previous :ref:`Step03 <VMCStep03>` above, but using the new :file:`VMCSelectedImages_CloudTopAltitudes.dat` table as entry.
 
-How to "correct" for the effect seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the two latitude sections? 
+How to "correct" for the change in temperate 
+effect seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the two latitude sections? 
 
 
 .. image:: ./images/thinking.png
@@ -1162,6 +1172,11 @@ References
 .. _Marcq2020:
 
 **Marcq, R.** *et al.*, 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, `DOI 10.1016/j.icarus.2019.07.002 <https://doi.org/10.1016/j.icarus.2019.07.002>`_.
+
+
+.. _Seiff1980:
+
+**Seiff, Y.J.** *et al.*, 1980. Measurements of Thermal Structure and Thermal Contrasts in the Atmosphere of Venus and Related Dynamical Observations: Results From the Four Pioneer Venus Probes. JGR 85, 7903-7933. `DOI 10.1029/JA085iA13p07903 <https://doi.org/10.1029/JA085iA13p07903>`_.
 
 
 .. _Shalygina2015:

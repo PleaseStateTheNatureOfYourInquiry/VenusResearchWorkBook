@@ -88,6 +88,32 @@ plt.close (figure)
 plt.figure (2)
 plt.clf ()
 
+figure = plt.figure (2)
+figure.set_figheight (6)
+figure.set_figwidth (15)
+figure.clf ()
+figure.subplots_adjust (left = 0.05, right = 0.95)
+
+axis1 = plt.subplot2grid ( shape = (1, 3), loc = (0, 0), colspan = 1 )
+axis2 = plt.subplot2grid ( shape = (1, 3), loc = (0, 1), colspan = 1 )
+axis3 = plt.subplot2grid ( shape = (1, 3), loc = (0, 2), colspan = 1 )
+
+
+# dT/dz plot (left)   
+
+axis1.scatter ( VeRaFilteredProfile [7], VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
+axis1.plot ( VeRaFilteredProfile [7] , VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue' )
+axis1.set_ylim (50,100)
+axis1.set_xlabel ('dT/dz (K/km)')
+axis1.set_ylabel ('Altitude (km)')
+axis1.set_title ( 'VeRa VEX Orbit {} - {}, LST {}h, Lat {}˚'.
+                  format ( VeRaProfiles ['OrbitID'][iProfile],  VeRaProfiles ['DayOfYear'][iProfile], 
+                           VeRaProfiles ['LocalSolarTime'][iProfile], VeRaProfiles ['LatitudeOneBar'][iProfile] ), fontsize = 10 )
+
+
+
+
+
 # Calculate the adiabatic lapse rate is from Fig. 18 from Seiff et al. 1980, which I measured and parametrized between 200 and 350K
 # T1 = 200 K, -gamma1 = 11.6 + 9/14.5 * 0.4 K/km
 # T2 = 250 K, -gamma2 = 10.8 + 5/14.5 * 0.4 K/km
@@ -107,14 +133,29 @@ for iLevel in range (VeRaProfiles ['NumberOfFilteredLevels'][iProfile]):
     
         gamma.append ( gamma2 + (VeRaFilteredProfile [1][iLevel] - 250.) * (gamma3 - gamma2) / (350. - 250.) )
 
-                
-plt.scatter ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
-plt.plot ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue' )
-plt.ylim (50,100)
-plt.xlabel ('Static stability (K/km)')
-plt.ylabel ('Altitude (km)')
-plt.title ( 'VeRa VEX Orbit {} - {}, LST {}h, Lat {}˚'.format ( VeRaProfiles ['OrbitID'][iProfile],  VeRaProfiles ['DayOfYear'][iProfile], VeRaProfiles ['LocalSolarTime'][iProfile], VeRaProfiles ['LatitudeOneBar'][iProfile] ) )
-plt.savefig ( '../plots/VeRaProfiles_Orb{}_dTdz-z_Figure.png'.format ( VeRaProfiles ['OrbitID'][iProfile] ) )
 
-plt.close ()
+axis2.scatter ( gamma, VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
+axis2.plot (gamma, VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue' )
+axis2.set_ylim (50,100)
+axis2.set_xlabel ('Adiabatic Lapse Rate (K/km)')
+axis2.set_ylabel ('Altitude (km)')
+axis2.set_title ('Parametrisation from Seiff et al. 1980')
+
+
+             
+# Static stability plot (right)   
+
+axis3.scatter ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - radiusOfVenus, marker = 'o', c = 'blue' )
+axis3.plot ( VeRaFilteredProfile [7] + gamma, VeRaFilteredProfile [0] - radiusOfVenus, c = 'blue' )
+axis3.set_ylim (50,100)
+axis3.set_xlabel ('Static stability (K/km)')
+axis3.set_ylabel ('Altitude (km)')
+axis3.set_title ( 'VeRa VEX Orbit {} - {}, LST {}h, Lat {}˚'.
+                  format ( VeRaProfiles ['OrbitID'][iProfile],  VeRaProfiles ['DayOfYear'][iProfile], 
+                           VeRaProfiles ['LocalSolarTime'][iProfile], VeRaProfiles ['LatitudeOneBar'][iProfile] ), fontsize = 10 )
+
+
+figure.savefig ( '../plots/VeRaProfiles_Orb{}_dTdz-z_Figure.png'.format ( VeRaProfiles ['OrbitID'][iProfile] ) )
+
+plt.close (figure)
     
