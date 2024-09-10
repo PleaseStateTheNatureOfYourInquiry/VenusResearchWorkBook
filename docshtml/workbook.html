@@ -865,28 +865,29 @@ In two bottom figures however, there is no obvious variation of the UV radiance 
 <p>Not sure (yet), but perhaps this figure is a rather new result?
 I combine the cloud top altitude derived from modeling SPICAV-UV spectra to the VeRa temperatures, was this ever done before in this manner? Need to check the literature!
 In terms of the cloud top altitudes, there are four levels, indicated by the green circles: 65km, 71km, 73km and 74km, though for the last level there are only two data points.
-The temperature gradient in this altitude range is rather complex, changing from negative to positive and back.
-It is not straight forward to know how much of the change in cloud top temperatures is due to the temperature gradient.
-I plot the temperature lapse rate the the cloud top level, the average and the median temperature lapse rate in the 65 - 74km altitude region to get a feel of what the values for the temperature lapse rates really are (<code class="file docutils literal notranslate"><span class="pre">Latitude_variability.py</span></code>):</p>
+The temperature gradient in this altitude range is rather complex, changing from negative to positive and back (see figures in <a class="reference internal" href="#verastep02"><span class="std std-ref">Vera Step02</span></a>).</p>
+<p>How much of the change in cloud top temperatures as a function of latitude and altitude is due to the temperature gradient?
+I try to address this question by plotting temperature gradients in three ways (<code class="file docutils literal notranslate"><span class="pre">Latitude_variability.py</span></code>):</p>
+<ol class="arabic simple">
+<li><p>the temperature gradient at the cloud top level (top row below);</p></li>
+<li><p>the average temperature gradient in the 65 - 74km altitude region (middle row below);</p></li>
+<li><p>the median temperature gradient in the 65 - 74km altitude region (bottom row below);</p></li>
+</ol>
 <a class="reference internal image-reference" href="_images/temperatureGradientVeRa_CloudTops_orbitLimit_0.png"><img alt="_images/temperatureGradientVeRa_CloudTops_orbitLimit_0.png" src="_images/temperatureGradientVeRa_CloudTops_orbitLimit_0.png" style="width: 448.0px; height: 336.0px;" /></a>
 <a class="reference internal image-reference" href="_images/temperatureGradientVeRa_CloudTops_orbitLimit_1188.png"><img alt="_images/temperatureGradientVeRa_CloudTops_orbitLimit_1188.png" src="_images/temperatureGradientVeRa_CloudTops_orbitLimit_1188.png" style="width: 448.0px; height: 336.0px;" /></a>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <a class="reference internal image-reference" href="_images/temperatureGradientVeRa_Average65-74km_orbitLimit_0.png"><img alt="_images/temperatureGradientVeRa_Average65-74km_orbitLimit_0.png" src="_images/temperatureGradientVeRa_Average65-74km_orbitLimit_0.png" style="width: 448.0px; height: 336.0px;" /></a>
 <a class="reference internal image-reference" href="_images/temperatureGradientVeRa_Average65-74km_orbitLimit_1188.png"><img alt="_images/temperatureGradientVeRa_Average65-74km_orbitLimit_1188.png" src="_images/temperatureGradientVeRa_Average65-74km_orbitLimit_1188.png" style="width: 448.0px; height: 336.0px;" /></a>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <a class="reference internal image-reference" href="_images/temperatureGradientVeRa_Median65-74km_orbitLimit_0.png"><img alt="_images/temperatureGradientVeRa_Median65-74km_orbitLimit_0.png" src="_images/temperatureGradientVeRa_Median65-74km_orbitLimit_0.png" style="width: 448.0px; height: 336.0px;" /></a>
 <a class="reference internal image-reference" href="_images/temperatureGradientVeRa_Median65-74km_orbitLimit_1188.png"><img alt="_images/temperatureGradientVeRa_Median65-74km_orbitLimit_1188.png" src="_images/temperatureGradientVeRa_Median65-74km_orbitLimit_1188.png" style="width: 448.0px; height: 336.0px;" /></a>
-<p>What I see from this analysis and the figures and values above is that the temperature lapse rate in the relevant altitude range is around -1 K/km.
-However, there is a 20K cloud top temperature variation in the 65 - 74km altitude range with latitude, which would require a lapse rate on the order of -2 K/km.
-So i think it is safe to state that about half of the temperature variation in the cloud top temperatures as a function of latitude is due to the temperature lapse rate.</p>
-<p>This analysis could probably be taken further in more detail: for example do the SPICAV-UV data overlap in terms of time of observation and latitude-longitude with (any of) the VeRa soundings at all?</p>
+<p>In the plots above I also report the average and median values of the temperature gradients as a function of latitude.
+What I see from these plots and the average / median values above is that the temperature gradient in the relevant altitude range is on the order of -1 K/km.
+However, there is a 20K cloud top temperature variation with latitude, spanning the 65 - 74km altitude range in terms of cloud top levels, which would require a temperature gradient on the order of -2 K/km.
+So it looks like it is safe to state that about <strong>half of the temperature variation in the cloud top temperatures as a function of latitude</strong> is due to the temperature gradient. What is the other half?</p>
+<p>This analysis could probably be taken further in more detail!</p>
+<p>In any case, I think I can use the above insights to try correct the cloud top temperature variation due to the temperature gradient in the atmosphere, so that the values can be compared across latitudes when doing the correlation with the VMC UV-brightness?</p>
+<p>Would it be necessary to perhaps separate the analysis in the several latitude sections?</p>
 <p>The next step would be to run the <code class="file docutils literal notranslate"><span class="pre">CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py</span></code>, which is the same script as in the previous <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> above, but using the new <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_CloudTopAltitudes.dat</span></code> table as entry.</p>
-<p>How to “correct” for the apparent change in temperature as a function of latitude seen in the figure above when comparing VeRa cloud top temperatures with VMC UV-brightness? Would it be necessary to perhaps separate the analysis in the several latitude sections? Should I correct by subtracting an expected variation based on the -1 K/km temperature lapse rate in the 65 - 74km altitude region?</p>
-<a class="reference internal image-reference" href="_images/thinking.png"><img alt="_images/thinking.png" src="_images/thinking.png" style="width: 112.0px; height: 112.0px;" /></a>
+<a class="reference internal image-reference" href="_images/thinking.png"><img alt="_images/thinking.png" src="_images/thinking.png" style="width: 80.0px; height: 80.0px;" /></a>
 </section>
 <section id="step-04-thermal-tide-correction">
 <span id="vmcstep04"></span><h4>Step 04 - Thermal tide correction<a class="headerlink" href="#step-04-thermal-tide-correction" title="Link to this heading"></a></h4>
@@ -985,7 +986,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Sep 10, 2024, 8:16:10 AM.
+      <span class="lastupdated">Last updated on Sep 10, 2024, 4:05:11 PM.
       </span></p>
   </div>
 
