@@ -1018,26 +1018,26 @@ The temperature gradient in this altitude range is rather complex, changing from
 It is not straight forward to know how much of the change in cloud top temperatures is due to the temperature gradient. 
 I plot the temperature lapse rate the the cloud top level, the average and the median temperature lapse rate in the 65 - 74km altitude region to get a feel of what the values for the temperature lapse rates really are (:file:`Latitude_variability.py`):
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_CloudTops_orbitLimit_0.png
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureGradientVeRa_CloudTops_orbitLimit_0.png
     :scale: 70%
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_CloudTops_orbitLimit_1188.png
-    :scale: 70%
-
-|
-
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Average65-74km_orbitLimit_0.png
-    :scale: 70%
-
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Average65-74km_orbitLimit_1188.png
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureGradientVeRa_CloudTops_orbitLimit_1188.png
     :scale: 70%
 
 |
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Median65-74km_orbitLimit_0.png
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureGradientVeRa_Average65-74km_orbitLimit_0.png
     :scale: 70%
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureLapseRateVeRa_Median65-74km_orbitLimit_1188.png
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureGradientVeRa_Average65-74km_orbitLimit_1188.png
+    :scale: 70%
+
+|
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureGradientVeRa_Median65-74km_orbitLimit_0.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureGradientVeRa_Median65-74km_orbitLimit_1188.png
     :scale: 70%
 
 
