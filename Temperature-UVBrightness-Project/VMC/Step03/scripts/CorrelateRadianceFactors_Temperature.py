@@ -158,13 +158,13 @@ for iImage in range (numberOfVMCImages):
 
     # Select the images based on the orbits IDs, the phase angle and the minimum number of points in the latitude-longitude boxes.  
     if VMCOrbitID >= VMCOrbitBoundaries [0] and VMCOrbitID <= VMCOrbitBoundaries [1] and \
-       phaseAngle <= phaseAngleLimit and\
+       phaseAngle <= phaseAngleLimit and \
        numberOfPointInLatLonBox >= numberOfPointInLatitudeLongitudeBoxMinimum:
 
         VMCOrbitIDs.append (VMCOrbitID)
 
         RadianceFactorInLatLonBox = VMCSelectedImages [0][16][iImage]
-        dRadianceFactorInLatLonBox= VMCSelectedImages [0][17][iImage]
+        dRadianceFactorInLatLonBox = VMCSelectedImages [0][17][iImage]
         
         # Find the index in the model phase curve  phaseCurve  (1˚ step) for this angle.
         iPhaseCurve = phaseAngle - int ( phaseCurve [0][0][0] )

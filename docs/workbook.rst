@@ -922,9 +922,9 @@ Finally, it is interesting to look at just the egress data points, which results
 
 
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Step 03bis - Cloud top altitudes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 03bis - Cloud top altitudes as a function of latitude
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. _lastPointOfWork:
 
@@ -939,7 +939,6 @@ Step 03bis - Cloud top altitudes
     | :file:`./scripts/CloudTopAltitudesSPICAV-UV.py`
     | :file:`VMCImagesEvaluate_CloudTopAltitudes.py`
     | :file:`Latitude_variability.py`
-    | :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`
     | files: 
     | :file:`Marcq_2020_Figure14.dat`
     | :file:`Marcq_2020_Figure14.png`
@@ -991,16 +990,16 @@ It is useful to look at how the cloud top temperatures extracted from the VeRa p
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/cloudTopTemperatureVeRa_orbitLimit_1188.png
     :scale: 70%
 
-|
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/radianceFactorsVMCPerOrbit_orbitLimit_0.png
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/radianceFactorsRatiosMedianVMCPerOrbit_orbitLimit_0.png
     :scale: 70%
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/radianceFactorsVMCPerOrbit_orbitLimit_1188.png
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/radianceFactorsRatiosMedianVMCPerOrbit_orbitLimit_1188.png
     :scale: 70%
 
 
-*Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDs in this study (>= 260, left column) and orbitIDs >= 1188 (right column). The cloud top altitudes are from* :ref:`Marcq et al. 2020 <marcq2020>` *their Figure 14. Note that there a few more VeRa profiles compared to the VMC-UV Radiance Factors, because not all orbits for which there were VeRa and VMC measurements have VMC data that was deemed good enough* (:ref:`VMC/Step01 <VMCStep01>`).
+*Cloud top altitudes and corresponding VeRa temperatures as a function of latitude for all orbitsIDs in this study (>= 260, left column) and orbitIDs >= 1188 (right column). The cloud top altitudes are from* :ref:`Marcq et al. 2020 <marcq2020>` *their Figure 14. Note that there a few more VeRa profiles compared to the VMC-UV Radiance Factor Ratios, because not all orbits for which there were VeRa and VMC measurements have VMC data that was deemed good enough* (:ref:`VMC/Step01 <VMCStep01>`).
 
 
 From pure visual inspection of the figure, there seems to be a linear-ish variation in the cloud top temperatures with latitude. 
@@ -1054,16 +1053,6 @@ So it looks like it is safe to state that about **half of the temperature variat
 
 This analysis could probably be taken further in more detail!
 
-In any case, I think I can use the above insights to try correct the cloud top temperature variation due to the temperature gradient in the atmosphere, so that the values can be compared across latitudes when doing the correlation with the VMC UV-brightness?
-
-Would it be necessary to perhaps separate the analysis in the several latitude sections? 
-
-The next step would be to run the :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`, which is the same script as in the previous :ref:`Step03 <VMCStep03>` above, but using the new :file:`VMCSelectedImages_CloudTopAltitudes.dat` table as entry.
-
-
-.. image:: ./images/thinking.png
-    :scale: 50%
-
 
 
 .. _VMCStep04:
@@ -1098,7 +1087,7 @@ From the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_e
 In the caption of Figure 3 of their paper (the figure shows temperature cross section of thermal tides as a function LST in the northern hemisphere only) it is stated that **... the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right**. I verify by corresponding with the authors that this is also valid for the other figures in the paper. What I find to be confusing in this statement, or at least the way I interpret it, is that it seems as if there are **two Local Solar Times**: one **on Venus** and another one ... of **the figure**? 
 The :ref:`wind is in the direction of increasing LST <longitudeandlocalsolartime>`, hence the last part of their statement corroborates with that.
 
-In the script :file:`./scripts/ThermalTideCorrection.dat` I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the :file:`VMCSelectedImages.dat` table. I apply linear interpolation first in latitude and then in LST of the values in the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the :file:`ThermalTideCorrection.dat` table file.
+In the script :file:`./scripts/thermalTideAkiba2021.py` I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the :file:`VMCSelectedImages.dat` table. I apply linear interpolation first in latitude and then in LST of the values in the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the :file:`ThermalTideCorrection.dat` table file.
 
 I adapt the :file:`./scripts/CorrelateRadianceFactors_Temperature.py` script in :ref:`Step03 <VMCStep03>` to allow taking into account (subtract) thermal tide amplitude from the :file:`ThermalTideCorrection.dat` table file.
 
@@ -1121,6 +1110,65 @@ Also, the uncertainty in the thermal tide amplitude seems to be on the order of 
     :scale: 75%
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_orbits_median.png
     :scale: 75%
+
+
+
+.. _VMCStep05:
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 05 - Correlation analysis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. admonition:: directory, scripts & files
+
+    | top directory: :file:`VMC/Step05`
+    | scripts:
+    | :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`
+
+
+In any case, I think there are two ways use the above results.
+
+First, I try to separate the analysis in several latitude sections, as defined by the changes in cloud top altitudes (green points in the figures above).
+
+The next step would be to run the :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`, derived from the script in :ref:`Step03 <VMCStep03>` above.
+In this script I use the :file:`VMCSelectedImages_CloudTopAltitudes.dat` table from :ref:`Step03bis <VMCStep03bis>` as entry.
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_65km_vs_RadianceFactorRatio.png
+    :scale: 60%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_71km_vs_RadianceFactorRatio.png
+    :scale: 60%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_73km_vs_RadianceFactorRatio.png
+    :scale: 60%
+
+The cloud top temperatures have been corrected for the thermal tide at 69km altitude (:file:`ThermalTideCorrection.dat`) as described in :ref:`Step04 <VMCStep04>`), even though none of the cloud top altitudes is exactly at 69km altitude: I assume this amplitude to be a good indication.
+I also determined linear fits to the points, but the linear correlation is very weak.
+I need to do another statistical analysis here.
+
+
+Second, I correct the cloud top temperature variation due to the temperature gradient in the atmosphere, so that the values can be compared across latitudes when 
+doing the correlation with the VMC UV-brightness. 
+I take 71km altitude as the reference level and subtract 
+
+.. math::
+
+    dT = \frac {dT}{dz}_{average} \times (71 - z_{cloud-top})
+
+with
+
+.. math::
+
+    \frac {dT}{dz}_{average} = -1K/km
+
+
+Hence, the cloud top temperatures at 65km altitude would be 6K lower due to the average temperature gradient if they were at 71km.
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png
+    :scale: 100%
+
 
 
 
