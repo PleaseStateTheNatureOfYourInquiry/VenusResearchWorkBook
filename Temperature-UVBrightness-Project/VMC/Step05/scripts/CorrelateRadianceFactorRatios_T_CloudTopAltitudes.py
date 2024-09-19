@@ -1,13 +1,13 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240917
+# Version: v20240918
 
-# 
+# Analysis of the cloud top temperatures vs radiance factor ratios.
 
 # Chose the desired limitation in orbitIDVMC.
 
-# orbitIDLimit = [0, 'All orbits']
+    # orbitIDLimit = [0, 'All orbits']
 orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
 
 
@@ -30,7 +30,6 @@ sys.path.append ( os.path.abspath ('../../../') )
 from analysisConfiguration import *
 
 
-
 # Load the content of the  VMCSelectedImages_CloudTopAltitudes.dat  table created in VMC/Step01. 
 #  In this table the VeRa derived temperatures are taken at 70km altitude, the cloud top temperature assumed (in Step01) constant for all latitudes.
 VMCSelectedImages = HandyTools.readTable ('../../Step03bis/VMCSelectedImages_CloudTopAltitudes.dat')
@@ -45,14 +44,12 @@ radiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][4]
 dradiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][5] )
 
 
-
 # Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020 (VMC/Step03bis)
 figure14Data = HandyTools.readTable ('../../Step03bis/Marcq_2020_Figure14.dat')
 
 
 # Load the thermal tide correction as determined in VMC/Step04.
 thermalTideTable = HandyTools.readTable ('../../Step04/ThermalTideCorrection.dat')
-
 
 
 # Load the profiles of both the nominal and extended mission as well as the South Polar Dynamics Campaign from the  .profiles  NumPy files created
@@ -71,15 +68,6 @@ altitudesCloudTop = []
 
 cloudTopTemperatureVeRa = []
 dCloudTopTemperatureVeRa = []
-
-cloudTopTemperatureGradientVeRa = []
-dCloudTopTemperatureGradientVeRa = []
-
-cloudTopTemperatureGradientVeRaAverage = []
-dCloudTopTemperatureGradientVeRaAverage = []
-
-cloudTopTemperatureGradientVeRaMedian = []
-dCloudTopTemperatureGradientVeRaMedian = []
 
 for profileSet in profileSets:
 
@@ -111,32 +99,6 @@ for profileSet in profileSets:
             # Store the cloud top temperature and its uncertainty.            
             cloudTopTemperatureVeRa.append ( profileVeRa [1][iAltitudeCloudTopInVeRaProfile] )
             dCloudTopTemperatureVeRa.append ( profileVeRa [2][iAltitudeCloudTopInVeRaProfile] )
-            
-            
-            # Store the cloud top temperature gradient and its uncertainty.
-            cloudTopTemperatureGradientVeRa.append ( profileVeRa [7][iAltitudeCloudTopInVeRaProfile] )
-            dCloudTopTemperatureGradientVeRa.append ( profileVeRa [8][iAltitudeCloudTopInVeRaProfile] )
-
-
-            # Calculate and store the average temperature gradient and its uncertainty in the 65 - 74km altitude range.
-            averageTemperatureGradientPerProfile = DataTools.getAverageVarAndSDPYtoCPP ( DataTools.getNanFreeNumpyArray ( profileVeRa [7][iLatitudeLevels] ) )
-            cloudTopTemperatureGradientVeRaAverage.append ( averageTemperatureGradientPerProfile [0] )
-           
-            cloudTopTemperatureGradientVeRaUncertainties = DataTools.getNanFreeNumpyArray (profileVeRa [8][iLatitudeLevels])
-            dCloudTopTemperatureGradientVeRaAverage.append ( 
-             max ( np.sum ( cloudTopTemperatureGradientVeRaUncertainties ** 2 ) / len (cloudTopTemperatureGradientVeRaUncertainties), 
-                   averageTemperatureGradientPerProfile [1] ) )
-
-
-            # Calculate and store the median temperature gradient and its uncertainty in the 65 - 74km altitude range.
-            medianTemperatureGradientPerProfile = DataTools.getMedianAndQuantilesPYtoCPP ( 
-             DataTools.getNanFreeNumpyArray ( profileVeRa [7][iLatitudeLevels] ), lowerQuantilePercentage = 33, upperQuantilePercentage = 67,
-             uncertainties = DataTools.getNanFreeNumpyArray ( profileVeRa [8][iLatitudeLevels] ) )
-            
-            cloudTopTemperatureGradientVeRaMedian.append ( medianTemperatureGradientPerProfile [0] ) 
-            errorBars = max ( medianTemperatureGradientPerProfile [2] - medianTemperatureGradientPerProfile [0], 
-                              medianTemperatureGradientPerProfile [0] - medianTemperatureGradientPerProfile [1] )
-            dCloudTopTemperatureGradientVeRaMedian.append ( max (medianTemperatureGradientPerProfile [3], errorBars) )
 
 
 
@@ -153,13 +115,16 @@ dradiadanceFactorsRatiosMedianPerOrbitCorrected = []
 
 iVeRaProfileForVMCImagesCorrected = []
 
+# Create a plot of cloud top temperature vs RFR for each by cloud top altitude: 65, 71, 73 and 74km, though the last one does not have any corresponding
+#  VMC images / points.
 iPlot = 0
 for cloudTopAltitude in cloudTopAltitudesUnique:
 
     iVeRaProfiles = np.where ( np.asarray (altitudesCloudTop) == cloudTopAltitude )[0]
 
 
-    # The cloud top temperature correction relative to 71km altitude could be estimated 
+    # The cloud top temperature correction relative to 71km altitude can be estimated by considering the temperature gradient to be on the order of -1K/km
+    #  in the 65-74km altitude range across the latitudes.
     if cloudTopAltitude == 65:
     
         temperatureCorrection = -6
@@ -200,7 +165,7 @@ for cloudTopAltitude in cloudTopAltitudesUnique:
                 
             thermalTideCorrection.append ( thermalTideTable [0][5][iTermalTideTableLine] )
 
-            # Determine the latitude range.
+            # Keep track of the latitude range for this cloud top altitude.
             if latitudesVeRa [iVeRaProfile] > latitudeMaximum:
             
                 latitudeMaximum = latitudesVeRa [iVeRaProfile]
@@ -208,8 +173,6 @@ for cloudTopAltitude in cloudTopAltitudesUnique:
             if latitudesVeRa [iVeRaProfile] < latitudeMinimum:
             
                 latitudeMinimum = latitudesVeRa [iVeRaProfile]
-
-#             print (iVeRaProfile, orbitIDVeRa [iVeRaProfile], thermalTideTable [1][0][iTermalTideTableLine], thermalTideCorrection)
             
             cloudTopTemperatureVeRaCorrected.append ( cloudTopTemperatureVeRa [iVeRaProfile] + temperatureCorrection - thermalTideCorrection [-1] )
             dCloudTopTemperatureVeRaCorrected.append ( dCloudTopTemperatureVeRa [iVeRaProfile] )
@@ -250,22 +213,22 @@ for cloudTopAltitude in cloudTopAltitudesUnique:
         print ('b = ', fit [1], fit [3])
         print ('rSquared = ', fit [4])
         
-        plt.plot (fit [5], fit [6], c = 'black', alpha = 0.2)
+        plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2,
+                   label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ) )
+        plt.legend ( loc = 'upper left', fontsize = 9 )
 
         plt.savefig ( '../plots/cloudTopTemperature_{:2d}km_vs_RadianceFactorRatio.png'.format (cloudTopAltitude) )
 
 
-iPlot += 1
-
-
-plt.figure (iPlot)
+# Finally plot the corrected (thermal tide and temperature gradient variation) cloud top temperatures vs radiance factor ratios.
+plt.figure (iPlot + 1)
 plt.clf ()
 
 plt.scatter ( cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected )
 plt.xlim (195,240)
 plt.ylim (0.6, 1.5)
 
-plt.title ( '{:2d}km'.format (cloudTopAltitude) )
+plt.title ( 'Corrected cloud top temperature' )
 plt.xlabel ( 'Cloud top temperature corrected to 71km (VeRa)'.format (cloudTopAltitude) )
 plt.ylabel ( 'Radiance Factor Ratio (VMC)')
 
@@ -277,14 +240,16 @@ HandyTools.plotErrorBars ( cloudTopTemperatureVeRaCorrected, radiadanceFactorsRa
 fit = DataTools.linearLeastSquare (cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected, fractionBeyondXRange = 0.1)
 
 
-print ('corrected')
-print ('a = ',fit [0], fit [2])
-print ('b =', fit [1], fit [3])
-print ('rSquared = ', fit [4])
+plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2, 
+           label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ) )
+plt.legend ( loc = 'upper left', fontsize = 9 )
 
-plt.plot (fit [5], fit [6], c = 'black', alpha = 0.2)
 
 plt.savefig ( '../plots/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png' )
+
+
+
+
 
 
 

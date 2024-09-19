@@ -673,7 +673,9 @@ Step 03 - Investigate correlation
     | top directory: :file:`VMC/Step03`
     | scripts:
     | :file:`./scripts/CorrelateRadianceFactors_Temperature.py`
+    | :file:`./scripts/CreateRadianceFactorRatioTable.py`
     | files:
+    | :file:`RadianceFactorRatiosPerOrbit.dat`
 
 
 
@@ -702,8 +704,6 @@ The uncertainty in :math:`RFR` is:
     \sigma_{RFR}^2 = (\frac {\sigma_{RF-measured}}{RF_{phase curve}})^2 +  (\frac {\sigma_{RF-phase curve} RF_{measured}}{RF_{phase curve}^2})^2
 
 
-
-
 I create the script :file:`./scripts/CorrelateRadianceFactors_Temperature.py` to extract the information from the :file:`VMCSelectedImages.dat` and the :file:`PhaseCurveFit.dat` and calculate the RFRs as a function of the VeRa-derived temperatures and fit least square lines. 
 
 First, look at two separate orbits from the South Polar Dynamics Campaign (2811) and extension 3 (1748):
@@ -712,7 +712,6 @@ First, look at two separate orbits from the South Polar Dynamics Campaign (2811)
     :scale: 75%
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_images_orbit_1748-1748.png
     :scale: 75%
-
 
 
 There are two groups of points for the orbit 2811. 
@@ -748,12 +747,7 @@ resulting RFR and uncertainty (as per the formula above). The number of points i
 It can be seen that the statistics for the last three images (which correspond to the points with low phase angles in the :ref:`plots here<orbitimagesexample>`), is based on very low numbers, compared to the ingress images. 
 The uncertainties in the last three are (therefore) larger. I see no obvious reason to discard these images at low phase angles from the analyses though. I did experiment with taking a lower limit for the number of points in a latitude-longitude box. This is described and shown :ref:`below <excludinglowphaseangleimages>`.
 
-
-I can make three types plots:
-
-    (1) the RFR of all the images as a function of VeRa-derived temperature;
-    (2) the average or median RFR of the images per orbit as a function of VeRa-derived temperatures;
-    (3) the temperature-binned version of (2), either the average value or the median.
+I also set up the script :file:`./scripts/CreateRadianceFactorRatioTable.py` to create the table :file:`RadianceFactorRatiosPerOrbit.dat`, which lists the orbitsIDs, the median central latitudes of the latitude-longitude boxes of the images in that orbit, the average and median values of the RFR and corresponding uncertainties as derived from the images of that orbit.
 
 .. admonition:: uncertainties in the case of taking the average of a set RFR values for one orbit
 
@@ -763,12 +757,19 @@ I can make three types plots:
 
 .. admonition:: uncertainties in the case of taking the median of a set RFR values for one orbit
 
-    The uncertainty in the median can be evaluated by means of creating a new set of the data points based on the original set recalculating a median at each new set. Each data point has an associated uncertainty. By taking this uncertainty as the standard deviation for each data point, I use the NumPy `np.random.normal <https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html>`_ method to create gaussian noise and add it to the data point. I do this whole exercise 1000 times and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median (`DataTools.getMedianAndQuantilesPYtoCPP <https://generaltools-for-scientists.readthedocs.io/en/latest/datatools.html#DataTools.DataTools.getMedianAndQuantilesPYtoCPP>_`).
+    The uncertainty in the median can be evaluated by means of creating a new set of the data points based on the original set recalculating a median at each new set. Each data point has an associated uncertainty. By taking this uncertainty as the standard deviation for each data point, I use the NumPy `np.random.normal <https://numpy.org/doc/stable/reference/random/generated/numpy.random.normal.html>`_ method to create gaussian noise and add it to the data point. I do this whole exercise 1000 times and therefore get 1000 median values. From this set of median values, I calculate the average and the standard deviation. The standard deviation is a measure of the uncertainty in the median (`DataTools.getMedianAndQuantilesPYtoCPP <https://generaltools-for-scientists.readthedocs.io/en/latest/datatools.html#DataTools.DataTools.getMedianAndQuantilesPYtoCPP>`_).
     
     On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.
     
     I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, in other cases the second one.        
- 
+
+
+I can make three types plots:
+
+    (1) the RFR of all the images as a function of VeRa-derived temperature;
+    (2) the average or median RFR of the images per orbit as a function of VeRa-derived temperatures;
+    (3) the temperature-binned version of (2), either the average value or the median.
+
  
 When I use all the images with phase angles < 130˚ (see :ref:`Step 02 <VMCStep02>`), the results are:
     
@@ -847,8 +848,12 @@ Also note that the temperature binning could be one way to account for variation
 
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_binned_median_from_average_8K.png    
 
-In :ref:`Step 4 <VMCStep04>` I extract the amplitude of the thermal tide and apply a correction. 
 
+In above I assumed for simplicity that the cloud tops are at the same level throughout the atmosphere.
+However, this is not the case.
+In :ref:`Step 3bis <VMCStep03bis>` I explore in detail how to take the variation of cloud top temperature into account.
+In :ref:`Step 4 <VMCStep04>` I extract the amplitude of the thermal tide and in :ref:`Step 5 <VMCStep05>` I analyse the fully corrected temperatures and how they correlate to the RFR.
+ 
 
 
 .. _excludinglowphaseangleimages:
@@ -945,8 +950,7 @@ Step 03bis - Cloud top altitudes as a function of latitude
 
 
 
-
-Until now, for simplicity, I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
+For simplicity until this point I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
 However, this is not quite correct.
 For example, :ref:`Marcq et al. 2020 <Marcq2020>` analyse SPICAV-UV spectra to retrieve the abundance of SO2 at the cloud tops across Venus.
 SPICAV-UV is sensitive between 170 and 320nm, VMC is sensitive between 325 and 405nm (:ref:`Calibration of VMC images <calibratingvmcimages>`).
@@ -1006,8 +1010,8 @@ From pure visual inspection of the figure, there seems to be a linear-ish variat
 To my knowledge there is not obvious physical reason to expect any correlation of this kind though. 
 
 Could some of the variation in the temperatures be due to the UV-absorber?
-In two bottom figures however, there is no obvious variation of the UV radiance factors as a function of latitude, in particular when considering the valid orbits 
-(conclusion of previous :ref:`Step03 <VMCStep02>`) only in the bottom right figure.
+In two figures below there there might be a very very faint variation of the UV radiance factor ratios as a function of latitude, also increasing towards the pole. 
+There is a lot of variation however.
 
 
 Not sure (yet), but perhaps this figure is a rather new result? 
@@ -1124,34 +1128,33 @@ Step 05 - Correlation analysis
 
     | top directory: :file:`VMC/Step05`
     | scripts:
-    | :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`
+    | :file:`CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py`
 
 
-In any case, I think there are two ways use the above results.
+I think there are two ways to approach the analysis of a correlation between the cloud top temperatures and UV-brightness, based on the results from the steps above.
+I set up the script :file:`CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py` for both these ways and use the :file:`VMCSelectedImages_CloudTopAltitudes.dat` table from :ref:`Step 3bis <VMCStep03bis>` as well as :file:`RadianceFactorRatiosPerOrbit.dat` from :ref:`Step 3 <VMCStep03>`
 
-First, I try to separate the analysis in several latitude sections, as defined by the changes in cloud top altitudes (green points in the figures above).
-
-The next step would be to run the :file:`CorrelateRadianceFactors_Temperature_CloudTopAltitudes.py`, derived from the script in :ref:`Step03 <VMCStep03>` above.
-In this script I use the :file:`VMCSelectedImages_CloudTopAltitudes.dat` table from :ref:`Step03bis <VMCStep03bis>` as entry.
-
+The **first** way is to split the analysis in several latitude sections.
+These sections would logically be defined by the changes in cloud top altitudes, as indicated by the green points in the figures above in :ref:`Step 3bis <VMCStep03bis>`: 65km for latitudes < -60˚, 71km for latitudes between -60˚ and -40˚, 73km for latitudes between -40˚ and -15˚.
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_65km_vs_RadianceFactorRatio.png
-    :scale: 60%
+    :scale: 80%
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_71km_vs_RadianceFactorRatio.png
-    :scale: 60%
+    :scale: 80%
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_73km_vs_RadianceFactorRatio.png
-    :scale: 60%
+    :scale: 80%
 
 The cloud top temperatures have been corrected for the thermal tide at 69km altitude (:file:`ThermalTideCorrection.dat`) as described in :ref:`Step04 <VMCStep04>`), even though none of the cloud top altitudes is exactly at 69km altitude: I assume this amplitude to be a good indication.
-I also determined linear fits to the points, but the linear correlation is very weak.
-I need to do another statistical analysis here.
+I also determined linear fits to the points, but clearly the linear correlation is very weak if even existent at all. 
+
+I need to do another statistical analysis test here!
 
 
-Second, I correct the cloud top temperature variation due to the temperature gradient in the atmosphere, so that the values can be compared across latitudes when 
-doing the correlation with the VMC UV-brightness. 
-I take 71km altitude as the reference level and subtract 
+The **second** way I correct the cloud top temperature variation due to the temperature gradient in the atmosphere,
+so that the values can be compared across latitudes when doing the correlation with the VMC UV-brightness. 
+I take 71km altitude as the reference level: 
 
 .. math::
 
@@ -1164,13 +1167,24 @@ with
     \frac {dT}{dz}_{average} = -1K/km
 
 
-Hence, the cloud top temperatures at 65km altitude would be 6K lower due to the average temperature gradient if they were at 71km.
+Hence, the cloud top temperatures at 65km altitude would be 6K lower due to the average temperature gradient if they were at 71km, the cloud top temperatures at 73km would be 2K higher.
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png
     :scale: 100%
 
 
+Except for a slight hint at a positive correlation, it is very very weak.
 
+
+
+.. _interepretationandconclusion:
+
+Interpretation and conclusion
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+I think the conclusion is that when considering the uncertainty in the measurements and corrections to be applied is no clear detectable correlation 
+between the cloud top temperature and the corresponding UV-brightness, just a slight hint. 
 
 
 

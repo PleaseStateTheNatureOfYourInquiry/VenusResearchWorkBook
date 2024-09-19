@@ -342,6 +342,12 @@ if plotToProduce ['Radiance Factor Ratios vs latitude']:
 
     HandyTools.plotErrorBars (latitudesPerOrbit [iValidOrbits], radiadanceFactorRatiosPerOrbitAverage [iValidOrbits], yErrors = dradiadanceFactorRatiosPerOrbitAverage [iValidOrbits], colours = 'blue')
 
+    latitudeRanges = [[-90, -60], [-59, -42], [-40, 0]]
+    for latitudeRange in latitudeRanges:
+    
+        iLatitudeInRange = np.where ( np.logical_and () )[0]
+
+
     
     # instantiate a second Axes that shares the same x-axis
     ax2 = ax1.twinx ()  
