@@ -931,11 +931,6 @@ Finally, it is interesting to look at just the egress data points, which results
 Step 03bis - Cloud top altitudes as a function of latitude
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _lastPointOfWork:
-
-.. image:: ./images/construction.png
-    :scale: 50%
-
 
 .. admonition:: directory, scripts & files
 
@@ -1124,6 +1119,12 @@ Also, the uncertainty in the thermal tide amplitude seems to be on the order of 
 Step 05 - Correlation analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. _lastPointOfWork:
+
+.. image:: ./images/construction.png
+    :scale: 50%
+
+
 .. admonition:: directory, scripts & files
 
     | top directory: :file:`VMC/Step05`
@@ -1173,7 +1174,7 @@ Hence, the cloud top temperatures at 65km altitude would be 6K lower due to the 
     :scale: 100%
 
 
-Here too, the linear correlation is very very weak. 
+Except for a slight hint at a positive correlation, it is very very weak.
 
 
 
@@ -1181,7 +1182,6 @@ Here too, the linear correlation is very very weak.
 
 Interpretation and conclusion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 
 
 I think the conclusion is that when considering the uncertainty in the measurements and corrections to be applied is no clear detectable correlation 

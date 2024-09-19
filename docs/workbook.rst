@@ -931,11 +931,6 @@ Finally, it is interesting to look at just the egress data points, which results
 Step 03bis - Cloud top altitudes as a function of latitude
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _lastPointOfWork:
-
-.. image:: ./images/construction.png
-    :scale: 50%
-
 
 .. admonition:: directory, scripts & files
 
@@ -1123,6 +1118,12 @@ Also, the uncertainty in the thermal tide amplitude seems to be on the order of 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Step 05 - Correlation analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _lastPointOfWork:
+
+.. image:: ./images/construction.png
+    :scale: 50%
+
 
 .. admonition:: directory, scripts & files
 
