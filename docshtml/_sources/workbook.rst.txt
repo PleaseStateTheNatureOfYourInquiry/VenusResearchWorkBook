@@ -1038,6 +1038,7 @@ I try to address this question by plotting temperature gradients in three ways (
 
 
 
+
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/temperatureGradientVeRa_Median65-74km_orbitLimit_0.png
     :scale: 70%
 
@@ -1184,8 +1185,13 @@ Interpretation and conclusion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-I think the conclusion is that when considering the uncertainty in the measurements and corrections to be applied is no clear detectable correlation 
-between the cloud top temperature and the corresponding UV-brightness, just a slight hint. 
+I think that when considering the uncertainty in the measurements, even after the correction that I tried to apply, there is no clear detectable correlation 
+between the cloud top temperature and the corresponding UV-brightness, only a slight hint. 
+
+I now seek a better / more suitable (?) statistical method other than trying to fit a least square line (see last figure above).
+
+.. image:: ./images/thinking.png
+    :scale: 50%
 
 
 
