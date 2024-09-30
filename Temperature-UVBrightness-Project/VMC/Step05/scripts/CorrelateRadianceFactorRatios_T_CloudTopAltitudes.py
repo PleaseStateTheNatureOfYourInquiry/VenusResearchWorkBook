@@ -9,8 +9,9 @@
 
 # orbitIDLimit = [0, 'All orbits']
 orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
-createTable = True
-createFigures = False
+createTable = False
+createFigures = True
+fitAndPlot = False
 
 
 # Standard imports.
@@ -217,18 +218,21 @@ for cloudTopAltitude in cloudTopAltitudesUnique:
                                    xErrors = dCloudTopTemperatureVeRa [iVeRaProfileForVMCImages],
                                    yErrors = dradiadanceFactorsRatiosMedianPerOrbit [iVMCImages], colours = 'blue' )
 
-        fit = DataTools.linearLeastSquare ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, 
-                                            radiadanceFactorsRatiosMedianPerOrbit [iVMCImages], 
-                                            fractionBeyondXRange = 0.1 )
-        
-        print (cloudTopAltitude)
-        print ('a = ', fit [0], fit [2])
-        print ('b = ', fit [1], fit [3])
-        print ('rSquared = ', fit [4])
-        
-        plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2,
-                   label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ) )
-        plt.legend ( loc = 'upper left', fontsize = 9 )
+
+        if fitAndPlot:
+            
+            fit = DataTools.linearLeastSquare ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, 
+                                                radiadanceFactorsRatiosMedianPerOrbit [iVMCImages], 
+                                                fractionBeyondXRange = 0.1 )
+            
+            print (cloudTopAltitude)
+            print ('a = ', fit [0], fit [2])
+            print ('b = ', fit [1], fit [3])
+            print ('rSquared = ', fit [4])
+            
+            plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2,
+                       label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ) )
+            plt.legend ( loc = 'upper left', fontsize = 9 )
 
         plt.savefig ( '../plots/cloudTopTemperature_{:2d}km_vs_RadianceFactorRatio.png'.format (cloudTopAltitude) )
 
@@ -296,13 +300,16 @@ if createFigures:
     HandyTools.plotErrorBars ( cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected, 
                                xErrors = dcloudTopTemperatureVeRaCorrected,
                                yErrors = dRadiadanceFactorsRatiosMedianPerOrbitCorrected, colours = 'blue' )
-    
-    fit = DataTools.linearLeastSquare (cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected, fractionBeyondXRange = 0.1)
-    
-    
-    plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2, 
-               label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ) )
-    plt.legend ( loc = 'upper left', fontsize = 9 )
+
+
+    if fitAndPlot:
+        
+        fit = DataTools.linearLeastSquare (cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected, fractionBeyondXRange = 0.1)
+        
+        
+        plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2, 
+                   label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ) )
+        plt.legend ( loc = 'upper left', fontsize = 9 )
     
     
     plt.savefig ( '../plots/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png' )
