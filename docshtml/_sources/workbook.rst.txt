@@ -673,7 +673,7 @@ Step 03 - Investigate correlation
     | top directory: :file:`VMC/Step03`
     | scripts:
     | :file:`./scripts/CorrelateRadianceFactors_Temperature.py`
-    | :file:`./scripts/CreateRadianceFactorRatioTable.py`
+    | :file:`./scripts/CreateRadianceFactorRatioTableAndPlots.py`
     | files:
     | :file:`RadianceFactorRatiosPerOrbit.dat`
 
@@ -747,7 +747,7 @@ resulting RFR and uncertainty (as per the formula above). The number of points i
 It can be seen that the statistics for the last three images (which correspond to the points with low phase angles in the :ref:`plots here<orbitimagesexample>`), is based on very low numbers, compared to the ingress images. 
 The uncertainties in the last three are (therefore) larger. I see no obvious reason to discard these images at low phase angles from the analyses though. I did experiment with taking a lower limit for the number of points in a latitude-longitude box. This is described and shown :ref:`below <excludinglowphaseangleimages>`.
 
-I also set up the script :file:`./scripts/CreateRadianceFactorRatioTable.py` to create the table :file:`RadianceFactorRatiosPerOrbit.dat`, which lists the orbitsIDs, the median central latitudes of the latitude-longitude boxes of the images in that orbit, the average and median values of the RFR and corresponding uncertainties as derived from the images of that orbit.
+I also set up the script :file:`./scripts/CreateRadianceFactorRatioTableAndPlots.py` to create the table :file:`RadianceFactorRatiosPerOrbit.dat`, which lists the orbitsIDs, the median central latitudes of the latitude-longitude boxes of the images in that orbit, the average and median values of the RFR and corresponding uncertainties as derived from the images of that orbit.
 
 .. admonition:: uncertainties in the case of taking the average of a set RFR values for one orbit
 
@@ -762,6 +762,27 @@ I also set up the script :file:`./scripts/CreateRadianceFactorRatioTable.py` to 
     On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.
     
     I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, in other cases the second one.        
+
+
+With this script I can also create a series of plots of the RFR values for each orbit as a function of the phase angle and of the time difference between the VeRa sounding and the VMC image. This is an important check on the consistency of the RFR values in one orbit, taking into account the uncertainties. I export all the plots in the :file:`Step03/plots` subfolder, they are named :file:`RadianceFactorRatio_vs_PhaseAngle_0X.png` and :file:`RadianceFactorRatio_vs_VeRaVMCTimeDifference_0X.png`, where :file:`X` goes from :file:`1` to :file:`5`.
+
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots/RadianceFactorRatio_vs_PhaseAngle_05.png
+
+    The last set of plots of RFR vs Phase Angle: RadianceFactorRatio_vs_PhaseAngle_05.png
+
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots/RadianceFactorRatio_vs_VeRaVMCTimeDifference_05.png
+
+    The last set of plots of RFR vs time difference: RadianceFactorRatio_vs_VeRaVMCTimeDifference_05.png
+    
+
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_0/RadianceFactorRatio_vs_Temperature_all_images.png    
+
+    The RFR of all the images as a function of VeRa-derived temperature at 70km altitude.
+
+
 
 
 I can make three types plots:
@@ -1120,12 +1141,6 @@ Also, the uncertainty in the thermal tide amplitude seems to be on the order of 
 Step 05 - Correlation analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _lastPointOfWork:
-
-.. image:: ./images/construction.png
-    :scale: 50%
-
-
 .. admonition:: directory, scripts & files
 
     | top directory: :file:`VMC/Step05`
@@ -1176,6 +1191,32 @@ Hence, the cloud top temperatures at 65km altitude would be 6K lower due to the 
 
 
 Except for a slight hint at a positive correlation, it is very very weak.
+
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 06 - New Correlation analysis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _lastPointOfWork:
+
+.. image:: ./images/construction.png
+    :scale: 50%
+
+
+.. admonition:: directory, scripts & files
+
+    | top directory: :file:`VMC/Step6`
+    | scripts:
+    | :file:`CorrelationAnalysis.py`
+    | :file:`CreateFactorRatiosTVeRaTable.py`
+    | files: 
+    | :file:`RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat`
+
+
+
+After discussing with Colin, we decided that I still need to 
+
 
 
 
@@ -1250,6 +1291,16 @@ References
 .. _Bevington2003:
 
 **P.R. Bevington and D.K. Robinson** 2003. Data Reduction and Error Analysis for the Physical Sciences. Third Edition, McGraw Hill Higher Education.
+
+
+.. _crisp1986:
+
+**Crisp, D.** 1986. Radiative forcing of the Venus Mesosphere. I. Solar fluxes and heating rates. Icarus 67, 484 - 514. `DOI 10.1016/0019-1035(86)90126-0 <https://doi.org/10.1016/0019-1035(86)90126-0>`_.
+
+.. _crisp1989:
+
+**Crisp, D.** 1989. Radiative forcing of the Venus Mesosphere. II. Thermal fluxes, cooling rates and radiative equilibrium temperatures. Icarus 77, 391 - 413. `DOI doi.org/10.1016/0019-1035(89)90096-1 <https://doi.org/10.1016/0019-1035(89)90096-1>`_.
+
 
 .. _Khatuntsev2013:
 

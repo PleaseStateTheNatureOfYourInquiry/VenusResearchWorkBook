@@ -62,6 +62,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#step-03bis-cloud-top-altitudes-as-a-function-of-latitude">Step 03bis - Cloud top altitudes as a function of latitude</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-04-thermal-tide-correction">Step 04 - Thermal tide correction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-05-correlation-analysis">Step 05 - Correlation analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-06-new-correlation-analysis">Step 06 - New Correlation analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#interpretation-and-conclusion">Interpretation and conclusion</a></li>
@@ -647,7 +648,7 @@ C_END
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step03</span></code></div>
 <div class="line">scripts:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateRadianceFactorRatioTable.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateRadianceFactorRatioTableAndPlots.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatiosPerOrbit.dat</span></code></div>
 </div>
@@ -699,7 +700,7 @@ resulting RFR and uncertainty (as per the formula above). The number of points i
 </div>
 <p>It can be seen that the statistics for the last three images (which correspond to the points with low phase angles in the <a class="reference internal" href="#orbitimagesexample"><span class="std std-ref">plots here</span></a>), is based on very low numbers, compared to the ingress images.
 The uncertainties in the last three are (therefore) larger. I see no obvious reason to discard these images at low phase angles from the analyses though. I did experiment with taking a lower limit for the number of points in a latitude-longitude box. This is described and shown <a class="reference internal" href="#excludinglowphaseangleimages"><span class="std std-ref">below</span></a>.</p>
-<p>I also set up the script <code class="file docutils literal notranslate"><span class="pre">./scripts/CreateRadianceFactorRatioTable.py</span></code> to create the table <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatiosPerOrbit.dat</span></code>, which lists the orbitsIDs, the median central latitudes of the latitude-longitude boxes of the images in that orbit, the average and median values of the RFR and corresponding uncertainties as derived from the images of that orbit.</p>
+<p>I also set up the script <code class="file docutils literal notranslate"><span class="pre">./scripts/CreateRadianceFactorRatioTableAndPlots.py</span></code> to create the table <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatiosPerOrbit.dat</span></code>, which lists the orbitsIDs, the median central latitudes of the latitude-longitude boxes of the images in that orbit, the average and median values of the RFR and corresponding uncertainties as derived from the images of that orbit.</p>
 <div class="admonition-uncertainties-in-the-case-of-taking-the-average-of-a-set-rfr-values-for-one-orbit admonition">
 <p class="admonition-title">uncertainties in the case of taking the average of a set RFR values for one orbit</p>
 <p>The uncertainty is the maximum of the uncertainty derived from the <a class="reference internal" href="#uncertaintyinaverage"><span class="std std-ref">averaging formula</span></a> and the standard deviation of the average of the points.
@@ -711,6 +712,25 @@ The last value is almost always the larger one. For the South Polar Dynamics Cam
 <p>On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.</p>
 <p>I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, in other cases the second one.</p>
 </div>
+<p>With this script I can also create a series of plots of the RFR values for each orbit as a function of the phase angle and of the time difference between the VeRa sounding and the VMC image. This is an important check on the consistency of the RFR values in one orbit, taking into account the uncertainties. I export all the plots in the <code class="file docutils literal notranslate"><span class="pre">Step03/plots</span></code> subfolder, they are named <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_PhaseAngle_0X.png</span></code> and <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_VeRaVMCTimeDifference_0X.png</span></code>, where <code class="file docutils literal notranslate"><span class="pre">X</span></code> goes from <code class="file docutils literal notranslate"><span class="pre">1</span></code> to <code class="file docutils literal notranslate"><span class="pre">5</span></code>.</p>
+<figure class="align-default" id="id17">
+<img alt="_images/RadianceFactorRatio_vs_PhaseAngle_05.png" src="_images/RadianceFactorRatio_vs_PhaseAngle_05.png" />
+<figcaption>
+<p><span class="caption-text">The last set of plots of RFR vs Phase Angle: RadianceFactorRatio_vs_PhaseAngle_05.png</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id18">
+<img alt="_images/RadianceFactorRatio_vs_VeRaVMCTimeDifference_05.png" src="_images/RadianceFactorRatio_vs_VeRaVMCTimeDifference_05.png" />
+<figcaption>
+<p><span class="caption-text">The last set of plots of RFR vs time difference: RadianceFactorRatio_vs_VeRaVMCTimeDifference_05.png</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id19">
+<img alt="_images/RadianceFactorRatio_vs_Temperature_all_images.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images.png" />
+<figcaption>
+<p><span class="caption-text">The RFR of all the images as a function of VeRa-derived temperature at 70km altitude.</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+</figcaption>
+</figure>
 <p>I can make three types plots:</p>
 <blockquote>
 <div><ol class="arabic simple">
@@ -720,10 +740,10 @@ The last value is almost always the larger one. For the South Polar Dynamics Cam
 </ol>
 </div></blockquote>
 <p>When I use all the images with phase angles &lt; 130˚ (see <a class="reference internal" href="#vmcstep02"><span class="std std-ref">Step 02</span></a>), the results are:</p>
-<figure class="align-default" id="id17">
+<figure class="align-default" id="id20">
 <img alt="_images/RadianceFactorRatio_vs_Temperature_all_images.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images.png" />
 <figcaption>
-<p><span class="caption-text">The RFR of all the images as a function of VeRa-derived temperature at 70km altitude.</span><a class="headerlink" href="#id17" title="Link to this image"></a></p>
+<p><span class="caption-text">The RFR of all the images as a function of VeRa-derived temperature at 70km altitude.</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>Below are the results when averaging (left) or taking the median value (right) for all points per orbit.</p>
@@ -782,10 +802,10 @@ In <a class="reference internal" href="#vmcstep04"><span class="std std-ref">Ste
 <p id="excludinglowphaseangleimages"><strong>Excluding the low phase angle images</strong></p>
 <p>From the plots above, where I <strong>include all the images</strong> from the ingress and egress sections of the orbits, it looks like an anti-correlation between the VeRa-derived temperature at 70km altitude and the VMC_derived UV-brightness RFR exists, albeit not a very strong one.</p>
 <p>When I use the images with phase angles &lt; 130˚ and number of points in the latitude-longitude boxes more then 20, which basically excludes the egress images, the results are:</p>
-<figure class="align-default" id="id18">
+<figure class="align-default" id="id21">
 <img alt="_images/RadianceFactorRatio_vs_Temperature_all_images1.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images1.png" />
 <figcaption>
-<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
+<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" style="width: 480.0px; height: 360.0px;" /></a>
@@ -801,10 +821,10 @@ In <a class="reference internal" href="#vmcstep04"><span class="std std-ref">Ste
 It can also be nicely seen how the uncertainty of each point is less than for the case of using all the images.
 <strong>Since there is no obvious reason to discard the low phase images, moving forward, I chose to include all the images.</strong></p>
 <p>Finally, it is interesting to look at just the egress data points, which results in the oposite correlation, but much less convincing.</p>
-<figure class="align-default" id="id19">
+<figure class="align-default" id="id22">
 <img alt="_images/RadianceFactorRatio_vs_Temperature_all_images2.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images2.png" />
 <figcaption>
-<p><span class="caption-text">The RFR of the images with phase angles &lt; 60˚, which is only the South Polar Dynamics Campaign egress images.</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
+<p><span class="caption-text">The RFR of the images with phase angles &lt; 60˚, which is only the South Polar Dynamics Campaign egress images.</span><a class="headerlink" href="#id22" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average2.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average2.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average2.png" style="width: 480.0px; height: 360.0px;" /></a>
@@ -916,10 +936,10 @@ The <a class="reference internal" href="#longitudeandlocalsolartime"><span class
 <p>In the script <code class="file docutils literal notranslate"><span class="pre">./scripts/thermalTideAkiba2021.py</span></code> I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table. I apply linear interpolation first in latitude and then in LST of the values in the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>I adapt the <code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code> script in <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> to allow taking into account (subtract) thermal tide amplitude from the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>Also, the uncertainty in the thermal tide amplitude seems to be on the order of <span class="math notranslate nohighlight">\(\pm\)</span> 0.1K (Figure 7 from <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al.</span></a>), but I am trying to verify this value with the authors.</p>
-<figure class="align-default" id="id20">
+<figure class="align-default" id="id23">
 <img alt="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" />
 <figcaption>
-<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id20" title="Link to this image"></a></p>
+<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" style="width: 480.0px; height: 360.0px;" /></a>
@@ -929,7 +949,6 @@ The <a class="reference internal" href="#longitudeandlocalsolartime"><span class
 </section>
 <section id="step-05-correlation-analysis">
 <span id="vmcstep05"></span><h4>Step 05 - Correlation analysis<a class="headerlink" href="#step-05-correlation-analysis" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="_images/construction.png" id="lastpointofwork"><img alt="_images/construction.png" id="lastpointofwork" src="_images/construction.png" style="width: 80.0px; height: 80.0px;" /></a>
 <div class="admonition-directory-scripts-files admonition">
 <p class="admonition-title">directory, scripts &amp; files</p>
 <div class="line-block">
@@ -960,6 +979,22 @@ I take 71km altitude as the reference level:</p>
 <a class="reference internal image-reference" href="_images/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png"><img alt="_images/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png" src="_images/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p>Except for a slight hint at a positive correlation, it is very very weak.</p>
 </section>
+<section id="step-06-new-correlation-analysis">
+<h4>Step 06 - New Correlation analysis<a class="headerlink" href="#step-06-new-correlation-analysis" title="Link to this heading"></a></h4>
+<a class="reference internal image-reference" href="_images/construction.png" id="lastpointofwork"><img alt="_images/construction.png" id="lastpointofwork" src="_images/construction.png" style="width: 80.0px; height: 80.0px;" /></a>
+<div class="admonition-directory-scripts-files admonition">
+<p class="admonition-title">directory, scripts &amp; files</p>
+<div class="line-block">
+<div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step6</span></code></div>
+<div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelationAnalysis.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFactorRatiosTVeRaTable.py</span></code></div>
+<div class="line">files:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat</span></code></div>
+</div>
+</div>
+<p>After discussing with Colin, we decided that I still need to</p>
+</section>
 </section>
 <section id="interpretation-and-conclusion">
 <span id="interepretationandconclusion"></span><h3>Interpretation and conclusion<a class="headerlink" href="#interpretation-and-conclusion" title="Link to this heading"></a></h3>
@@ -985,10 +1020,10 @@ Referring to <a class="reference internal" href="#archinal2018"><span class="std
 <li><p>If the rotation of the planet is <em>retrograde</em> (clockwise seen from the North), then <strong>W</strong> decreases with time. This is the case for the Venus. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude increases with time.</p></li>
 </ul>
 <p>This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise, and the (East) longitude increases in the clockwise direction. This is the case (see also <a class="reference external" href="https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube">VMCTools.readVMCImageAndGeoCube</a>):</p>
-<figure class="align-default" id="id21">
+<figure class="align-default" id="id24">
 <a class="reference internal image-reference" href="_images/longitudeTransformationCheck.png"><img alt="_images/longitudeTransformationCheck.png" src="_images/longitudeTransformationCheck.png" style="width: 1000.0px; height: 408.8px;" /></a>
 <figcaption>
-<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
+<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>It also follows that the <strong>Local Solar Time increases</strong> in the direction of <strong>decreasing East longitude</strong>.
@@ -1001,6 +1036,8 @@ The <strong>zonal wind</strong> moves the clouds in the direction of <strong>inc
 <p id="archinal2018"><strong>Archinal, B.A.</strong> et al. 2018. Report of the IAU Working Group on CartographicCoordinates and Rotational Elements: 2015. Celest Mech Dyn Astr. 130, 22 - 68.
 <a class="reference external" href="https://astropedia.astrogeology.usgs.gov/download/Docs/WGCCRE/WGCCRE2015reprint.pdf">DOI 10.1007/s10569-017-9805-5 (pdf)</a>.</p>
 <p id="bevington2003"><strong>P.R. Bevington and D.K. Robinson</strong> 2003. Data Reduction and Error Analysis for the Physical Sciences. Third Edition, McGraw Hill Higher Education.</p>
+<p id="crisp1986"><strong>Crisp, D.</strong> 1986. Radiative forcing of the Venus Mesosphere. I. Solar fluxes and heating rates. Icarus 67, 484 - 514. <a class="reference external" href="https://doi.org/10.1016/0019-1035(86)90126-0">DOI 10.1016/0019-1035(86)90126-0</a>.</p>
+<p id="crisp1989"><strong>Crisp, D.</strong> 1989. Radiative forcing of the Venus Mesosphere. II. Thermal fluxes, cooling rates and radiative equilibrium temperatures. Icarus 77, 391 - 413. <a class="reference external" href="https://doi.org/10.1016/0019-1035(89)90096-1">DOI doi.org/10.1016/0019-1035(89)90096-1</a>.</p>
 <p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> <em>et al.</em>, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
 <p id="lee2015"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
 <p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> <em>et al.</em>, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
@@ -1025,7 +1062,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Sep 30, 2024, 9:13:53 AM.
+      <span class="lastupdated">Last updated on Oct 18, 2024, 4:46:42 PM.
       </span></p>
   </div>
 

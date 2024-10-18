@@ -1,12 +1,12 @@
  
  File: /Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC/Step05/cloudTopTemperature_vs_RadianceFactorRatio.dat
- Created at 2024-09-28 at 20:11:36
+ Created at 2024-10-05 at 14:29:51
  
  T_cloudtop_corr = cloud top temperature corrected = T_cloud_uncorr + dT/dz_correction - T_tide_correction
  T_cloud_uncorr = cloud top temperature from VeRa uncorrected for any effects
  dT/dz_correction = cloud top temperature correction for the thermal gradient of -1K/km relative to the cloud top altitude of 71km.
  T_tide_correction = cloud top temperature correction for the thermal tide
- RFR = Radiance Factor Ratio average for the VMC image
+ RFR = Radiance Factor Ratio median for the VMC image (from VMC Step03 - RadianceFactorRatiosPerOrbit.dat)
  z_cloudtop = cloud top altitude
  latitude = latitude of the VeRa sounding at 70km altitude
  

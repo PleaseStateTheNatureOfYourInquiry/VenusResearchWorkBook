@@ -9,8 +9,8 @@
 
 # orbitIDLimit = [0, 'All orbits']
 orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
-createTable = False
-createFigures = True
+createTable = True
+createFigures = False
 fitAndPlot = False
 
 
@@ -62,7 +62,7 @@ profilesSouthPolarDynamicsCampaign = np.load ('../../../VeRa/Step02/VeRaSouthPol
 
 profileSets = [profilesNominalAndExtendedMission, profilesSouthPolarDynamicsCampaign]
 
-latitudeLevel = 70 #km
+altitudeLevel = 70 #km
 
 orbitIDVeRa = []
 
@@ -74,11 +74,7 @@ dCloudTopTemperatureVeRa = []
 
 for profileSet in profileSets:
 
-    iLatitudeLevel = int ( radiusOfVenus + latitudeLevel - profileSet ['FilteredProfiles'][0][0][0] )
-
-    # This list will be used to extract the temperature gradients in the region where all the cloud tops fall: 65 - 74km.
-    #  I use it to calculate an average temperature gradient, as compared to the gradient at the cloud top level.
-    iLatitudeLevels = np.asarray ( [ int ( radiusOfVenus + latitudeLevel - profileSet ['FilteredProfiles'][0][0][0] )  for latitudeLevel in range (65,75) ] )
+    iAltitudeLevel = int ( radiusOfVenus + altitudeLevel - profileSet ['FilteredProfiles'][0][0][0] )
     
     for iProfile in range ( len ( profileSet ['OrbitID'] ) ):
     
@@ -88,7 +84,7 @@ for profileSet in profileSets:
                 
             profileVeRa = profileSet ['FilteredProfiles'][iProfile]
             
-            latitudesVeRa.append ( profileVeRa [5][iLatitudeLevel] )
+            latitudesVeRa.append ( profileVeRa [5][iAltitudeLevel] )
         
         
             # Determine the index in the  Marcq_2020_Figure14.dat  table that corresponds to the VeRa latitude.
@@ -254,7 +250,7 @@ if createTable:
     print (' T_cloud_uncorr = cloud top temperature from VeRa uncorrected for any effects', file = fileOpen)
     print (' dT/dz_correction = cloud top temperature correction for the thermal gradient of -1K/km relative to the cloud top altitude of 71km.', file = fileOpen)
     print (' T_tide_correction = cloud top temperature correction for the thermal tide', file = fileOpen)
-    print (' RFR = Radiance Factor Ratio average for the VMC image', file = fileOpen)
+    print (' RFR = Radiance Factor Ratio median for the VMC image (from VMC Step03 - RadianceFactorRatiosPerOrbit.dat)', file = fileOpen)
     print (' z_cloudtop = cloud top altitude', file = fileOpen)
     print (' latitude = latitude of the VeRa sounding at 70km altitude', file = fileOpen)
     
@@ -313,6 +309,7 @@ if createFigures:
     
     
     plt.savefig ( '../plots/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png' )
+    plt.close (iPlot + 1)
 
 
 
