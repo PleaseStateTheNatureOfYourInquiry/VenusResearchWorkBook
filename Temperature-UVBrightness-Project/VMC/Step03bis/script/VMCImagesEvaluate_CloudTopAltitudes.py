@@ -101,7 +101,7 @@ for iImage in range ( len ( tableContent [0][0] ) ):
 
 #     print (iImage, tableContent [0][0][iImage], tableContent [0][6][iImage], altitudeCloudTop, iAltitudeCloudTopInVeRaProfile, temperatureCloudTop, dTemperatureCloudTop)    
     
-    print ( ' {}   {}   {}    {:5.2f}       {:5.2f}      {:6.2f}    {:6.2f}    {:7.2f}         {:6.2f}      {:6.2f}  {:6.2f}      {:7.2f}      {:6.2f}   {:7.2f}     {:7.2f}         {:6d}             {:6.3f}           {:6.3f}        {:6.2f}   {:6.3f}       {:5.2f} '.
+    print ( ' {}   {}   {}    {:5.2f}       {:5.2f}      {:6.2f}    {:6.2f}    {:7.2f}         {:6.2f}      {:6.2f}  {:6.2f}      {:7.2f}      {:6.2f}   {:7.2f}     {:7.2f}         {:6d}             {:6.3f}           {:6.3f}        {:6.2f}   {:6.3f}       {:5.2f}             {:6.2f}           {:6.2f} '.
           format ( tableContent [0][0][iImage],
                    tableContent [1][1][iImage],
                    tableContent [1][2][iImage],
@@ -120,7 +120,9 @@ for iImage in range ( len ( tableContent [0][0] ) ):
                    tableContent [0][17][iImage],               
                    temperatureCloudTop,
                    dTemperatureCloudTop,   
-                   tableContent [0][20][iImage] ), file = fileOpen )
+                   tableContent [0][20][iImage],
+                   tableContent [0][21][iImage],
+                   tableContent [0][22][iImage] ), file = fileOpen )
 
 
 fileOpen.close ()

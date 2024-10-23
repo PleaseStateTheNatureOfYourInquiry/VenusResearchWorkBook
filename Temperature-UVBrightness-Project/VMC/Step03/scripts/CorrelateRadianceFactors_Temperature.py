@@ -1,7 +1,7 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240624
+# Version: v20241022
 
 # Extract the Radiance Factors and VeRa-derived temperatures from table file   VMCSelectedImages.dat  created in Step01 of the images of the selected orbits
 # (VMCOrbitBoundaries) and normalise each Radiance Factor to the model phase curve from table file  PhaseCurveFit.dat  created in Step02: 
@@ -59,17 +59,17 @@ statisticsStringStep3 = 'average'  if radianceFactorRatiosStatistics ['Use avera
 
 
 # Temperature bin size for step 3.
-# temperatureBinSize = 2
-temperatureBinSize = 4
+temperatureBinSize = 2
+# temperatureBinSize = 4
 # temperatureBinSize = 8
 
 # Boolean to control correction for thermal tide.
-thermalTideCorrectionApply = False
+thermalTideCorrectionApply = True
 thermalTideString = '_thermalTideCorrection'  if thermalTideCorrectionApply else  ''
 
 
 # The first plot is all points, the second plot is the RFRs averaged (or median-ed) for each orbit, the third plot is with RFR-values per orbit binned in temperature bins.
-plotParameters = { 'create plots' : [True, True, True],
+plotParameters = { 'create plots' : [True, False, False],
                    'plot titles' : [ 'All points orbits {} - {}, \n # points in lat-lon box > {}, $\phi$ < {:3d}'.format ( VMCOrbitBoundaries [0], 
                                                                                                                            VMCOrbitBoundaries [1], 
                                                                                                                            numberOfPointInLatitudeLongitudeBoxMinimum, 
@@ -106,7 +106,10 @@ HandyTools.createPathToFile ( fullPath = '../plots_phase_angle_lt_{:03d}_min-poi
           numberOfPointInLatitudeLongitudeBoxMinimum,
           thermalTideString ) )
 
+
+
 # # Settings to extract the data of orbit 2805 and plot the individual Radiance Factor Ratios.
+# # VMCOrbitBoundaries = [1789, 1789]
 # VMCOrbitBoundaries = [2811, 2811]
 # numberOfPointInLatitudeLongitudeBoxMinimum = 0
 # phaseAngleLimit = 130
@@ -128,7 +131,7 @@ HandyTools.createPathToFile ( fullPath = '../plots_phase_angle_lt_{:03d}_min-poi
 # Load the data from the table files.
 VMCSelectedImages = HandyTools.readTable ('../../Step01/VMCSelectedImages.dat')
 numberOfVMCImages = len ( VMCSelectedImages [0][0] )
-phaseCurve =  HandyTools.readTable ('../../Step02/PhaseCurveFit.dat')
+phaseCurve =  HandyTools.readTable ('../../Step02/PhaseCurveFit_i<84_e<81.dat')
 thermalTideCorrection = HandyTools.readTable ('../../Step04/ThermalTideCorrection.dat')
 
 

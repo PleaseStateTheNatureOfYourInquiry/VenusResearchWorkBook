@@ -1,10 +1,10 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240524
+# Version: v20241022
 
 # From the table created by  CreatePhaseCurveTable.py  in this same Step02 of the process, extract a binned phase curve. 
-# The bin size can be set, default value is 1Ëš (note, the PhaseCurve.dat table is ordered by increasing phase angle).
+# The bin size can be set, default value is 1û (note, the PhaseCurve.dat table is ordered by increasing phase angle).
 # 
 
 # Standard imports.
@@ -25,28 +25,32 @@ from VeRaTools import VeRaTools
 from VMCTools import VMCTools
 
 
+incidence_emission_angle_String = 'i<89_e<89'
+incidence_emission_angle_String = 'i<84_e<81'
 
-phaseCurveFitFileName = '../PhaseCurve.dat'
+phaseCurveFitFileName = '../PhaseCurve_{}.dat'.format (incidence_emission_angle_String)
+
 phaseCurveData = HandyTools.readTable (phaseCurveFitFileName)
 numberOfPhaseCurvePoints = len (phaseCurveData [0][1])
 
 # Set binsize and initialise the binned  phaseCurveBinned  list and the corresponding  phaseAnglesBinned  list.
-binSize = 1 # Ëš
+binSize = 1 # û
+
 
 # All the different settings to produce intermediate and final results for the phase curve.
 selectionParameterSets =  [ 
     
     # Setting for the plots with all data not in bins.
-    [ 'V0000', 180, '../plots/PhaseCurve_allPhaseAngles.png', 'Whole mission & all phase angles', False ],
-    [ 'V0500', 180, '../plots/PhaseCurveExtension1-4+SPDC_allPhaseAngles.png', 'EXT 1-4 + SPDC & all phase angles', False ],
-    [ 'V1000', 180, '../plots/PhaseCurveExtension2-4+SPDC_allPhaseAngles.png', 'EXT 2-4 + SPDC & all phase angles', False ],
-    [ 'V1000', 130, '../plots/PhaseCurveExtension2-4+SPDC_PhaseAngleLT130dgr.png', 'EXT2-4 + SPDC & phase angles < 130Ëš', False ], 
+    [ 'V0000', 180, '../plots_{}/PhaseCurve_allPhaseAngles.png'.format (incidence_emission_angle_String), 'Whole mission & all phase angles', False ],
+    [ 'V0500', 180, '../plots_{}/PhaseCurveExtension1-4+SPDC_allPhaseAngles.png'.format (incidence_emission_angle_String), 'EXT 1-4 + SPDC & all phase angles', False ],
+    [ 'V1000', 180, '../plots_{}/PhaseCurveExtension2-4+SPDC_allPhaseAngles.png'.format (incidence_emission_angle_String), 'EXT 2-4 + SPDC & all phase angles', False ],
+    [ 'V1000', 130, '../plots_{}/PhaseCurveExtension2-4+SPDC_PhaseAngleLT130dgr.png'.format (incidence_emission_angle_String), 'EXT2-4 + SPDC & phase angles < 130û', False ], 
 
     # Setting for the plots with binned data.
-    [ 'V0000', 180, '../plots/PhaseCurveBinned_allPhaseAngles.png', 'Whole mission & all phase angles (binned {}Ëš)'.format (binSize), True ],
-    [ 'V0500', 180, '../plots/PhaseCurveBinnedExtension1-4+SPDC_allPhaseAngles.png', 'EXT 1-4 + SPDC & all phase angles (binned {}Ëš)'.format (binSize), True ],
-    [ 'V1000', 180, '../plots/PhaseCurveBinnedExtension2-4+SPDC_allPhaseAngles.png', 'EXT 2-4 + SPDC & all phase angles  (binned {}Ëš)'.format (binSize), True ],
-    [ 'V1000', 130, '../plots/PhaseCurveBinnedExtension2-4+SPDC_PhaseAngleLT130dgr.png', 'EXT2-4 + SPDC & phase angles < 130Ëš (binned {}Ëš)'.format (binSize), True ],
+    [ 'V0000', 180, '../plots_{}/PhaseCurveBinned_allPhaseAngles.png'.format (incidence_emission_angle_String), 'Whole mission & all phase angles (binned {}û)'.format (binSize), True ],
+    [ 'V0500', 180, '../plots_{}/PhaseCurveBinnedExtension1-4+SPDC_allPhaseAngles.png'.format (incidence_emission_angle_String), 'EXT 1-4 + SPDC & all phase angles (binned {}û)'.format (binSize), True ],
+    [ 'V1000', 180, '../plots_{}/PhaseCurveBinnedExtension2-4+SPDC_allPhaseAngles.png'.format (incidence_emission_angle_String), 'EXT 2-4 + SPDC & all phase angles  (binned {}û)'.format (binSize), True ],
+    [ 'V1000', 130, '../plots_{}/PhaseCurveBinnedExtension2-4+SPDC_PhaseAngleLT130dgr.png'.format (incidence_emission_angle_String), 'EXT2-4 + SPDC & phase angles < 130û (binned {}û)'.format (binSize), True ],
  
 ]
 
@@ -195,7 +199,7 @@ for iSelectionParameters, selectionParameters in enumerate (selectionParameterSe
     plt.xlim (0,150)
     plt.ylim (0,2.5)
 
-    plt.xlabel ('Phase Angle $\phi$ (Ëš)')
+    plt.xlabel ('Phase Angle $\phi$ (û)')
     plt.ylabel ('RF or Radiance Factor')
 
     plt.legend ( [ 'RF = {:8.6f}$\phi^2$ + {:7.4f}$\phi$ + {:7.3f}  |  $r^2$ = {:5.3f}'.format ( 
@@ -222,7 +226,7 @@ for iSelectionParameters, selectionParameters in enumerate (selectionParameterSe
     plt.close ()
     
 
-# The quadratic least square fit to the binned data with phase angles < 130Ëš (last of the cases in  selectionParameterSets ).
+# The quadratic least square fit to the binned data with phase angles < 130û (last of the cases in  selectionParameterSets ).
 regressionPhaseCurve = polynomialRegression (phaseAnglesBinnedFullRange)
 
 # For each phase angle bin, determine the variation as inferred from the 1000 gaussian noise experiments.
@@ -245,7 +249,7 @@ for iPhaseAngle in range ( len (phaseAnglesBinnedFullRange) ):
 
 
 # Open and create the header of the table file that will contain information about the selected images.
-phaseCurveFitFileName = 'PhaseCurveFit.dat'
+phaseCurveFitFileName = 'PhaseCurveFit_{}.dat'.format(incidence_emission_angle_String)
 fileOpen = open ( os.path.join ('..', phaseCurveFitFileName), 'w')
 
 print (' ', file = fileOpen)
@@ -253,7 +257,7 @@ print (' File: {}'.format (phaseCurveFitFileName), file = fileOpen)
 print (' Created at {}'.format ( HandyTools.getDateAndTimeString () ), file = fileOpen)
 
 print (' ', file = fileOpen)
-print ('  RF (pa)= {:8.6f} * pa^2 + {:7.4f} * pa + {:7.3f}  |  r^2 = {:5.3f} (pa = phase angle in Ëš)'.
+print ('  RF (pa)= {:8.6f} * pa^2 + {:7.4f} * pa + {:7.3f}  |  r^2 = {:5.3f} (pa = phase angle in û)'.
  format (polynomialCoefficients [2], polynomialCoefficients [1], polynomialCoefficients [0], rSquared), file = fileOpen )
 
 print (' ', file = fileOpen)
@@ -265,7 +269,7 @@ print ('  MaxMin RF = (maximum - minimum) / 2  of the Radiance Factor from 1000 
 
 print (' ', file = fileOpen)
 print ('   phase angle   RF (Fit)  RF (Average)   dRF     MaxMin RF' , file = fileOpen)
-print ('       (Ëš)', file = fileOpen)
+print ('       (û)', file = fileOpen)
 print ('C_END', file = fileOpen)
 
 

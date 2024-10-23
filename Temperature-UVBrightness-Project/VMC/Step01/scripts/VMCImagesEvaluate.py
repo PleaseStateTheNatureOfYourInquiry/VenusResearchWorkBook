@@ -1,7 +1,7 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240514
+# Version: v20241020
 
 # Load all images and create a figure of each image, showing the spot of the VeRa sounding and the wind advected area of that spot at the time of the
 #  recording of the image.
@@ -28,6 +28,8 @@ sys.path.append ( os.path.abspath ('../../../') )
 from analysisConfiguration import *
 
 
+# orbitIDLimit = '0000'
+orbitIDLimit = '1188'
 
 # With this function a list of VMC images is processed:
 #  For each image the wind advected area (latitude-longitude box) of the VeRa sounding location is calculated using  the  getWindAdvectedBox  method of the 
@@ -240,7 +242,7 @@ def processOrbit ( listOfImageFiles,
         # Add the information of selected images to the selected images table, as well as to the  iValidPointsSelectedImages   Python dictionary.
         if imageSelected:
         
-            print ( ' {}   {}   {}    {:5.2f}       {:5.2f}      {:6.2f}    {:6.2f}    {:7.2f}         {:6.2f}      {:6.2f}  {:6.2f}      {:7.2f}      {:6.2f}   {:7.2f}     {:7.2f}         {:6d}             {:6.3f}           {:6.3f}        {:6.2f}   {:6.3f}       {:5.2f} '.
+            print ( ' {}   {}   {}    {:5.2f}       {:5.2f}      {:6.2f}    {:6.2f}    {:7.2f}         {:6.2f}      {:6.2f}  {:6.2f}      {:7.2f}      {:6.2f}   {:7.2f}     {:7.2f}         {:6d}             {:6.3f}           {:6.3f}        {:6.2f}   {:6.3f}       {:5.2f}             {:6.2f}           {:6.2f} '.
                   format ( VeRaProfileSpecs [0].split ('_')[0],
                            VMCImageFileName.split (separatorCharacter)[-1][:-4],
                            VeRaProfileSpecs [4],
@@ -259,7 +261,9 @@ def processOrbit ( listOfImageFiles,
                            averageRadianceFactor [1],               
                            temperatureAtTargetAltitude,
                            oneSigmaTemperateAtTargetAltitude,   
-                           VeRaProfileSpecs [6] ), file = fileOpen )
+                           VeRaProfileSpecs [6],
+                           emissionAngleAverage,
+                           incidenceAngleAverage ), file = fileOpen )
 
         
             iValidPointsSelectedImages ['Image File Name'].append (VMCImageFileName)
@@ -342,7 +346,16 @@ oneSigmaMeridionalWind = 12 #m/s - the uncertainty in the meridional wind.
 
 
 # Open and create the header of the table file that will contain information about the selected images.
-VMCSelectedImagesFileName = 'VMCSelectedImages.dat'
+
+if orbitIDLimit == '0000':
+
+    VMCSelectedImagesFileName = 'VMCSelectedImages.dat'
+
+else:
+
+    VMCSelectedImagesFileName = 'VMCSelectedImages_orbits_later_than_{}.dat'.format (orbitIDLimit)
+
+
 fileOpen = open ( os.path.join ('..', VMCSelectedImagesFileName), 'w' )
 
 print (' ', file = fileOpen)
@@ -360,8 +373,8 @@ print ('  Radiance factor is the average of the points in the latitude-longitude
 print ('  dRadiance factor is the standard deviation of the radiance factor', file = fileOpen)
 
 print (' ', file = fileOpen)
-print (' Orbit       Image          DOY      VeRa Time    VMC Time   Time diff  Lat_VeRa   Lon_VeRa   lat_centre_VMC   Lat_range_VMC   Lon_centre_VMC   Lon_range_VMC      Phase Angle   #Points in box   Radiance factor  dRadiance factor     T       dT     Local Solar Time', file = fileOpen)
-print ('                         yyyy-mm-dd     (h)         (h)         (h)       (˚)        (˚)            (˚)             (˚)              (˚)             (˚)               (˚)                                                             (K)      (K)          (h)', file = fileOpen)
+print (' Orbit       Image          DOY      VeRa Time    VMC Time   Time diff  Lat_VeRa   Lon_VeRa   lat_centre_VMC   Lat_range_VMC   Lon_centre_VMC   Lon_range_VMC      Phase Angle   #Points in box   Radiance factor  dRadiance factor     T       dT     Local Solar Time   Emission Angle   Incidence Angle', file = fileOpen)
+print ('                         yyyy-mm-dd     (h)         (h)         (h)       (˚)        (˚)            (˚)             (˚)              (˚)             (˚)               (˚)                                                             (K)      (K)          (h)                (˚)              (˚)', file = fileOpen)
 print ('C_END', file = fileOpen)
 
 
@@ -374,8 +387,8 @@ iValidPointsSelectedImages = { 'Image File Name' : [],
 
 
 # # ----- For testing of this script
-# # Note that  VMCDataDictectory  is from the  analysisConfiguration  file (import at the top of this script).
-# listOfImageFiles = HandyTools.getFilesInDirectoryTree ( os.path.join ( VMCDataDictectory, 'Orb0260' ), extension = 'GEO' )
+# # Note that  VMCDataDirectory  is from the  analysisConfiguration  file (import at the top of this script).
+# listOfImageFiles = HandyTools.getFilesInDirectoryTree ( os.path.join ( VMCDataDirectory, 'Orb0260' ), extension = 'GEO' )
 # processOrbit ( listOfImageFiles, 
 #                VeRaSelectedProfilesInformation, 
 #                VeRaSPoleProfilesInformation, 
@@ -388,37 +401,41 @@ iValidPointsSelectedImages = { 'Image File Name' : [],
 # Go through each VeRa profile and process the images of the corresponding orbit.
 for orbitID in VeRaSelectedProfilesInformation ['OrbitID']:
 
-    # Get the list of existing images in the orbit directory.
-    # Note that  VMCDataDictectory  is from the  analysisConfiguration  file (import at the top of this script).
-    listOfImageFiles = HandyTools.getFilesInDirectoryTree ( os.path.join ( VMCDataDictectory, 'Orb' + str (orbitID).split ('_')[0] ), extension = 'GEO' )
-    
-    if listOfImageFiles:
+    if orbitID >= orbitIDLimit:
 
-        # Process the images with the  processOrbit  function.
-        processOrbit ( listOfImageFiles, 
-                       VeRaSelectedProfilesInformation, 
-                       VeRaSPoleProfilesInformation, 
-                       targetAltitude = targetAltitude,
-                       oneSigmaZonalWind = oneSigmaZonalWind, 
-                       oneSigmaMeridionalWind = oneSigmaMeridionalWind )
+        # Get the list of existing images in the orbit directory.
+        # Note that  VMCDataDirectory  is from the  analysisConfiguration  file (import at the top of this script).
+        listOfImageFiles = HandyTools.getFilesInDirectoryTree ( os.path.join ( VMCDataDirectory, 'Orb' + str (orbitID).split ('_')[0] ), extension = 'GEO' )
+        
+        if listOfImageFiles:
+    
+            # Process the images with the  processOrbit  function.
+            processOrbit ( listOfImageFiles, 
+                           VeRaSelectedProfilesInformation, 
+                           VeRaSPoleProfilesInformation, 
+                           targetAltitude = targetAltitude,
+                           oneSigmaZonalWind = oneSigmaZonalWind, 
+                           oneSigmaMeridionalWind = oneSigmaMeridionalWind )
 
 
 
 for orbitID in VeRaSPoleProfilesInformation ['OrbitID']:
 
-    # Get the list of existing images in the orbit directory.
-    # Note that  VMCDataDictectory  is from the  analysisConfiguration  file (import at the top of this script).
-    listOfImageFiles = HandyTools.getFilesInDirectoryTree ( os.path.join ( VMCDataDictectory, 'Orb' + str (orbitID).split ('_')[0] ), extension = 'GEO' )
-
-    if listOfImageFiles:
+    if orbitID >= orbitIDLimit:
     
-        # Process the images with the  processOrbit  function.
-        processOrbit ( listOfImageFiles, 
-                       VeRaSelectedProfilesInformation, 
-                       VeRaSPoleProfilesInformation, 
-                       targetAltitude = targetAltitude,
-                       oneSigmaZonalWind = oneSigmaZonalWind, 
-                       oneSigmaMeridionalWind = oneSigmaMeridionalWind )
+        # Get the list of existing images in the orbit directory.
+        # Note that  VMCDataDirectory  is from the  analysisConfiguration  file (import at the top of this script).
+        listOfImageFiles = HandyTools.getFilesInDirectoryTree ( os.path.join ( VMCDataDirectory, 'Orb' + str (orbitID).split ('_')[0] ), extension = 'GEO' )
+    
+        if listOfImageFiles:
+        
+            # Process the images with the  processOrbit  function.
+            processOrbit ( listOfImageFiles, 
+                           VeRaSelectedProfilesInformation, 
+                           VeRaSPoleProfilesInformation, 
+                           targetAltitude = targetAltitude,
+                           oneSigmaZonalWind = oneSigmaZonalWind, 
+                           oneSigmaMeridionalWind = oneSigmaMeridionalWind )
 
  
  
@@ -443,13 +460,15 @@ numberOfOrbits = len ( list ( set ( tableContent [0][0] ) ) )
 fileOpen = open ( os.path.join ('..', VMCSelectedImagesFileName), 'w')
 
 for textLine in tableTextContent:
-
-    if 'DOY' in textLine:
-    
-        print ( ' {} orbits with a total of {} images'.format (numberOfOrbits, numberOfImages), file = fileOpen )
-        print ( '', file = fileOpen )
         
     print (textLine, file = fileOpen)
+
+    if 'dRadiance factor is the standard deviation of the radiance factor' in textLine:
+
+        print ( '', file = fileOpen )    
+        print ( ' {} orbits with a total of {} images'.format (numberOfOrbits, numberOfImages), file = fileOpen )
+        print ( '', file = fileOpen )
+
     
 fileOpen.close ()
 

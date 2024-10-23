@@ -1,10 +1,14 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240517
+# Version: v20241122
 
 # Load all the (hand)-selected images (see VMCImagesEvaluate.py in Step01) and extract the phase angle, the average and median radiance factor of all the valid 
 #  points in the image and write the results to a table, in order of increasing phase angle.
+#  The points on the Venus visible disk are selected based on a maximum incidence angle (i) and emission angle (e): 
+#  Lee et al. (2015, Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express, 
+#   http://dx.doi.org/10.1016/j.icarus.2015.02.015) adopt values of i < 84˚ and e < 81˚. 
+
 #  Also write to the table the Radiance Scaling Factor from the image meta data, that is used to calibrate the radiance values.
 
 
@@ -32,7 +36,13 @@ from analysisConfiguration import *
 
 
 # Extract the average and median of the radiance factor for a given image.
-def processImage (VMCFileNameRoot, iterativeOutlierRemoval = True, sigmaLimit = 2.5, percentageLimit = 1, createQQPlots = False):
+def processImage ( VMCFileNameRoot,
+                   incidenceAngleLimit = 89, 
+                   emissionAngleLimit = 89,
+                   iterativeOutlierRemoval = True,
+                   sigmaLimit = 2.5, 
+                   percentageLimit = 1,
+                   createQQPlots = False ):
 
     # Load the .IMG and .GEO files information.   
     VMCImage, VMCImageFlattened, VMCGeoCube, VMCGeoArraysFlattened = VMCTools.readVMCImageAndGeoCube (VMCFileNameRoot + '.GEO')
@@ -41,7 +51,13 @@ def processImage (VMCFileNameRoot, iterativeOutlierRemoval = True, sigmaLimit = 
     VMCImageCalibrated, VMCImageCalibratedFlattened, \
     incidenceAngleAverage, incidenceAngleSTD, \
     emissionAngleAverage, emissionAngleSTD, \
-    phaseAngleAverage, phaseAngleSTD, radianceScalingFactor = VMCTools.VMCPhotometry (VMCImage, VMCImageFlattened, VMCGeoCube, VMCGeoArraysFlattened)        
+    phaseAngleAverage, phaseAngleSTD, radianceScalingFactor = \
+     VMCTools.VMCPhotometry ( VMCImage, 
+                              VMCImageFlattened, 
+                              VMCGeoCube, 
+                              VMCGeoArraysFlattened,
+                              incidenceAngleLimit = incidenceAngleLimit,
+                              emissionAngleLimit = emissionAngleLimit )        
 
     
     iOnDiskValid = np.where ( VMCImageCalibratedFlattened > 0) [0]
@@ -105,7 +121,7 @@ def processImage (VMCFileNameRoot, iterativeOutlierRemoval = True, sigmaLimit = 
 # Initialise the run.
 
 # Note that  dataDirectory  is from the  analysisConfiguration  file (import at the top of this script).
-listOfVMCPNGFileNames = HandyTools.getFilesInDirectoryTree ( VMCDataDictectory, extension = 'png' )
+listOfVMCPNGFileNames = HandyTools.getFilesInDirectoryTree ( VMCDataDirectory, extension = 'png' )
 
 # Only select the image file names from the  UsedImages  subfolders in each of the VMC orbit folders.
 listOfUsedVMCPNGFileNames = [ listOfVMCPNGFileName for listOfVMCPNGFileName in listOfVMCPNGFileNames  if 'UsedImages' in listOfVMCPNGFileName ]
@@ -126,13 +142,20 @@ percentageLimit = 1
 iterativeOutlierRemoval = True
 orbits = []
 
+# Based on section 3.2 of Lee et al. 2015 (Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express, 
+#  http://dx.doi.org/10.1016/j.icarus.2015.02.015).
+incidenceAngleLimit = 84
+emissionAngleLimit = 81
+
+createTable = True
 
 for VMCPNGFileName in listOfUsedVMCPNGFileNames:
 
-# Use these two lines instead of the line aove to only create the QQPlots of the iterative outlier removal for image  V0260_0047_UV2 as an example for the work book.
+# Use these four lines instead of the line above to only create the QQPlots of the iterative outlier removal for image  V0260_0047_UV2 as an example for the work book.
 # for i in range (1,2,1):
 # 
 #     VMCPNGFileName = listOfUsedVMCPNGFileNames [i]   
+#     createTable = False
 
     orbits.append ( VMCPNGFileName.split (separatorCharacter) [-3] )
       
@@ -150,7 +173,7 @@ for VMCPNGFileName in listOfUsedVMCPNGFileNames:
 
      
     averageRadianceFactor, medianRadianceFactor, phaseAngle, numberOfIterations, radianceScalingFactor, numberOfValidPoints = \
-     processImage ( VMCImageFileNameRoot, 
+     processImage ( VMCImageFileNameRoot, incidenceAngleLimit = incidenceAngleLimit, emissionAngleLimit = emissionAngleLimit,
                     iterativeOutlierRemoval = iterativeOutlierRemoval, sigmaLimit = sigmaLimit, percentageLimit = percentageLimit,
                     createQQPlots = createQQPlots )
 
@@ -165,10 +188,10 @@ for VMCPNGFileName in listOfUsedVMCPNGFileNames:
 
 
 # This  if  statement is to avoid creating a new table when only creating the QQPlots of image V0260_0047_UV2 example.
-if not createQQPlots:
+if createTable:
    
     # Open and create the header of the table file that will contain information about the selected images.
-    phaseCurveFileName = 'PhaseCurve.dat'
+    phaseCurveFileName = 'PhaseCurve_i<{}_e<{}.dat'.format (incidenceAngleLimit, emissionAngleLimit)
     fileOpen = open ( os.path.join ('..', phaseCurveFileName), 'w')
     
     print (' ', file = fileOpen)
@@ -181,6 +204,10 @@ if not createQQPlots:
     
     print (' ', file = fileOpen)
     print (' Radiance Scaling Factor from image header label RADIANCE_SCALING_FACTOR', file = fileOpen)
+    
+    print (' ', file = fileOpen)
+    print (' Incidence angle < {}˚'.format (incidenceAngleLimit), file = fileOpen)
+    print (' Emission angle < {}˚'.format (emissionAngleLimit), file = fileOpen) 
     
     
     print (' ', file = fileOpen)

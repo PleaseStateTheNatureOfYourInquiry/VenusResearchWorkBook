@@ -1,10 +1,10 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20241017
+# Version: v20241022
 
 # Extract the Radiance Factors  from table file   VMCSelectedImages.dat  created in Step01 of the images of the selected orbits
-# (VMCOrbitBoundaries) and normalise each Radiance Factor to the model phase curve from table file  PhaseCurveFit.dat  created in Step02: 
+# (VMCOrbitBoundaries) and normalise each Radiance Factor to the model phase curve from table file  PhaseCurveFit_i<84_e<81.dat  created in Step02: 
 # this is called Radiance Factor Ratio (RFR). 
 #
 # The RFRs corresponds to the latitude-longitude wind advected boxes for each image. There is a large variation in the amount of individual pixels on the Venus
@@ -32,7 +32,6 @@ from DataTools import DataTools
 
 createTable = False
 
-
 createPlots = True
 
 # The plots of the Radiance Factor Ratio vs T_VeRa - T_VMC or Phase Angle per valid orbit will be laid out on a grid.
@@ -44,13 +43,19 @@ if createPlots:
 
     fig, subPlotAxis = plt.subplots (numberOfSubPlotRows, numberOfSubPlotColumns, figsize = (numberOfSubPlotRows * scale, numberOfSubPlotColumns * scale) )
     # Create the spacing from the border and between the plots (wspace and hspace).
-    plt.subplots_adjust( bottom = 0.1,  top = 0.9, left = 0.1, right = 0.9, wspace = 0.3, hspace = 0.3 ) 
+    plt.subplots_adjust( bottom = 0.05,  top = 0.95, left = 0.05, right = 0.95, wspace = 0.3, hspace = 0.3 ) 
 
-    # Plot RFR vs T_VeRa - T_VMC per orbit.
-    abcissaList = [ 5, 'T_VMC - T_VeRa (h)', 'VeRaVMCTimeDifference' ]
 
-    # Plot RFR vs phase angle per orbit.
-    abcissaList = [14, 'Phase Angle (˚)', 'PhaseAngle']
+
+# Plot RFR vs T_VeRa - T_VMC or Phase Angle per orbit.
+#  The first element in this list is the index of the value to take from the  VMCSelectedImages  file.
+
+# Plot RFR vs T_VeRa - T_VMC per orbit.
+abcissaList = [ 5, 'T_VMC - T_VeRa (h)', 'VeRaVMCTimeDifference' ]
+
+
+# # Plot RFR vs phase angle per orbit.
+# abcissaList = [14, 'Phase Angle (˚)', 'PhaseAngle']
     
 
 
@@ -110,8 +115,9 @@ def addFigureToPage ( iSubPlot,
                                axis = subPlotAxis [iRow, iColumn] )
     
     
-    xlim_minimum = int (0.9 * min ( abcissaData) )
-    xlim_maximum = int ( 1.1 * max (abcissaData) + 0.5 )
+    abcissaDataRange = max (abcissaData) - min (abcissaData)
+    xlim_minimum = int ( min (abcissaData) - 0.1 * abcissaDataRange )
+    xlim_maximum = int ( max (abcissaData) + 0.1 * abcissaDataRange )
     subPlotAxis [iRow, iColumn].set_xlim (xlim_minimum, xlim_maximum)
     
     subPlotAxis [iRow, iColumn].hlines ( y = averageAndMedianValues [0], xmin = xlim_minimum, xmax = xlim_maximum, color = 'red' ,linewidths = 1 )
@@ -177,10 +183,13 @@ numberOfPointInLatitudeLongitudeBoxMinimum = 0
 phaseAngleLimit = 130
 
 # Load the data from the table files.
-VMCSelectedImages = HandyTools.readTable ('../../Step01/VMCSelectedImages.dat')
+
+VMCSelectedImagesFileName = 'VMCSelectedImages.dat'
+VMCSelectedImages = HandyTools.readTable ( '../../Step01/{}'.format (VMCSelectedImagesFileName) )
 numberOfVMCImages = len ( VMCSelectedImages [0][0] )
 
-phaseCurve =  HandyTools.readTable ('../../Step02/PhaseCurveFit.dat')
+phaseCurveFitFileName = 'PhaseCurveFit_i<84_e<81.dat'
+phaseCurve =  HandyTools.readTable ( '../../Step02/{}'.format (phaseCurveFitFileName) )
 
 
 # Go through all the images in the  VMCSelectedImages.dat  table and collect all the valid data points from the selected images per orbit.
@@ -243,7 +252,7 @@ for iImage in range (numberOfVMCImages):
 
                 fig, subPlotAxis = plt.subplots ( numberOfSubPlotRows, numberOfSubPlotColumns, 
                                                   figsize = (numberOfSubPlotRows * scale, numberOfSubPlotColumns * scale) )  
-                plt.subplots_adjust( bottom = 0.1,  top = 0.9, left = 0.1, right = 0.9, wspace = 0.3, hspace = 0.3 ) 
+                plt.subplots_adjust( bottom = 0.05,  top = 0.95, left = 0.05, right = 0.95, wspace = 0.3, hspace = 0.3 ) 
                             
                 iSubPlot = 0
                 
@@ -340,8 +349,8 @@ if createTable:
     print (' Latitude = median of the latitudes of the images in each orbit', file = fileOpen)
     
     print (' ', file = fileOpen)
-    print (' Image data from VMC/Step01/VMCSelectedImages.dat', file = fileOpen)
-    print (' Phase curve from VMC/Step02/PhaseCurveFit.dat', file = fileOpen)
+    print (' Image data from VMC/Step01/{}'.format (VMCSelectedImagesFileName), file = fileOpen)
+    print (' Phase curve from VMC/Step02/{}'.format (phaseCurveFitFileName), file = fileOpen)
     
     print ( '', file = fileOpen )
     print ( ' Phase angle <= {:3d}˚'.format (phaseAngleLimit), file = fileOpen )

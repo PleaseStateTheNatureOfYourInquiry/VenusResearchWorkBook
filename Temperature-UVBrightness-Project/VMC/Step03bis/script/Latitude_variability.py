@@ -1,7 +1,7 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240908
+# Version: v20241023
 
 # Create plots of the cloud top temperatures from the VeRa derived temperature profiles and the results from Marcq et al. 2020 
 #  (Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002)) 
@@ -10,14 +10,14 @@
 
 # Set which plots to produce.
 plotToProduce = { 'Cloud top temperature vs latitude': False,
-                  'Cloud top temperature gradient vs latitude' : False,
-                  'Radiance Factor Ratios vs latitude': True }
+                  'Cloud top temperature gradient vs latitude' : True,
+                  'Radiance Factor Ratios vs latitude': False }
 
 
 # Chose the desired limitation in orbitIDs.
 
-orbitIDLimit = [0, 'All orbits']
-# orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
+# orbitIDLimit = [0, 'All orbits']
+orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
 
 
 # Standard imports.
@@ -343,9 +343,9 @@ if plotToProduce ['Radiance Factor Ratios vs latitude']:
     HandyTools.plotErrorBars (latitudesPerOrbit [iValidOrbits], radiadanceFactorRatiosPerOrbitAverage [iValidOrbits], yErrors = dradiadanceFactorRatiosPerOrbitAverage [iValidOrbits], colours = 'blue')
 
     latitudeRanges = [[-90, -60], [-59, -42], [-40, 0]]
-    for latitudeRange in latitudeRanges:
-    
-        iLatitudeInRange = np.where ( np.logical_and () )[0]
+#     for latitudeRange in latitudeRanges:
+#     
+#         iLatitudeInRange = np.where ( np.logical_and ( latitudeRange [0], latitudeRange [1] ) )[0]
 
 
     

@@ -1,7 +1,7 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20240826
+# Version: v20241023
 
 # Extract the fitted values from the SPICAV-UV data as obtained by Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. 
 #  Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002).

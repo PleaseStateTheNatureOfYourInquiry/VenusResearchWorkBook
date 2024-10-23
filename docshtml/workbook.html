@@ -61,7 +61,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#step-03-investigate-correlation">Step 03 - Investigate correlation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-03bis-cloud-top-altitudes-as-a-function-of-latitude">Step 03bis - Cloud top altitudes as a function of latitude</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-04-thermal-tide-correction">Step 04 - Thermal tide correction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#step-05-correlation-analysis">Step 05 - Correlation analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-05-first-correlation-analysis">Step 05 - First Correlation analysis</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-06-new-correlation-analysis">Step 06 - New Correlation analysis</a></li>
 </ul>
 </li>
@@ -382,6 +382,7 @@ I try it out with the Python script <code class="file docutils literal notransla
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VMCImagesEvaluate.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_orbits_later_than_1188.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.iValidPoints</span></code></div>
 </div>
 </div>
@@ -481,29 +482,37 @@ This method is called in the script <code class="file docutils literal notransla
 These plots are saved in the subfolder <code class="file docutils literal notranslate"><span class="pre">Images</span></code> created inside the directories of the orbits containing the .GEO and .IMG files, for example <code class="file docutils literal notranslate"><span class="pre">SOMEPATH//Venus/Data/VEX/VMC/Orb2811/Images</span></code>.</p>
 <p>I manually evaluate each image plot and select the ones that have the advected box fully on the visible disk of Venus as mentioned above, and copy these plots to the <code class="file docutils literal notranslate"><span class="pre">UsedImages</span></code> subfolder that I manually create in each orbit directory, for example
 <code class="file docutils literal notranslate"><span class="pre">SOMEPATH/Venus/Data/VEX/VMC/Orb2811/UsedImages</span></code>.</p>
-<p>I now run the <code class="file docutils literal notranslate"><span class="pre">./scripts/VMCImagesEvaluate.py</span></code> script a second time to process the selected images and write the results to the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table file. The header and first few lines of which are of this file are:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>File: VMCSelectedImages.dat
- Created at 2024-05-21 at 16:48:01
+<p>I now run the <code class="file docutils literal notranslate"><span class="pre">./scripts/VMCImagesEvaluate.py</span></code> script a second time to process the selected images and write the results to the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table file. The header and first few lines of which are of this file are shown below.</p>
+<p>In the script I built the option to choose the minimal orbitID from where to start this process.
+The file <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> has all valid orbits,
+the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_orbits_later_than_1188.dat</span></code> has valid starting at orbitID 1188, which is what is used for the final analysis as explained in further steps in this Workbook.</p>
+<p>The header, the first few and the last few lines of this file are:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> File: VMCSelectedImages_orbits_later_than_1188.dat
+ Created at 2024-10-21 at 11:42:30
 
- Target altitude (cloud tops) = 70km (Lat_VeRa, Lon_VeRa, T, dT)
- Standard deviation zonal wind = 20m/s
- Standard deviation meridional wind = 12m/s
+  Target altitude (cloud tops) = 70km (Lat_VeRa, Lon_VeRa, T, dT)
+  Standard deviation zonal wind = 20m/s
+  Standard deviation meridional wind = 12m/s
 
- # point in box are all the points in the latitude-longitude box on the Venus disk
- Radiance factor is the average of the points in the latitude-longitude box with values &gt; 0 and incidence angles &lt; 89˚
- dRadiance factor is the standard deviation of the radiance factor
+  # point in box are all the points in the latitude-longitude box on the Venus disk
+  Radiance factor is the average of the points in the latitude-longitude box with values &gt; 0 and incidence angles &lt; 89˚
+  dRadiance factor is the standard deviation of the radiance factor
 
- 73 orbits with a total of 1374 images
+ 56 orbits with a total of 972 images
 
- Orbit       Image          DOY      VeRa Time    VMC Time   Time diff  Lat_VeRa   Lon_VeRa   lat_centre_VMC   Lat_range_VMC   Lon_centre_VMC   Lon_range_VMC       #Points in box   Radiance factor  dRadiance factor     T       dT     Local Solar Time
-                         yyyy-mm-dd     (h)         (h)         (h)       (˚)        (˚)            (˚)             (˚)              (˚)             (˚)                                                                  (K)      (K)          (h)
+
+ Orbit       Image          DOY      VeRa Time    VMC Time   Time diff  Lat_VeRa   Lon_VeRa   lat_centre_VMC   Lat_range_VMC   Lon_centre_VMC   Lon_range_VMC      Phase Angle   #Points in box   Radiance factor  dRadiance factor     T       dT     Local Solar Time   Emission Angle   Incidence Angle
+
+ 56 orbits with a total of 972 images
+
+                         yyyy-mm-dd     (h)         (h)         (h)       (˚)        (˚)            (˚)             (˚)              (˚)             (˚)               (˚)                                                             (K)      (K)          (h)                (˚)              (˚)
 C_END
- 0260   V0260_0038_UV2   2007-01-06     8.48        4.98       -3.49    -60.30     242.65         -59.63      -61.04  -58.22       258.56       253.81  263.31             71              1.096            0.141        229.24    0.761        7.61
- 0260   V0260_0047_UV2   2007-01-06     8.48       18.65       10.17    -60.30     242.65         -62.26      -66.37  -58.15       196.31       182.48  210.15            516              1.037            0.028        229.24    0.761        7.61
- ....
- ....
- 2811   V2811_0084_UV2   2013-12-31     7.96        8.65        0.69    -58.03      62.02         -58.19      -58.47  -57.91        58.80        57.91   59.68              7              0.874            0.030        227.96    0.680       16.07
- 2811   V2811_0088_UV2   2013-12-31     7.96        8.98        1.03    -58.03      62.02         -58.26      -58.68  -57.84        57.25        55.94   58.56             13              0.800            0.029        227.96    0.680       16.07
+ 1191   V1191_0040_UV2   2009-07-25     0.26       20.70       -3.56    -15.33     143.00         -14.64      -16.08  -13.20       154.57      152.09    157.06       93.94             35              0.491            0.029        229.62    2.264       13.70              45.76            65.32
+ 1191   V1191_0044_UV2   2009-07-25     0.26       21.20       -3.06    -15.33     143.00         -14.74      -15.97  -13.50       152.95      150.81    155.08       94.07             31              0.514            0.022        229.62    2.264       13.70              45.73            65.53
+     ....
+     ....
+ 2811   V2811_0084_UV2   2013-12-31     7.96        8.65        0.69    -58.03      62.02         -58.19      -58.47  -57.91        58.80       57.91     59.68       29.57              7              0.874            0.030        227.96    0.680       16.07              45.14            55.39
+ 2811   V2811_0088_UV2   2013-12-31     7.96        8.98        1.03    -58.03      62.02         -58.26      -58.68  -57.84        57.25       55.94     58.56       34.38             13              0.800            0.029        227.96    0.680       16.07              41.28            55.92
 </pre></div>
 </div>
 <p>Running this script during the second iteration I also create a NumPy file called <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.iValidPoints</span></code>. To read this file:</p>
@@ -534,16 +543,21 @@ In this way, I do not need to recalculate these if I need them at some later sta
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreatePhaseAngleCurveTable.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code></div>
 <div class="line">files:</div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseAngleCurve.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurve_i&lt;84_e&lt;81.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit_i&lt;84_e&lt;81.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurve_i&lt;89_e&lt;90.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit_i&lt;89_e&lt;90.dat</span></code></div>
 </div>
 </div>
 <p>In this step, I construct the phase curve.
 The 1374 selected images from 73 orbits cover a phase angle range between 27˚ and 140˚.
 These images have been selected during <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a> above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file`UsedImages` subfolders for each orbit.</p>
 <p>For each selected image, I use all the pixels on the visible disk and take the average and the median values.
-By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
-In order to avoid the effect of these outliers, I apply an iterative averaging process:</p>
+Initially, I had set the incidence and emission angles limits to 89˚ and 90˚.
+I changed that to 84˚ and 81˚ respectively in line with the results presented by <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. (2015)</span></a> in their section 3.2.
+The difference in the final resulting coefficients of the phase angle curve fit are on the order or 2%.</p>
+<p>By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
+This was also noted by <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. (2015)</span></a> who adapoted another condition on the selection of the image pixel that the radiance factor be larger than 0.05. I address this perhaps more rigorously using the process described below. In order to avoid the effect of these outliers, I apply an iterative averaging process:</p>
 <ul class="simple">
 <li><p>Step 1: calculate the average;</p></li>
 <li><p>Step 2: check if the current average value is different by more than a given <strong>percentage</strong> (set by the user) from the one from the previous iteration;</p></li>
@@ -553,28 +567,30 @@ In order to avoid the effect of these outliers, I apply an iterative averaging p
 <p>I try some values and find that <strong>n</strong> <sub>sd</sub> <strong>= 3</strong> and <strong>percentage = 1%</strong> gives good results.
 Here is an example of a sequence of iterations.</p>
 <figure class="align-default" id="id14">
-<a class="reference internal image-reference" href="_images/V0260_0047_UV2_iteration_QQ_Histogram.png"><img alt="_images/V0260_0047_UV2_iteration_QQ_Histogram.png" src="_images/V0260_0047_UV2_iteration_QQ_Histogram.png" style="width: 325.0px; height: 375.0px;" /></a>
+<a class="reference internal image-reference" href="_images/V0260_0047_UV2_iteration_QQ_Histogram.jpg"><img alt="_images/V0260_0047_UV2_iteration_QQ_Histogram.jpg" src="_images/V0260_0047_UV2_iteration_QQ_Histogram.jpg" style="width: 325.0px; height: 375.0px;" /></a>
 <figcaption>
 <p><span class="caption-text">Iterative progression of histogram and QQ plot for image V0260_0047, with <strong>n</strong> <sub>sd</sub> <strong>= 3</strong> and <strong>percentage = 1%</strong>.</span><a class="headerlink" href="#id14" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>With the script <code class="file docutils literal notranslate"><span class="pre">./CreatePhaseAngleCurveTable.py</span></code> I process all the images and export the results to the <code class="file docutils literal notranslate"><span class="pre">PhaseAngleCurve.dat</span></code> table file.</p>
+<p>With the script <code class="file docutils literal notranslate"><span class="pre">./CreatePhaseAngleCurveTable.py</span></code> I process all the images and export the results to the <code class="file docutils literal notranslate"><span class="pre">PhaseCurve_i&lt;84_e&lt;81.dat</span></code> table file.</p>
 <p>I now look at how to best construct and fit the phase curve to a quadratic polinomial with NumPy’s <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.polynomial.polynomial.Polynomial.fit.html">np.polynomial.polynomial.Polynomial.fit ()</a> function.
 I create the script <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code>.
 At first I use <strong>all the data points</strong> as they are and get the following result:</p>
 <a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles.png"><img alt="_images/PhaseCurve_allPhaseAngles.png" src="_images/PhaseCurve_allPhaseAngles.png" style="width: 460.79999999999995px; height: 345.59999999999997px;" /></a>
-<a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles_detail.png"><img alt="_images/PhaseCurve_allPhaseAngles_detail.png" src="_images/PhaseCurve_allPhaseAngles_detail.png" style="width: 453.0px; height: 348.0px;" /></a>
+<a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles_detail.png"><img alt="_images/PhaseCurve_allPhaseAngles_detail.png" src="_images/PhaseCurve_allPhaseAngles_detail.png" style="width: 320.0px; height: 240.0px;" /></a>
 <p>The fit to the quadratic model is clearly off, the <span class="math notranslate nohighlight">\(r^2\)</span> value is low.</p>
 <p>It is clear the Nominal (green) and Extension 1 (blue) mission sections are quite different than the rest. In the detailed plot on the right, there seems to be quite a lot of <em>regularity</em> in the Nominal and Extension 1 data, which I find somewhat suspicious.
-Could this be related to calibration issues? When inspecting more closely the values of the Radiance Scaling Factors in <code class="file docutils literal notranslate"><span class="pre">PhaseAngleCurve.dat</span></code> around phase angles of 90˚, I find a number of instances where in the same orbit (consecutive) images have different calibration factors. For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   Image          phase angle   Average RF  dAverage RF     Q1 RF  Median RF  Q3 RF   # iterations   Radiance Scaling Factor
+Could this be related to calibration issues? When inspecting more closely the values of the Radiance Scaling Factors in
+<code class="file docutils literal notranslate"><span class="pre">PhaseCurve_i&lt;84_e&lt;81.dat</span></code> around phase angles of 90˚, I find a number of instances where in the same orbit (consecutive) images have different calibration factors. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   Image          phase angle   Average RF  dAverage RF     Q1 RF  Median RF  Q3 RF   # iterations   Radiance Scaling Factor    # valid data points
                       (˚)                                                                              W/m2/ster/micron/DN
+
 ...
-V0268_0032_UV2       89.47         0.896      0.1717        0.747    0.904    1.022        2               0.04643
+V0260_0052_UV2       88.47         0.820      0.1649        0.717    0.807    0.957        1               0.11607                       21249
 ...
-V0268_0031_UV2       89.50         0.904      0.1805        0.749    0.901    1.042        2               0.07738
+V0260_0048_UV2       89.44         0.845      0.1557        0.756    0.846    0.967        2               0.07738                       20891
 ...
-V0268_0030_UV2       89.52         0.895      0.1801        0.743    0.889    1.029        2               0.11607
+V0260_0047_UV2       89.47         0.841      0.1546        0.753    0.842    0.960        2               0.09673                       20869
 ...
 </pre></div>
 </div>
@@ -614,29 +630,30 @@ I also keep the values for all these tests to estimate the uncertainties in the 
 The other is to simply take the difference between the maximum and the minimum value of the 1000 experiments for each phase angle bin.
 This second method generally results in larger uncertainties, but not always.
 Also, the average value of the 1000 experiments for each phase angle bin should be the same, to within great precision, as the model fit. I verify that this is true to the level of a 0.05% (<span class="math notranslate nohighlight">\(100 * (RF_{model} - RF_{average}) / RF_{model}\)</span>).</p>
-<p>Using the <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit.dat</span></code> table file, that contains the results of these experiments and the different ways
-to determine the uncertainties.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> File: PhaseCurveFit.dat
- Created at 2024-05-25 at 22:19:37
+<p>Using the <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit_i&lt;84_e&lt;81.dat</span></code> table file,
+that contains the results of these experiments and the different ways to determine the uncertainties.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> File: PhaseCurveFit_i&lt;84_e&lt;81.dat
+ Created at 2024-10-22 at 04:32:02
 
-  RF (pa)  =  0.000174 * pa^2  +  -0.0216 * pa  +  1.174  |  r^2 = 0.956  (pa = phase angle in ˚)
+  RF (pa)= 0.000179 * pa^2 + -0.0222 * pa +   1.189  |  r^2 = 0.960 (pa = phase angle in ˚)
 
- RF (Fit) = Radiance Factor as fit with the quadratic model above
- RF (Average) = average Radiance Factor from 1000 gaussian noise experiments
- dRF = standard deviation of the Radiance Factor from 1000 gaussian noise experiments
- MaxMin RF = maximum - minimum of the Radiance Factor from 1000 gaussian noise experiments
+  RF (Fit) = Radiance Factor as fit with the quadratic model above
+  RF (Average) = average Radiance Factor from 1000 gaussian noise experiments
+  dRF = standard deviation of the Radiance Factor from 1000 gaussian noise experiments
+  MaxMin RF = (maximum - minimum) / 2  of the Radiance Factor from 1000 Gaussian noise experiments
 
    phase angle   RF (Fit)  RF (Average)   dRF     MaxMin RF
        (˚)
 C_END
-      27.0        0.719       0.720      0.0349    0.2138
-      28.0        0.707       0.708      0.0336    0.2061
-      29.0        0.695       0.696      0.0323    0.1987
+      27.0        0.719       0.720      0.0329    0.1112
+      28.0        0.707       0.708      0.0316    0.1074
+      29.0        0.695       0.696      0.0305    0.1038
       ...
       ...
-     127.0        1.237       1.237      0.0357    0.2289
-     128.0        1.260       1.260      0.0372    0.2386
-     129.0        1.283       1.283      0.0389    0.2486
+     127.0        1.252       1.253      0.0285    0.1009
+     128.0        1.276       1.276      0.0298    0.1055
+     129.0        1.299       1.300      0.0311    0.1101
+     130.0        1.324       1.324      0.0325    0.1148
 </pre></div>
 </div>
 </section>
@@ -675,27 +692,27 @@ I call this variable the Radiance Factor Ratio (<span class="math notranslate no
 The RFR values for the egress images very close to the actual VeRa observation in time and place are significantly higher: they are at low phases angle and the amount of points in the boxes is low, <em>i.e.</em> the boxes are very small.
 Corresponding to the figure on the left above, below are printed the phase angle, the radiance factor divided by the model phase curve radiance factor and the
 resulting RFR and uncertainty (as per the formula above). The number of points in the latitude-longitude box is the last number on each line:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> 82˚: 0.5710 / 0.5740 = 0.9948 +/- 0.1196 (# points = 702)</span>
-<span class="go"> 84˚: 0.5780 / 0.5880 = 0.9830 +/- 0.1111 (# points = 635)</span>
-<span class="go"> 85˚: 0.5830 / 0.5960 = 0.9782 +/- 0.1073 (# points = 585)</span>
-<span class="go"> 86˚: 0.5910 / 0.6040 = 0.9785 +/- 0.1018 (# points = 535)</span>
-<span class="go"> 88˚: 0.6010 / 0.6220 = 0.9662 +/- 0.0927 (# points = 492)</span>
-<span class="go"> 89˚: 0.6120 / 0.6310 = 0.9699 +/- 0.0871 (# points = 451)</span>
-<span class="go"> 90˚: 0.6060 / 0.6400 = 0.9469 +/- 0.0848 (# points = 401)</span>
-<span class="go"> 91˚: 0.6080 / 0.6500 = 0.9354 +/- 0.0760 (# points = 367)</span>
-<span class="go"> 93˚: 0.6180 / 0.6710 = 0.9210 +/- 0.0656 (# points = 342)</span>
-<span class="go"> 95˚: 0.6390 / 0.6930 = 0.9221 +/- 0.0622 (# points = 311)</span>
-<span class="go"> 97˚: 0.6480 / 0.7170 = 0.9038 +/- 0.0613 (# points = 280)</span>
-<span class="go">100˚: 0.6780 / 0.7550 = 0.8980 +/- 0.0487 (# points = 261)</span>
-<span class="go">103˚: 0.7030 / 0.7960 = 0.8832 +/- 0.0470 (# points = 237)</span>
-<span class="go">106˚: 0.7530 / 0.8400 = 0.8964 +/- 0.0503 (# points = 214)</span>
-<span class="go">110˚: 0.8150 / 0.9040 = 0.9015 +/- 0.0637 (# points = 187)</span>
-<span class="go">115˚: 0.9160 / 0.9910 = 0.9243 +/- 0.0736 (# points = 168)</span>
-<span class="go">121˚: 1.1040 / 1.1080 = 0.9964 +/- 0.0983 (# points = 140)</span>
-<span class="go">125˚: 1.2660 / 1.1930 = 1.0612 +/- 0.1216 (# points = 129)</span>
-<span class="go"> 27˚: 0.9270 / 0.7190 = 1.2893 +/- 0.1970 (# points =   3)</span>
-<span class="go"> 29˚: 0.8740 / 0.6950 = 1.2576 +/- 0.1864 (# points =   7)</span>
-<span class="go"> 34˚: 0.8000 / 0.6420 = 1.2461 +/- 0.1610 (# points =  13)</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go"> 82˚: 0.5710 / 0.5700 = 1.0018 +/- 0.0946 (# points = 702)</span>
+<span class="go"> 84˚: 0.5780 / 0.5850 = 0.9880 +/- 0.0897 (# points = 635)</span>
+<span class="go"> 85˚: 0.5830 / 0.5930 = 0.9831 +/- 0.0881 (# points = 585)</span>
+<span class="go"> 86˚: 0.5910 / 0.6010 = 0.9834 +/- 0.0842 (# points = 535)</span>
+<span class="go"> 88˚: 0.6010 / 0.6190 = 0.9709 +/- 0.0793 (# points = 492)</span>
+<span class="go"> 89˚: 0.6120 / 0.6280 = 0.9745 +/- 0.0745 (# points = 451)</span>
+<span class="go"> 90˚: 0.6060 / 0.6380 = 0.9498 +/- 0.0740 (# points = 401)</span>
+<span class="go"> 91˚: 0.6080 / 0.6480 = 0.9383 +/- 0.0656 (# points = 367)</span>
+<span class="go"> 93˚: 0.6180 / 0.6700 = 0.9224 +/- 0.0568 (# points = 342)</span>
+<span class="go"> 95˚: 0.6390 / 0.6920 = 0.9234 +/- 0.0562 (# points = 311)</span>
+<span class="go"> 97˚: 0.6480 / 0.7170 = 0.9038 +/- 0.0584 (# points = 280)</span>
+<span class="go">100˚: 0.6780 / 0.7560 = 0.8968 +/- 0.0439 (# points = 261)</span>
+<span class="go">103˚: 0.7030 / 0.7980 = 0.8810 +/- 0.0409 (# points = 237)</span>
+<span class="go">106˚: 0.7530 / 0.8440 = 0.8922 +/- 0.0413 (# points = 214)</span>
+<span class="go">110˚: 0.8150 / 0.9090 = 0.8966 +/- 0.0551 (# points = 187)</span>
+<span class="go">115˚: 0.9160 / 0.9990 = 0.9169 +/- 0.0651 (# points = 168)</span>
+<span class="go">121˚: 1.1040 / 1.1190 = 0.9866 +/- 0.0804 (# points = 140)</span>
+<span class="go">125˚: 1.2660 / 1.2070 = 1.0489 +/- 0.0955 (# points = 129)</span>
+<span class="go"> 27˚: 0.9270 / 0.7190 = 1.2893 +/- 0.2003 (# points =   3)</span>
+<span class="go"> 29˚: 0.8740 / 0.6950 = 1.2576 +/- 0.1927 (# points =   7)</span>
+<span class="go"> 34˚: 0.8000 / 0.6400 = 1.2500 +/- 0.1749 (# points =  13)</span>
 </pre></div>
 </div>
 <p>It can be seen that the statistics for the last three images (which correspond to the points with low phase angles in the <a class="reference internal" href="#orbitimagesexample"><span class="std std-ref">plots here</span></a>), is based on very low numbers, compared to the ingress images.
@@ -712,7 +729,8 @@ The last value is almost always the larger one. For the South Polar Dynamics Cam
 <p>On the other hand, there is the 33 - 67 percentile values for the median of the original set. Half the difference between these two values is also a measure for the spread and the uncertainty.</p>
 <p>I take the maximum of these two ways of determining the uncertainty, which in some cases it is the first one, in other cases the second one.</p>
 </div>
-<p>With this script I can also create a series of plots of the RFR values for each orbit as a function of the phase angle and of the time difference between the VeRa sounding and the VMC image. This is an important check on the consistency of the RFR values in one orbit, taking into account the uncertainties. I export all the plots in the <code class="file docutils literal notranslate"><span class="pre">Step03/plots</span></code> subfolder, they are named <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_PhaseAngle_0X.png</span></code> and <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_VeRaVMCTimeDifference_0X.png</span></code>, where <code class="file docutils literal notranslate"><span class="pre">X</span></code> goes from <code class="file docutils literal notranslate"><span class="pre">1</span></code> to <code class="file docutils literal notranslate"><span class="pre">5</span></code>.</p>
+<p>With this script I can create plots of the RFR values for each orbit as a function of the phase angle and the time difference between the VeRa sounding and the VMC image. This is an important check on the consistency of the RFR values in one orbit, always taking into account the uncertainties.
+All the plots are in the <code class="file docutils literal notranslate"><span class="pre">Step03/plots</span></code> subfolder, and are named <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_PhaseAngle_0X.png</span></code> and <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_VeRaVMCTimeDifference_0X.png</span></code>, where <code class="file docutils literal notranslate"><span class="pre">X</span></code> goes from <code class="file docutils literal notranslate"><span class="pre">1</span></code> to <code class="file docutils literal notranslate"><span class="pre">5</span></code>. Below are two examples (<code class="file docutils literal notranslate"><span class="pre">X</span> <span class="pre">=</span> <span class="pre">5</span></code>), the red line is the average and the red area it’s uncertainty, the green is the median and the green area the uncertainty, derived as explained above. These are the values listed in the <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatiosPerOrbit.dat</span></code> file.</p>
 <figure class="align-default" id="id17">
 <img alt="_images/RadianceFactorRatio_vs_PhaseAngle_05.png" src="_images/RadianceFactorRatio_vs_PhaseAngle_05.png" />
 <figcaption>
@@ -725,13 +743,14 @@ The last value is almost always the larger one. For the South Polar Dynamics Cam
 <p><span class="caption-text">The last set of plots of RFR vs time difference: RadianceFactorRatio_vs_VeRaVMCTimeDifference_05.png</span><a class="headerlink" href="#id18" title="Link to this image"></a></p>
 </figcaption>
 </figure>
+<p>Below is a plot of all the RFR values per orbit combined into one plot as a function of the VeRa-derived temperature at 70km altitude:</p>
 <figure class="align-default" id="id19">
 <img alt="_images/RadianceFactorRatio_vs_Temperature_all_images.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images.png" />
 <figcaption>
 <p><span class="caption-text">The RFR of all the images as a function of VeRa-derived temperature at 70km altitude.</span><a class="headerlink" href="#id19" title="Link to this image"></a></p>
 </figcaption>
 </figure>
-<p>I can make three types plots:</p>
+<p>I can make three types of plots:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li><p>the RFR of all the images as a function of VeRa-derived temperature;</p></li>
@@ -947,8 +966,8 @@ The <a class="reference internal" href="#longitudeandlocalsolartime"><span class
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_median3.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_median3.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_median3.png" style="width: 480.0px; height: 360.0px;" /></a>
 <a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png" style="width: 480.0px; height: 360.0px;" /></a>
 </section>
-<section id="step-05-correlation-analysis">
-<span id="vmcstep05"></span><h4>Step 05 - Correlation analysis<a class="headerlink" href="#step-05-correlation-analysis" title="Link to this heading"></a></h4>
+<section id="step-05-first-correlation-analysis">
+<span id="vmcstep05"></span><h4>Step 05 - First Correlation analysis<a class="headerlink" href="#step-05-first-correlation-analysis" title="Link to this heading"></a></h4>
 <div class="admonition-directory-scripts-files admonition">
 <p class="admonition-title">directory, scripts &amp; files</p>
 <div class="line-block">
@@ -993,7 +1012,10 @@ I take 71km altitude as the reference level:</p>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat</span></code></div>
 </div>
 </div>
-<p>After discussing with Colin, we decided that I still need to</p>
+<p>In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures at a given altitude level, and separated this analysis in several latitude bins, to avoid as much as possible the effect of the change in temperature as a function of latitude.</p>
+<p>The idea is that the UV-deposition depth is not well known.</p>
+<p>I am not sure. <a class="reference internal" href="#crisp1986"><span class="std std-ref">Crisp (1986)</span></a> state the the vertical distribution of the UV_absorberis constrained below the cloud tops at 70-71km altitude.
+This would mean that the UV-radiation we see reflected back from across Venus is always from a similar altitude level?</p>
 </section>
 </section>
 <section id="interpretation-and-conclusion">
@@ -1062,7 +1084,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Oct 18, 2024, 4:46:42 PM.
+      <span class="lastupdated">Last updated on Oct 23, 2024, 5:56:08 PM.
       </span></p>
   </div>
 

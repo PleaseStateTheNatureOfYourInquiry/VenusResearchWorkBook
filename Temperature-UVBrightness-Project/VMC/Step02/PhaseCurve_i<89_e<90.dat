@@ -7,6 +7,9 @@
  
  Radiance Scaling Factor from image header label RADIANCE_SCALING_FACTOR
  
+ Incidence angle < 89˚
+ Emission angle < 90˚
+ 
  Iterative removal of outliers at the 3-sigma level with a > 1% change in average value
  Note: median values are calculated after iterative outlier removal!
 
