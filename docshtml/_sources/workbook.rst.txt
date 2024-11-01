@@ -60,6 +60,10 @@ Go to :ref:`last point of work <lastPointOfWork>`.
         
         radiusOfVenus = 6052 #km
         
+        VeRaWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa'
+        VMCWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC'
+        
+        
     It can be loaded at the top of a scripts using:
  
     .. code-block:: Python

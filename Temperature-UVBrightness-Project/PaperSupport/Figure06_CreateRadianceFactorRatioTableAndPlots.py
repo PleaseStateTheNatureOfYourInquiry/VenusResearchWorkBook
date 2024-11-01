@@ -29,21 +29,22 @@ plt.rcParams['axes.titlesize'] = 16
 from HandyTools import HandyTools
 from DataTools import DataTools
 
-
-createTable = False
+# Import the analysis configuration settings.
+sys.path.append ( os.path.abspath ('..') ) 
+from analysisConfiguration import *
 
 createPlots = True
 
 # The plots of the Radiance Factor Ratio vs T_VeRa - T_VMC or Phase Angle per valid orbit will be laid out on a grid.
-numberOfSubPlotRows = 4
-numberOfSubPlotColumns = 3
+numberOfSubPlotRows = 3
+numberOfSubPlotColumns = 2
 numberOfPlotsOnPage = numberOfSubPlotRows * numberOfSubPlotColumns
 scale = 3
 if createPlots:
 
-    fig, subPlotAxis = plt.subplots (numberOfSubPlotRows, numberOfSubPlotColumns, figsize = (numberOfSubPlotRows * scale, numberOfSubPlotColumns * scale) )
+    fig, subPlotAxis = plt.subplots (numberOfSubPlotRows, numberOfSubPlotColumns, figsize = (numberOfSubPlotRows * scale, numberOfSubPlotColumns * scale * 1.5) )
     # Create the spacing from the border and between the plots (wspace and hspace).
-    plt.subplots_adjust( bottom = 0.05,  top = 0.95, left = 0.05, right = 0.95, wspace = 0.3, hspace = 0.3 ) 
+    plt.subplots_adjust( bottom = 0.08,  top = 0.92, left = 0.08, right = 0.92, wspace = 0.2, hspace = 0.23 ) 
 
 
 
@@ -51,12 +52,12 @@ if createPlots:
 #  The first element in this list is the index of the value to take from the  VMCSelectedImages  file.
 
 # Plot RFR vs T_VeRa - T_VMC per orbit.
-abcissaList = [ 5, 'T_VMC - T_VeRa (h)', 'VeRaVMCTimeDifference' ]
-
+abcissaListTimeDifference = [ 5, 'T_VMC - T_VeRa (h)', 'Figure06' ]
 
 # # Plot RFR vs phase angle per orbit.
-# abcissaList = [14, 'Phase Angle (˚)', 'PhaseAngle']
+abcissaListPhaseAngle = [ 14, 'Phase Angle (˚)', 'Figure06' ]
     
+orbitsToPlot = ['1513', '2776', '2805']
 
 
 #
@@ -135,41 +136,41 @@ def addFigureToPage ( iSubPlot,
                                                color = 'green', alpha = 0.1)
 
     
-    subPlotAxis [iRow, iColumn].set_title ('Orbit {} (latitude {:5.2f}˚)'.format (VMCOrbitID, latitude), fontsize = 8)
+    subPlotAxis [iRow, iColumn].set_title ('Orbit {} (latitude {:5.2f}˚)'.format (VMCOrbitID, latitude), fontsize = 10)
 
 
-    subPlotAxis [iRow, iColumn].tick_params ( axis='x', labelsize = 7 )
-    subPlotAxis [iRow, iColumn].tick_params ( axis='y', labelsize = 7 )
+    subPlotAxis [iRow, iColumn].tick_params ( axis='x', labelsize = 8 )
+    subPlotAxis [iRow, iColumn].tick_params ( axis='y', labelsize = 8 )
 
 
 
 # When a grid is complete, save it to a file and reset.
 #  Before saving, add the horizontal and vertical axes labels on the left and bottom plots only.
-def savePlotPage (iSubPlotPage, iSubPlot, abcissaList):
+def savePlotPage (iSubPlot, abcissaList1, abcissaList2):
 
     # Add the horizontal axes labels to the bottom plots.
     iRow = (iSubPlot - 1) // numberOfSubPlotColumns
     iColumn = (iSubPlot - 1) % numberOfSubPlotColumns            
-    while iColumn:
        
-        subPlotAxis [iRow, iColumn].set_xlabel (abcissaList [1], fontsize = 7)          
-        iColumn -= 1    
+    subPlotAxis [2, 1].set_xlabel (abcissaList2 [1], fontsize = 10)        
+    subPlotAxis [2, 0].set_xlabel (abcissaList2 [1], fontsize = 10)   
+  
 
 
-    subPlotAxis [iRow, 0].set_xlabel (abcissaList [1], fontsize = 7)
+    subPlotAxis [iRow, 0].set_xlabel (abcissaList1 [1], fontsize = 10)
 
     # Add the vertical axes labels to the left plots.    
     while iRow:
     
-        subPlotAxis [iRow, 0].set_ylabel ('RFR', fontsize = 7)
+        subPlotAxis [iRow, 0].set_ylabel ('RFR', fontsize = 10)
         iRow -= 1     
 
         
-    subPlotAxis [0, 0].set_ylabel ('RFR', fontsize = 7)
+    subPlotAxis [0, 0].set_ylabel ('RFR', fontsize = 10)
         
         
     # Save this completed grid.
-    plotPageFileName = '../plots/RadianceFactorRatio_vs_{}_{:02d}.png'.format (abcissaList [2], iSubPlotPage)
+    plotPageFileName = abcissaList1 [2]
     HandyTools.createPathToFile (plotPageFileName)
     plt.savefig (plotPageFileName)
 
@@ -185,11 +186,11 @@ phaseAngleLimit = 130
 # Load the data from the table files.
 
 VMCSelectedImagesFileName = 'VMCSelectedImages.dat'
-VMCSelectedImages = HandyTools.readTable ( '../../Step01/{}'.format (VMCSelectedImagesFileName) )
+VMCSelectedImages = HandyTools.readTable ( os.path.join ( VMCWorkBookDirectory, 'Step01', VMCSelectedImagesFileName ) )
 numberOfVMCImages = len ( VMCSelectedImages [0][0] )
 
 phaseCurveFitFileName = 'PhaseCurveFit_i<84_e<81.dat'
-phaseCurve =  HandyTools.readTable ( '../../Step02/{}'.format (phaseCurveFitFileName) )
+phaseCurve =  HandyTools.readTable ( os.path.join ( VMCWorkBookDirectory, 'Step02', phaseCurveFitFileName ) )
 
 
 # Go through all the images in the  VMCSelectedImages.dat  table and collect all the valid data points from the selected images per orbit.
@@ -199,7 +200,8 @@ VMCOrbitIDsUnique = [ VMCSelectedImages [1][0][iImage] ]
 radianceFactorRatiosInOrbit = []
 dRadianceFactorRatiosInOrbit = []
 latitudesInOrbit = []
-abcissaDataInOrbit = []
+abcissaDataInOrbitTimeDifference = []
+abcissaDataInOrbitPhaseAngle = []
 
 radianceFactorRatiosAveragePerOrbit = []
 dRadianceFactorRatiosAveragePerOrbit = []
@@ -241,29 +243,28 @@ for iImage in range (numberOfVMCImages):
 
         
         # Add the RFR vs VeRaVMC time difference plot to the plot page.
-        if createPlots and VMCOrbitIDsUnique [-1] > '1188' and len (radianceFactorRatiosAveragePerOrbit):
+        if createPlots  and  VMCOrbitIDsUnique [-1] in orbitsToPlot  and  len (radianceFactorRatiosAveragePerOrbit):
 
-            iSubPlot += 1        
-            if iSubPlot // (numberOfSubPlotRows * numberOfSubPlotColumns):
-            
-                iSubPlotPage += 1
-                savePlotPage (iSubPlotPage, iSubPlot, abcissaList)
-                plt.close (fig)  
-
-                fig, subPlotAxis = plt.subplots ( numberOfSubPlotRows, numberOfSubPlotColumns, 
-                                                  figsize = (numberOfSubPlotRows * scale, numberOfSubPlotColumns * scale) )  
-                plt.subplots_adjust( bottom = 0.05,  top = 0.95, left = 0.05, right = 0.95, wspace = 0.3, hspace = 0.3 ) 
-                            
-                iSubPlot = 0
-                
-
+            iSubPlot += 1    
             addFigureToPage ( iSubPlot,
                               numberOfSubPlotRows,
                               numberOfSubPlotColumns,
-                              subPlotAxis, 
+                              subPlotAxis,
                               radianceFactorRatiosInOrbit,
                               dRadianceFactorRatiosInOrbit,
-                              abcissaDataInOrbit,
+                              abcissaDataInOrbitTimeDifference,
+                              VMCOrbitIDsUnique [-1], 
+                              latitudesPerOrbit [-1],
+                              averageAndMedianValues )
+
+            iSubPlot += 1          
+            addFigureToPage ( iSubPlot,
+                              numberOfSubPlotRows,
+                              numberOfSubPlotColumns,
+                              subPlotAxis,
+                              radianceFactorRatiosInOrbit,
+                              dRadianceFactorRatiosInOrbit,
+                              abcissaDataInOrbitPhaseAngle,
                               VMCOrbitIDsUnique [-1], 
                               latitudesPerOrbit [-1],
                               averageAndMedianValues )
@@ -274,7 +275,8 @@ for iImage in range (numberOfVMCImages):
         radianceFactorRatiosInOrbit = []
         dRadianceFactorRatiosInOrbit = []
         latitudesInOrbit = []
-        abcissaDataInOrbit = []
+        abcissaDataInOrbitTimeDifference = []
+        abcissaDataInOrbitPhaseAngle = []
 
    
     # If the current image is to be taken into account, then add it to the list of this orbit.
@@ -298,8 +300,8 @@ for iImage in range (numberOfVMCImages):
         
 
         latitudesInOrbit.append ( VMCSelectedImages [0][8][iImage] )
-        abcissaDataInOrbit.append ( VMCSelectedImages [0][ abcissaList [0] ][iImage] )
-
+        abcissaDataInOrbitTimeDifference.append ( VMCSelectedImages [0][ abcissaListTimeDifference [0] ][iImage] )
+        abcissaDataInOrbitPhaseAngle.append ( VMCSelectedImages [0][ abcissaListPhaseAngle [0] ][iImage] )
 
     
 # Add the values for the last orbit.
@@ -326,54 +328,8 @@ if createPlots:
         subPlotAxis [iRow, iColumn].remove ()
 
     
-    iSubPlotPage += 1
-    savePlotPage (iSubPlotPage, iSubPlot + 1, abcissaList)
+    savePlotPage (iSubPlot + 1, abcissaListTimeDifference, abcissaListPhaseAngle)
     plt.close (fig)
 
-
-if createTable:
-
-    # Safe all the results to the table file.
-    RadianceFactorsRatiosPerOrbitFileName = 'RadianceFactorRatiosPerOrbit.dat'
-    fileOpen = open ( os.path.join ('..', RadianceFactorsRatiosPerOrbitFileName), 'w')
-    
-    print (' ', file = fileOpen)
-    print (' File: {}'.format (RadianceFactorsRatiosPerOrbitFileName), file = fileOpen)
-    print (' Created at {}'.format ( HandyTools.getDateAndTimeString () ), file = fileOpen)
-    
-    
-    
-    print (' ', file = fileOpen)
-    print (' RFR = Radiance Factor Ratio', file = fileOpen)
-    print (' dRFR = uncertainty in the RFR', file = fileOpen)
-    print (' Latitude = median of the latitudes of the images in each orbit', file = fileOpen)
-    
-    print (' ', file = fileOpen)
-    print (' Image data from VMC/Step01/{}'.format (VMCSelectedImagesFileName), file = fileOpen)
-    print (' Phase curve from VMC/Step02/{}'.format (phaseCurveFitFileName), file = fileOpen)
-    
-    print ( '', file = fileOpen )
-    print ( ' Phase angle <= {:3d}˚'.format (phaseAngleLimit), file = fileOpen )
-    
-    
-    print (' ', file = fileOpen)
-    print (' Orbit     Latitude    RFR_Average  dRFR_Average    RFR_Median   dRFR_Median   #Images in Orbit', file = fileOpen)
-    print ('              (˚)', file = fileOpen)
-    print ('C_END', file = fileOpen)
-    
-    
-    for iOrbit in range ( len (VMCOrbitIDsUnique) ): 
-    
-        print ( '  {}      {:6.2f}      {:6.2f}        {:6.3f}         {:6.2f}        {:6.3f}        {:4d}'.
-                format ( VMCOrbitIDsUnique [iOrbit], 
-                         latitudesPerOrbit [iOrbit],
-                         radianceFactorRatiosAveragePerOrbit [iOrbit],
-                         dRadianceFactorRatiosAveragePerOrbit [iOrbit],
-                         radianceFactorRatiosMedianPerOrbit [iOrbit],
-                         dRadianceFactorRatiosMedianPerOrbit [iOrbit],
-                         numberOfValuesPerOrbit [iOrbit] ), file = fileOpen )
-    
-    
-    fileOpen.close ()
 
 

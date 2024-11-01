@@ -24,8 +24,10 @@ from analysisConfiguration import *
 
 
 # Note that  VeRaDataDirectory  is from the  analysisConfiguration  file.
-VeRaTools.createVeRaProfilesTable ('../VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat', VeRaDataDirectory)        
-VeRaTools.createVeRaProfilesTable ('../VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat', VeRaDataDirectory)      
+VeRaTools.createVeRaProfilesTable ( '../VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat', 
+                                    os.path.join (VeRaDataDirectory, 'VeRa_selected_profiles') )        
+VeRaTools.createVeRaProfilesTable ('../VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat', 
+                                    os.path.join (VeRaDataDirectory, 'VeRa_Spole_2013') )      
 
 
 

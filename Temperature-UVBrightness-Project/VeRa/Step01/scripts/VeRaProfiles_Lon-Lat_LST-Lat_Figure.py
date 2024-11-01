@@ -6,12 +6,19 @@
 # Create a plot of the distribution of VeRa-soundings in terms of latitude-longitude and in terms of latitude - Local Solar Time.
 
 # Standard imports.
+import os
+import sys
+
 import matplotlib.pyplot as plt 
 import numpy as np
 
 # Custom imports.
 from HandyTools import HandyTools
 from VeRaTools import VeRaTools
+
+# Import settings.
+sys.path.append ( os.path.abspath ('../../../') ) 
+from analysisConfiguration import *
 
 
 # Read the information from the two files.
