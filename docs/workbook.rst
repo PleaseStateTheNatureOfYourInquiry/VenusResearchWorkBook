@@ -106,8 +106,8 @@ Step 01 - Extract VeRa-profiles information
 
     | top directory: :file:`VeRa/Step01`
     | scripts:
-    | :file:`./scripts/VeRa_LocalSolarTime_CreateTable.py`
-    | :file:`./scripts/VeRaProfiles_Lon-Lat_LST-Lat_Figure.py`
+    | :file:`./scripts/CreateTable_VeRa_LocalSolarTime.py`
+    | :file:`./scripts/CreateFigure_VeRaProfiles_Lon-Lat_LST-Lat.py`
     | files:
     | :file:`VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat`
     | :file:`VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat`
@@ -138,8 +138,8 @@ Step 02 - Filter VeRa profiles
 
     | top directory: :file:`VeRa/Step02`
     | scripts:
-    | :file:`./scripts/VeRaAverageProfiles_CreateNumpyArray.py`
-    | :file:`./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py`
+    | :file:`./scripts/CreateFigure_VeRaAverageProfile_Tz_dTdz.py`
+    | :file:`./scripts/CreateNumpyArray_VeRaAverageProfiles.py`
     | files:
     | :file:`VeRaSelectedProfiles.profiles`
     | :file:`VeRaSouthPolarDynamicsCampaignProfiles.profiles`
@@ -524,8 +524,8 @@ Step 02 - Determine phase curve
 
     | top directory: :file:`VMC/Step02`
     | scripts:
-    | :file:`./scripts/CreatePhaseAngleCurveTable.py`
-    | :file:`./scripts/ExtractPhaseCurve.py`
+    | :file:`./scripts/CreateTable_PhaseAngleCurve.py`
+    | :file:`./scripts/CreateTable_PhaseCurveFit.py`
     | files:
     | :file:`PhaseCurve_i<84_e<81.dat`
     | :file:`PhaseCurveFit_i<84_e<81.dat`
@@ -538,7 +538,7 @@ The 1374 selected images from 73 orbits cover a phase angle range between 27˚ a
 These images have been selected during :ref:`Step 1<VMCStep01>` above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file`UsedImages` subfolders for each orbit.
 
 For each selected image, I use all the pixels on the visible disk and take the average and the median values.
-Initially, I had set the incidence and emission angles limits to 89˚ and 90˚.
+Initially, I had set the incidence and emission angles limits both to 89˚.
 I changed that to 84˚ and 81˚ respectively in line with the results presented by :ref:`Lee et al. (2015) <Lee2015>` in their section 3.2.
 The difference in the final resulting coefficients of the phase angle curve fit are on the order or 2%. 
 
@@ -569,7 +569,7 @@ At first I use **all the data points** as they are and get the following result:
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step02/plots_i<84_e<81/PhaseCurve_allPhaseAngles.png
     :scale: 72%
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step02/plots_i<84_e<81/PhaseCurve_allPhaseAngles_detail.png
-    :scale: 50%
+    :scale: 75%
 
 The fit to the quadratic model is clearly off, the :math:`r^2` value is low. 
 
@@ -697,7 +697,7 @@ Step 03 - Investigate correlation
     | top directory: :file:`VMC/Step03`
     | scripts:
     | :file:`./scripts/CorrelateRadianceFactors_Temperature.py`
-    | :file:`./scripts/CreateRadianceFactorRatioTableAndPlots.py`
+    | :file:`./scripts/CreateTableAndFigures_RadianceFactorRatio.py`
     | files:
     | :file:`RadianceFactorRatiosPerOrbit.dat`
 
@@ -982,12 +982,13 @@ Step 03bis - Cloud top altitudes as a function of latitude
 
     | top directory: :file:`VMC/Step03bis`
     | scripts:
-    | :file:`./scripts/CloudTopAltitudesSPICAV-UV.py`
+    | :file:`CreateFigure_CloudTopAltitudesSPICAV-UV.py`
+    | :file:`CreateFigures_Latitude_Variability.py`
     | :file:`VMCImagesEvaluate_CloudTopAltitudes.py`
-    | :file:`Latitude_variability.py`
     | files: 
     | :file:`Marcq_2020_Figure14.dat`
     | :file:`Marcq_2020_Figure14.png`
+    | :file:`VMCSelectedImages_CloudTopAltitudes.dat`
 
 
 
@@ -1234,17 +1235,31 @@ Step 06 - New Correlation analysis
     | top directory: :file:`VMC/Step6`
     | scripts:
     | :file:`CorrelationAnalysis.py`
-    | :file:`CreateFactorRatiosTVeRaTable.py`
+    | :file:`CorrelationAnalysisTablesAndPlots.py`
+    | :file:`CreateFactorRatios_vs_T-SVeRaTables.py`    
     | files: 
     | :file:`RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat`
+    | :file:`RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat`
+    | :file:`S_Correlation_All_Latitudes.dat`
+    | :file:`S_Correlation_Latitudes_-39.69_-14.97.dat`
+    | :file:`S_Correlation_Latitudes_-59.14_-43.12.dat`
+    | :file:`S_Correlation_Latitudes_-83.8_-62.06.dat`
+    | :file:`T_Correlation_All_Latitudes.dat`
+    | :file:`T_Correlation_Latitudes_-39.69_-14.97.dat`
+    | :file:`T_Correlation_Latitudes_-59.14_-43.12.dat`
+    | :file:`T_Correlation_Latitudes_-83.8_-62.06.dat`
+    
 
 
-In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures at a given altitude level, and separated this analysis in several latitude bins, to avoid as much as possible the effect of the change in temperature as a function of latitude.
+In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude. 
+We separated this analysis in several latitude bins to avoid, as much as possible, the effect of the change in temperature as a function of latitude.
 
-The idea is that the UV-deposition depth is not well known. 
+The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known.
 
-I am not sure. :ref:`Crisp (1986) <crisp1986>` state the the vertical distribution of the UV_absorberis constrained below the cloud tops at 70-71km altitude. 
-This would mean that the UV-radiation we see reflected back from across Venus is always from a similar altitude level?
+I am not sure. :ref:`Crisp (1986) <crisp1986>` state the the vertical distribution of the UV_absorberis constrained below the cloud tops at 70-71km altitude. This would mean that the UV-radiation we see reflected back from across Venus is always from a similar altitude level?
+If this is the case, would we not expect to see the largest correlation between temperature and UV-brightness around those levels?
+
+
 
 
 

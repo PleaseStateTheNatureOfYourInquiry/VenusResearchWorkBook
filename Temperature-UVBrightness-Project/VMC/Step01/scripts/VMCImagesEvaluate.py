@@ -335,8 +335,8 @@ def processOrbit ( listOfImageFiles,
 
 
 # Read the NumPy arrays containing all the necessary VeRa profiles information.
-VeRaSelectedProfilesInformation = np.load ('../../../VeRa/Step02/VeRaSelectedProfiles.profiles', allow_pickle = True).tolist ()
-VeRaSPoleProfilesInformation = np.load ('../../../VeRa/Step02/VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
+VeRaSelectedProfilesInformation = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02','VeRaSelectedProfiles.profiles'), allow_pickle = True ).tolist ()
+VeRaSPoleProfilesInformation = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02', 'VeRaSouthPolarDynamicsCampaignProfiles.profiles'), allow_pickle = True ).tolist ()
 
 
 # Set the parameters for this run.
@@ -356,27 +356,24 @@ else:
     VMCSelectedImagesFileName = 'VMCSelectedImages_orbits_later_than_{}.dat'.format (orbitIDLimit)
 
 
-fileOpen = open ( os.path.join ('..', VMCSelectedImagesFileName), 'w' )
+fileOpen = open ( os.path.join (VMCWorkBookDirectory, 'Step01', VMCSelectedImagesFileName), 'w' )
 
-print (' ', file = fileOpen)
-print (' File: {}'.format (VMCSelectedImagesFileName), file = fileOpen)
-print (' Created at {}'.format ( HandyTools.getDateAndTimeString () ), file = fileOpen)
+headerLines = [
+'',
+'  Target altitude (cloud tops) = {}km (Lat_VeRa, Lon_VeRa, T, dT)'.format (targetAltitude),
+'  Standard deviation zonal wind = {}m/s'.format (oneSigmaZonalWind),
+'  Standard deviation meridional wind = {}m/s'.format (oneSigmaMeridionalWind),
+'',
+'  # point in box are all the points in the latitude-longitude box on the Venus disk',
+'  Radiance factor is the average of the points in the latitude-longitude box with values > 0 and incidence angles < 89˚',
+'  dRadiance factor is the standard deviation of the radiance factor',
+'',
+' Orbit       Image          DOY      VeRa Time    VMC Time   Time diff  Lat_VeRa   Lon_VeRa   lat_centre_VMC   Lat_range_VMC   Lon_centre_VMC   Lon_range_VMC      Phase Angle   #Points in box   Radiance factor  dRadiance factor     T       dT     Local Solar Time   Emission Angle   Incidence Angle',
+'                         yyyy-mm-dd     (h)         (h)         (h)       (˚)        (˚)            (˚)             (˚)              (˚)             (˚)               (˚)                                                             (K)      (K)          (h)                (˚)              (˚)'
+]
 
-print (' ', file = fileOpen)
-print ('  Target altitude (cloud tops) = {}km (Lat_VeRa, Lon_VeRa, T, dT)'.format (targetAltitude), file = fileOpen)
-print ('  Standard deviation zonal wind = {}m/s'.format (oneSigmaZonalWind), file = fileOpen)
-print ('  Standard deviation meridional wind = {}m/s'.format (oneSigmaMeridionalWind), file = fileOpen)
-
-print (' ', file = fileOpen)
-print ('  # point in box are all the points in the latitude-longitude box on the Venus disk', file = fileOpen)
-print ('  Radiance factor is the average of the points in the latitude-longitude box with values > 0 and incidence angles < 89˚', file = fileOpen)
-print ('  dRadiance factor is the standard deviation of the radiance factor', file = fileOpen)
-
-print (' ', file = fileOpen)
-print (' Orbit       Image          DOY      VeRa Time    VMC Time   Time diff  Lat_VeRa   Lon_VeRa   lat_centre_VMC   Lat_range_VMC   Lon_centre_VMC   Lon_range_VMC      Phase Angle   #Points in box   Radiance factor  dRadiance factor     T       dT     Local Solar Time   Emission Angle   Incidence Angle', file = fileOpen)
-print ('                         yyyy-mm-dd     (h)         (h)         (h)       (˚)        (˚)            (˚)             (˚)              (˚)             (˚)               (˚)                                                             (K)      (K)          (h)                (˚)              (˚)', file = fileOpen)
-print ('C_END', file = fileOpen)
-
+headerString = HandyTools.getTableHeader (VMCSelectedImagesFileName, creationScript = 'VMCImagesEvaluate.py', headerLines = headerLines)
+print (headerString, file = fileOpen)
 
 
 # Create the Python dictionary that will contain the image file names + paths and the lists of indices of the valid points in the latitude-longitude boxes of the 
@@ -441,7 +438,7 @@ for orbitID in VeRaSPoleProfilesInformation ['OrbitID']:
  
 # Save the Python dictionary with the lists of indices (of the flattened image arrays!) of valid points to a NumPy file.
 HandyTools.saveContentToNumpyWithCustomExtension ( iValidPointsSelectedImages, 
-                                                   os.path.join ('..' , 'VMCSelectedImages'),
+                                                   os.path.join (VMCWorkBookDirectory, 'Step01', 'VMCSelectedImages'),
                                                    extensionWithoutDot = 'iValidPoints', 
                                                    overWrite = True )
    
@@ -451,13 +448,13 @@ fileOpen.close ()
 
 
 # Determine the number of orbits and images and add this information to the header of the table file.
-tableTextContent = HandyTools.getTextFileContent ( os.path.join ('..', VMCSelectedImagesFileName) )
-tableContent = HandyTools.readTable ( os.path.join ('..', VMCSelectedImagesFileName) )
+tableTextContent = HandyTools.getTextFileContent ( os.path.join (VMCWorkBookDirectory, 'Step01', VMCSelectedImagesFileName) )
+tableContent = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step01', VMCSelectedImagesFileName) )
 
 numberOfImages = len ( tableContent [0][0] )
 numberOfOrbits = len ( list ( set ( tableContent [0][0] ) ) )
 
-fileOpen = open ( os.path.join ('..', VMCSelectedImagesFileName), 'w')
+fileOpen = open ( os.path.join (VMCWorkBookDirectory, 'Step01', VMCSelectedImagesFileName), 'w' )
 
 for textLine in tableTextContent:
         

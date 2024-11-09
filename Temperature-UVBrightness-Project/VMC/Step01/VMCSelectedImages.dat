@@ -1,6 +1,7 @@
  
  File: VMCSelectedImages.dat
  Created at 2024-10-20 at 21:11:27
+ Created with VMCImagesEvaluate.py
  
   Target altitude (cloud tops) = 70km (Lat_VeRa, Lon_VeRa, T, dT)
   Standard deviation zonal wind = 20m/s

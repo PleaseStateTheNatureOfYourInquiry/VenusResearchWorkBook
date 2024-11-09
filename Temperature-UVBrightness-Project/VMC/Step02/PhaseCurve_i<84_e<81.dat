@@ -1,20 +1,21 @@
- 
+
  File: PhaseCurve_i<84_e<81.dat
- Created at 2024-10-22 at 04:29:20
- 
+ Created at 2024-11-09 at 16:27:05
+ Created with CreateTable_PhaseCurve.py
+
  RF = Radiance Factor
  dAverage RF = Standard deviation of average RF
- 
+
  Radiance Scaling Factor from image header label RADIANCE_SCALING_FACTOR
- 
+
  Incidence angle < 84˚
  Emission angle < 81˚
- 
+
  Iterative removal of outliers at the 3-sigma level with a > 1% change in average value
  Note: median values are calculated after iterative outlier removal!
 
  73 orbits with a total of 1374 images
- 
+
     Image          phase angle   Average RF  dAverage RF     Q1 RF  Median RF  Q3 RF   # iterations   Radiance Scaling Factor    # valid data points
                        (˚)                                                                              W/m2/ster/micron/DN
 C_END

@@ -198,8 +198,8 @@ At this point (2024) I redo the entire analysis, rewriting all code using Python
 <div class="line-block">
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VeRa/Step01</span></code></div>
 <div class="line">scripts:</div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRa_LocalSolarTime_CreateTable.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaProfiles_Lon-Lat_LST-Lat_Figure.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateTable_VeRa_LocalSolarTime.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateFigure_VeRaProfiles_Lon-Lat_LST-Lat.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SelectedProfiles.dat</span></code></div>
@@ -219,8 +219,8 @@ The table <code class="file docutils literal notranslate"><span class="pre">VeRa
 <div class="line-block">
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VeRa/Step02</span></code></div>
 <div class="line">scripts:</div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfiles_CreateNumpyArray.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VeRaAverageProfile_Tz_dTdz_Figure.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateFigure_VeRaAverageProfile_Tz_dTdz.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateNumpyArray_VeRaAverageProfiles.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSelectedProfiles.profiles</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VeRaSouthPolarDynamicsCampaignProfiles.profiles</span></code></div>
@@ -543,8 +543,8 @@ In this way, I do not need to recalculate these if I need them at some later sta
 <div class="line-block">
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step02</span></code></div>
 <div class="line">scripts:</div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreatePhaseAngleCurveTable.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateTable_PhaseAngleCurve.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateTable_PhaseCurveFit.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurve_i&lt;84_e&lt;81.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">PhaseCurveFit_i&lt;84_e&lt;81.dat</span></code></div>
@@ -556,7 +556,7 @@ In this way, I do not need to recalculate these if I need them at some later sta
 The 1374 selected images from 73 orbits cover a phase angle range between 27˚ and 140˚.
 These images have been selected during <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a> above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file`UsedImages` subfolders for each orbit.</p>
 <p>For each selected image, I use all the pixels on the visible disk and take the average and the median values.
-Initially, I had set the incidence and emission angles limits to 89˚ and 90˚.
+Initially, I had set the incidence and emission angles limits both to 89˚.
 I changed that to 84˚ and 81˚ respectively in line with the results presented by <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. (2015)</span></a> in their section 3.2.
 The difference in the final resulting coefficients of the phase angle curve fit are on the order or 2%.</p>
 <p>By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
@@ -580,7 +580,7 @@ Here is an example of a sequence of iterations.</p>
 I create the script <code class="file docutils literal notranslate"><span class="pre">./scripts/ExtractPhaseCurve.py</span></code>.
 At first I use <strong>all the data points</strong> as they are and get the following result:</p>
 <a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles.png"><img alt="_images/PhaseCurve_allPhaseAngles.png" src="_images/PhaseCurve_allPhaseAngles.png" style="width: 460.79999999999995px; height: 345.59999999999997px;" /></a>
-<a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles_detail.png"><img alt="_images/PhaseCurve_allPhaseAngles_detail.png" src="_images/PhaseCurve_allPhaseAngles_detail.png" style="width: 320.0px; height: 240.0px;" /></a>
+<a class="reference internal image-reference" href="_images/PhaseCurve_allPhaseAngles_detail.png"><img alt="_images/PhaseCurve_allPhaseAngles_detail.png" src="_images/PhaseCurve_allPhaseAngles_detail.png" style="width: 480.0px; height: 360.0px;" /></a>
 <p>The fit to the quadratic model is clearly off, the <span class="math notranslate nohighlight">\(r^2\)</span> value is low.</p>
 <p>It is clear the Nominal (green) and Extension 1 (blue) mission sections are quite different than the rest. In the detailed plot on the right, there seems to be quite a lot of <em>regularity</em> in the Nominal and Extension 1 data, which I find somewhat suspicious.
 Could this be related to calibration issues? When inspecting more closely the values of the Radiance Scaling Factors in
@@ -668,7 +668,7 @@ C_END
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step03</span></code></div>
 <div class="line">scripts:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateRadianceFactorRatioTableAndPlots.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CreateTableAndFigures_RadianceFactorRatio.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatiosPerOrbit.dat</span></code></div>
 </div>
@@ -863,12 +863,13 @@ It can also be nicely seen how the uncertainty of each point is less than for th
 <div class="line-block">
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step03bis</span></code></div>
 <div class="line">scripts:</div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/CloudTopAltitudesSPICAV-UV.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFigure_CloudTopAltitudesSPICAV-UV.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFigures_Latitude_Variability.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCImagesEvaluate_CloudTopAltitudes.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">Latitude_variability.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">Marcq_2020_Figure14.png</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_CloudTopAltitudes.dat</span></code></div>
 </div>
 </div>
 <p>For simplicity until this point I have assumed the cloud tops to be at 70km altitude everywhere on Venus, and I have used the VeRa temperatures at that altitude.
@@ -1010,15 +1011,26 @@ I take 71km altitude as the reference level:</p>
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step6</span></code></div>
 <div class="line">scripts:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelationAnalysis.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFactorRatiosTVeRaTable.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelationAnalysisTablesAndPlots.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFactorRatios_vs_T-SVeRaTables.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_All_Latitudes.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-39.69_-14.97.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-59.14_-43.12.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-83.8_-62.06.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_All_Latitudes.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-39.69_-14.97.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-59.14_-43.12.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-83.8_-62.06.dat</span></code></div>
 </div>
 </div>
-<p>In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures at a given altitude level, and separated this analysis in several latitude bins, to avoid as much as possible the effect of the change in temperature as a function of latitude.</p>
-<p>The idea is that the UV-deposition depth is not well known.</p>
-<p>I am not sure. <a class="reference internal" href="#crisp1986"><span class="std std-ref">Crisp (1986)</span></a> state the the vertical distribution of the UV_absorberis constrained below the cloud tops at 70-71km altitude.
-This would mean that the UV-radiation we see reflected back from across Venus is always from a similar altitude level?</p>
+<p>In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude.
+We separated this analysis in several latitude bins to avoid, as much as possible, the effect of the change in temperature as a function of latitude.</p>
+<p>The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known.</p>
+<p>I am not sure. <a class="reference internal" href="#crisp1986"><span class="std std-ref">Crisp (1986)</span></a> state the the vertical distribution of the UV_absorberis constrained below the cloud tops at 70-71km altitude. This would mean that the UV-radiation we see reflected back from across Venus is always from a similar altitude level?
+If this is the case, would we not expect to see the largest correlation between temperature and UV-brightness around those levels?</p>
 </section>
 </section>
 <section id="interpretation-and-conclusion">
@@ -1087,7 +1099,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Nov 01, 2024, 6:22:00 PM.
+      <span class="lastupdated">Last updated on Nov 09, 2024, 10:45:25 PM.
       </span></p>
   </div>
 

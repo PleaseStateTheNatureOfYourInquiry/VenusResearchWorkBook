@@ -38,6 +38,10 @@ from DataTools import DataTools
 from VeRaTools import VeRaTools
 from VMCTools import VMCTools
 
+# Import the analysis configuration settings.
+sys.path.append ( os.path.abspath ('../../../') ) 
+from analysisConfiguration import *
+
 
 # Extract the data of mission sections Extension 2, 3 and 4 + South Polar Dynamics Campaign (VMCOrbitID >= 1000).
 VMCOrbitBoundaries = [1000, 2811]
@@ -82,16 +86,16 @@ plotParameters = { 'create plots' : [True, False, False],
                                                                                                                statisticsStringStep2, 
                                                                                                                VMCOrbitBoundaries [0], 
                                                                                                                VMCOrbitBoundaries [1] ) ],
-                   'plotFileName' : [ '../plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}/RadianceFactorRatio_vs_Temperature_all_images.png'.
+                   'plotFileName' : [ 'plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}/RadianceFactorRatio_vs_Temperature_all_images.png'.
                                        format ( phaseAngleLimit, 
                                                 numberOfPointInLatitudeLongitudeBoxMinimum,
                                                 thermalTideString), 
-                                      '../plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}/RadianceFactorRatio_vs_Temperature_orbits_{}.png'.
+                                      'plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}/RadianceFactorRatio_vs_Temperature_orbits_{}.png'.
                                        format ( phaseAngleLimit, 
                                                 numberOfPointInLatitudeLongitudeBoxMinimum, 
                                                 thermalTideString,
                                                 statisticsStringStep2 ),
-                                      '../plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}/RadianceFactorRatio_vs_Temperature_binned_{}_from_{}_{}K.png'.
+                                      'plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}/RadianceFactorRatio_vs_Temperature_binned_{}_from_{}_{}K.png'.
                                        format ( phaseAngleLimit, 
                                                 numberOfPointInLatitudeLongitudeBoxMinimum,
                                                 thermalTideString,
@@ -101,10 +105,10 @@ plotParameters = { 'create plots' : [True, False, False],
 
 
 
-HandyTools.createPathToFile ( fullPath = '../plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}'.\
- format ( phaseAngleLimit, 
-          numberOfPointInLatitudeLongitudeBoxMinimum,
-          thermalTideString ) )
+HandyTools.createPathToFile ( 
+ fullPath = os.path.join (VMCWorkBookDirectory, 'Step03', 'plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}{}'.format ( phaseAngleLimit, 
+                                                                                                                           numberOfPointInLatitudeLongitudeBoxMinimum,
+                                                                                                                           thermalTideString ) ) )
 
 
 
@@ -118,21 +122,21 @@ HandyTools.createPathToFile ( fullPath = '../plots_phase_angle_lt_{:03d}_min-poi
 #                                                                                                                 VMCOrbitBoundaries [1], 
 #                                                                                                                 numberOfPointInLatitudeLongitudeBoxMinimum,
 #                                                                                                                 phaseAngleLimit ) ],
-#                    'plotFileName' : [ '../plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}/RadianceFactorRatio_vs_Temperature_images_orbit_{}-{}.png'.format ( phaseAngleLimit, 
+#                    'plotFileName' : [ 'plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}/RadianceFactorRatio_vs_Temperature_images_orbit_{}-{}.png'.format ( phaseAngleLimit, 
 #                                                                                                                                                                   numberOfPointInLatitudeLongitudeBoxMinimum, 
 #                                                                                                                                                                   VMCOrbitBoundaries [0], 
 #                                                                                                                                                                   VMCOrbitBoundaries [1] ) ] }
 # 
-# HandyTools.createPathToFile ( fullPath = '../plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}'.format (phaseAngleLimit, numberOfPointInLatitudeLongitudeBoxMinimum) )
+# HandyTools.createPathToFile ( fullPath = 'plots_phase_angle_lt_{:03d}_min-points-latlonbox_{}'.format (phaseAngleLimit, numberOfPointInLatitudeLongitudeBoxMinimum) )
 
 
 
 
 # Load the data from the table files.
-VMCSelectedImages = HandyTools.readTable ('../../Step01/VMCSelectedImages.dat')
+VMCSelectedImages = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step01', 'VMCSelectedImages.dat') )
 numberOfVMCImages = len ( VMCSelectedImages [0][0] )
-phaseCurve =  HandyTools.readTable ('../../Step02/PhaseCurveFit_i<84_e<81.dat')
-thermalTideCorrection = HandyTools.readTable ('../../Step04/ThermalTideCorrection.dat')
+phaseCurve =  HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step02', 'PhaseCurveFit_i<84_e<81.dat') )
+thermalTideCorrection = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step04','ThermalTideCorrection.dat') )
 
 
 # Set plot parameters.
@@ -206,11 +210,11 @@ for iImage in range (numberOfVMCImages):
         if VMCOrbitBoundaries [0] == VMCOrbitBoundaries [1]:
         
             print ('{:3d}˚: {:6.4f} / {:6.4f} = {:6.4f} +/- {:6.4f} (# points = {:3d})'.format ( phaseAngle, 
-                                                                                                RadianceFactorInLatLonBox, 
-                                                                                                phaseCurve [0][1][iPhaseCurve], 
-                                                                                                radianceFactorRatiosInLatLonBox [-1], 
-                                                                                                dRadianceFactorRatiosInLatLonBox [-1], 
-                                                                                                numberOfPointInLatLonBox ) )
+                                                                                                 RadianceFactorInLatLonBox, 
+                                                                                                 phaseCurve [0][1][iPhaseCurve], 
+                                                                                                 radianceFactorRatiosInLatLonBox [-1], 
+                                                                                                 dRadianceFactorRatiosInLatLonBox [-1], 
+                                                                                                 numberOfPointInLatLonBox ) )
 
 
 # Create the plot for this step.
@@ -235,7 +239,7 @@ if plotParameters ['create plots'][0]:
     plt.text ( xStart, yStart - yJump, 'V2452 - V2639 (Extention 4)', c = 'grey', fontsize = 8 )
     plt.text ( xStart + 12, yStart -  yJump, 'V2776 - V2811 (South Polar Dynamics Campaign)', c = 'red', fontsize = 8 )
 
-    plt.savefig ( plotParameters ['plotFileName'][0] )
+    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step03', plotParameters ['plotFileName'][0] ) )
     plt.close (1)
 
             
@@ -345,7 +349,7 @@ if plotParameters ['create plots'][1]:
     plt.text ( xStart, yStart - yJump, 'V2452 - V2639 (Extention 4)', c = 'grey', fontsize = 8 )
     plt.text ( xStart + 12, yStart -  yJump, 'V2776 - V2811 (South Polar Dynamics Campaign)', c = 'red', fontsize = 8 )
 
-    plt.savefig ( plotParameters ['plotFileName'][1] )
+    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step03', plotParameters ['plotFileName'][1] ) )
     plt.close (2)
 
 

@@ -28,32 +28,35 @@ from analysisConfiguration import *
 
 # Load the content of the table created in VMC/Step01. In this table the VeRa derived temperastures are taken at 70km altitude, which is the assumed cloud top altitude 
 #  for all latitudes.
-tableContent = HandyTools.readTable ('../../Step01/VMCSelectedImages.dat')
-tableContentPerLine = HandyTools.getTextFileContent ('../../Step01/VMCSelectedImages.dat')
+tableContent = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step01', 'VMCSelectedImages.dat') )
+tableContentPerLine = HandyTools.getTextFileContent ( os.path.join (VMCWorkBookDirectory, 'Step01','VMCSelectedImages.dat') )
 
 # Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. 
 #  Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002).
-figure14Data = HandyTools.readTable ('../Marcq_2020_Figure14.dat')
+figure14Data = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step03bis', 'Marcq_2020_Figure14.dat') )
 
 # Load the profiles of both the nominal and extended mission as well as the South Polar Dynamics Campaign from the  .profiles  NumPy files created
 #  in VeRa/Step02 (see VeRa/Step02bis for more details on the structure of the  .profiles  files).
-profilesNominalAndExtendedMission = np.load ('../../../VeRa/Step02/VeRaSelectedProfiles.profiles', allow_pickle = True).tolist ()
-profilesSouthPolarDynamicsCampaign = np.load ('../../../VeRa/Step02/VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
+profilesNominalAndExtendedMission = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02','VeRaSelectedProfiles.profiles'), allow_pickle = True).tolist ()
+profilesSouthPolarDynamicsCampaign = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02', 'VeRaSouthPolarDynamicsCampaignProfiles.profiles'), allow_pickle = True).tolist ()
 
 
 
 # Open the new table file that will contain information about all the selected images. 
 # Use the header from the  VMCSelectedImages.dat  table file from VMC/Step01 and parts of the  VMC/Step01/VMCImagesEvaluate.py  script.
 VMCSelectedImagesFileName = 'VMCSelectedImages_CloudTopAltitudes.dat'
-fileOpen = open ( os.path.join ('..', VMCSelectedImagesFileName), 'w' )
+fileOpen = open ( os.path.join (VMCWorkBookDirectory, 'Step03bis', VMCSelectedImagesFileName), 'w' )
 
-print (' ', file = fileOpen)
-print (' File: {}'.format (VMCSelectedImagesFileName), file = fileOpen)
-print (' Created at {}'.format ( HandyTools.getDateAndTimeString () ), file = fileOpen)
-print (' ', file = fileOpen)
-print ('  LATVeRa and LONVeRa is for 70km altitude', file = fileOpen)
-print ('  Target altitude of the cloud tops is determined from  Marcq_2020_Figure14.dat (Figure 14 in Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002))', file = fileOpen)
-iLine = 5
+headerLines = [
+'',
+'  LATVeRa and LONVeRa is for 70km altitude',
+'  Target altitude of the cloud tops is determined from  Marcq_2020_Figure14.dat (Figure 14 in Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002))'
+]
+
+headerString = HandyTools.getTableHeader (VMCSelectedImagesFileName, creationScript = 'VMCImagesEvaluate_CloudTopAltitudes.py', headerLines = headerLines, addC_END = False)
+print (headerString, file = fileOpen)
+
+iLine = 6
 while 'C_END' not in tableContentPerLine [iLine]:
 
     print (tableContentPerLine [iLine], file = fileOpen)

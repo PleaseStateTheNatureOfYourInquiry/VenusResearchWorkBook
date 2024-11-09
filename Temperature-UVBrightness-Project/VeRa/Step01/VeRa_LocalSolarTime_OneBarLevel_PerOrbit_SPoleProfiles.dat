@@ -1,11 +1,12 @@
- 
- File: VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat
- Created at 2024-10-31 at 14:11:39
- 
+
+ File: /Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa/Step01/VeRa_LocalSolarTime_OneBarLevel_PerOrbit_SPoleProfiles.dat
+ Created at 2024-11-09 at 16:08:06
+ Created with VeRaTools.createVeRaProfilesTable
+
   Include TXT files from: /Users/maarten/Science/Venus/Data/VEX/VeRa/VeRa_Spole_2013
- 
+
   Values are for 1-bar level, surface radius of Venus is 6051.8km
- 
+
  Orbit          DOY               UTC            Altitude   Temperature   Local Solar Time  Latitude   Longitude    Solar Zenith Angle
              yyyy-mm-dd        hh:mm:ss            (km)         (K)             (h)           (˚)         (˚)           (˚)
 C_END
