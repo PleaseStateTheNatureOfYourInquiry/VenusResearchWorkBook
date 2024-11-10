@@ -6,7 +6,9 @@ VMCDataDirectory = '/Users/maarten/Science/Venus/Data/VEX/VMC'
 AkatsukiDataDirectory = '/Users/maarten/Science/Venus/Data/Akatsuki'
 SPICAVUCDataDirectory = '/Users/maarten/Science/Venus/Data/EmmanuelMarcq2020'
 
-radiusOfVenus = 6052 #km
-
 VeRaWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa'
 VMCWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC'
+
+radiusOfVenus = 6052 #km
+
+

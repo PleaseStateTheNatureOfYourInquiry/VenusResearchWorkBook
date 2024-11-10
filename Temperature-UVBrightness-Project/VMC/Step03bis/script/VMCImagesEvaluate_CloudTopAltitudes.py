@@ -3,7 +3,7 @@
 
 # Version: v20240827
 
-# 
+# This script is made to add to the column 
 
 # Standard imports.
 import os
@@ -50,8 +50,11 @@ fileOpen = open ( os.path.join (VMCWorkBookDirectory, 'Step03bis', VMCSelectedIm
 headerLines = [
 '',
 '  LATVeRa and LONVeRa is for 70km altitude',
-'  Target altitude of the cloud tops is determined from  Marcq_2020_Figure14.dat (Figure 14 in Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002))'
+'  Target altitude of the cloud tops is determined from  Marcq_2020_Figure14.dat (Figure 14 in Marcq, R. et al., 2020. Climatology of SO2 and UV absorber at Venus cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002))',
+'  T = temperature of the cloud top at the target altitude',
+''
 ]
+
 
 headerString = HandyTools.getTableHeader (VMCSelectedImagesFileName, creationScript = 'VMCImagesEvaluate_CloudTopAltitudes.py', headerLines = headerLines, addC_END = False)
 print (headerString, file = fileOpen)

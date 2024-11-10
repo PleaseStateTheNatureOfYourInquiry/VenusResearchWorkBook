@@ -8,8 +8,8 @@
   Standard deviation meridional wind = 12m/s
  
   # point in box are all the points in the latitude-longitude box on the Venus disk
-  Radiance factor is the average of the points in the latitude-longitude box with values > 0 and incidence angles < 89˚
-  dRadiance factor is the standard deviation of the radiance factor
+  Radiance factor = average of the points in the latitude-longitude box with values > 0 and incidence angles < 89˚
+  dRadiance factor = standard deviation of the radiance factor
 
  56 orbits with a total of 972 images
 

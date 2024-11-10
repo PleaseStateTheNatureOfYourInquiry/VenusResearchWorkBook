@@ -49,7 +49,8 @@ Go to :ref:`last point of work <lastPointOfWork>`.
 
 .. admonition:: analysisConfiguration.py file
 
-    This file contains some configuration settings that are needed for the scripts in this analysis project to run.
+    This file contains configuration settings needed for the scripts in this project to run.
+    It *should* be easy to migrate this entire project to another computer, just by substituting the paths and names of these directories in this file.
 
     .. code-block:: Python
     
@@ -57,18 +58,22 @@ Go to :ref:`last point of work <lastPointOfWork>`.
         VMCDataDictectory = '/Users/maarten/Science/Venus/Data/VEX/VMC'
         AkatsukiDataDirectory = '/Users/maarten/Science/Venus/Data/Akatsuki'
         SPICAVUCDataDirectory = '/Users/maarten/Science/Venus/Data/EmmanuelMarcq2020'
-        
-        radiusOfVenus = 6052 #km
-        
+
         VeRaWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa'
         VMCWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC'
         
+        radiusOfVenus = 6052 #km
         
-    It can be loaded at the top of a scripts using:
+        
+        
+    The content of this file is loaded at the top of a script using:
  
     .. code-block:: Python
     
+        # Add the path where the  analysisConfiguration.py  script file lives relative to where the script file lives and is run from.
         sys.path.append ( os.path.abspath ('../../../') ) 
+        
+        # Import the content of the  analysisConfiguration.py  file.
         from analysisConfiguration import *
 
         
@@ -660,29 +665,30 @@ Using the :file:`./scripts/ExtractPhaseCurve.py` I create the :file:`PhaseCurveF
 that contains the results of these experiments and the different ways to determine the uncertainties.
 
 .. code-block::
- 
+
      File: PhaseCurveFit_i<84_e<81.dat
-     Created at 2024-10-22 at 04:32:02
-     
+     Created at 2024-11-09 at 16:53:08
+     Created with CreateTable_PhaseCurveFit.py
+    
       RF (pa)= 0.000179 * pa^2 + -0.0222 * pa +   1.189  |  r^2 = 0.960 (pa = phase angle in ˚)
-     
+    
       RF (Fit) = Radiance Factor as fit with the quadratic model above
       RF (Average) = average Radiance Factor from 1000 gaussian noise experiments
       dRF = standard deviation of the Radiance Factor from 1000 gaussian noise experiments
       MaxMin RF = (maximum - minimum) / 2  of the Radiance Factor from 1000 Gaussian noise experiments
-     
+    
        phase angle   RF (Fit)  RF (Average)   dRF     MaxMin RF
            (˚)
     C_END
-          27.0        0.719       0.720      0.0329    0.1112 
-          28.0        0.707       0.708      0.0316    0.1074 
-          29.0        0.695       0.696      0.0305    0.1038 
+          27.0        0.719       0.716      0.0342    0.1167 
+          28.0        0.707       0.704      0.0329    0.1119 
+          29.0        0.695       0.692      0.0316    0.1072 
           ...
           ...
-         127.0        1.252       1.253      0.0285    0.1009 
-         128.0        1.276       1.276      0.0298    0.1055 
-         129.0        1.299       1.300      0.0311    0.1101 
-         130.0        1.324       1.324      0.0325    0.1148 
+         127.0        1.252       1.252      0.0301    0.1014 
+         128.0        1.276       1.275      0.0315    0.1057 
+         129.0        1.299       1.299      0.0329    0.1100 
+         130.0        1.324       1.323      0.0344    0.1144 
           
 
 
@@ -1113,8 +1119,8 @@ Step 04 - Thermal tide correction
 
     | top directory: :file:`VMC/Step04`
     | scripts:
-    | :file:`./scripts/createTable_ThermalTide_Akiba2021_Figure5.py`
-    | :file:`./scripts/thermalTideAkiba2021.py`
+    | :file:`CreateTable_ThermalTide_Akiba2021_Figure5.py`
+    | :file:`CreateTable_ThermalTideCorrection.py`
     | files: 
     | :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat`
     | :file:`ThermalTideCorrection.dat`

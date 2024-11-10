@@ -23,9 +23,12 @@ import matplotlib.pyplot as plt
 # Custom imports.
 from HandyTools import HandyTools
 
+# Import the analysis configuration settings.
+sys.path.append ( os.path.abspath ('../../../') ) 
+from analysisConfiguration import *
+
 
 thermalTidePerLST = HandyTools.readTable ('../temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat')
-
 thermalTideLatitude = thermalTidePerLST [0][0]
 
 # plt.figure (1)
@@ -37,40 +40,33 @@ thermalTideLatitude = thermalTidePerLST [0][0]
 #     plt.plot ( latitude, thermalTidePerLST [0][iLST +1] )
 # 
 
-selectedImages = HandyTools.readTable ('..Step01/VMCSelectedImages.dat')
+selectedImages = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step01', 'VMCSelectedImages.dat') )
 imageIDSelectedImages = selectedImages [1][1]
 latitudeSelectedImages = selectedImages [0][6]
-LSTSelectedImages = selectedImages [0][-1]
+LSTSelectedImages = selectedImages [0][-3]
 
 
 # Use the absolute path to write it properly in the header of the table file to be created.
-tableFileName = os.path.abspath ('../ThermalTideCorrection.dat')
+tableFileName = os.path.abspath ( os.path.join (VMCWorkBookDirectory, 'Step04', 'ThermalTideCorrection.dat') )
 fileOpen = open (tableFileName, 'w')
 
-print (' ', file = fileOpen)
-print (' File: {}'.format (tableFileName), file = fileOpen)
-print (' Created at {}'.format ( HandyTools.getDateAndTimeString () ), file = fileOpen)
+headerLines = [
+'',
+' Figure 5a from Akiba, M. et al. (2021). "Thermal tides in the upper cloud layer of Venus as deduced from the emission angle dependence of the brightness temperature by Akatsuki/ LIR."',
+'  Journal of Geophysical Research: Planets, 126, e2020JE006808. https:// doi.org/10.1029/2020JE006808',
+' Zenodo repository at doi.org/10.5281/zenodo.5159027 (figure5)',
+'',
+' LST = Local Solar Time ',
+'',
+' The thermal tide file corresponding to Figure 5a is  temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat  and ',
+'  has been created using the script  /Users/maarten/Science/Venus/Temperature-UV_Analysis_2024/Analysis/VMC/Step04/scripts/createTable_ThermalTide_Akiba2021_Figure5.py',
+'',
+' Orbit      lat     Local Solar Time   T_VeRa   dT_VeRa    dT_tide ',
+'            (˚)            (h)           (K)      (K)        (K) '
+]
 
-print (' ', file = fileOpen)
-print (' Figure 5a from Akiba, M. et al. (2021). "Thermal tides in the upper cloud layer of Venus as deduced from the emission angle dependence of the brightness temperature by Akatsuki/ LIR."', file = fileOpen)
-print ('  Journal of Geophysical Research: Planets, 126, e2020JE006808. https:// doi.org/10.1029/2020JE006808', file = fileOpen)
-print (' Zenodo repository at doi.org/10.5281/zenodo.5159027 (figure5)', file = fileOpen)
-
-print (' ', file = fileOpen)
-print (' LST = Local Solar Time ', file = fileOpen)
-
-
-print (' ', file = fileOpen)
-print (' The thermal tide file corresponding to Figure 5a is  temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat  and ', file = fileOpen)
-print ('  has been created using the script  /Users/maarten/Science/Venus/Temperature-UV_Analysis_2024/Analysis/VMC/Step04/scripts/createTable_ThermalTide_Akiba2021_Figure5.py', file = fileOpen)
-
-print (' ', file = fileOpen)
-print (' The thermal tide amplitude (dT_tide) is calculated by linear interpolation first in latitude and next in Local Solar Time. ', file = fileOpen)
-
-print (' ', file = fileOpen)
-print (' Orbit      lat     Local Solar Time   T_VeRa   dT_VeRa    dT_tide ', file = fileOpen)
-print ('            (˚)            (h)           (K)      (K)        (K) ', file = fileOpen)
-print ('C_END', file = fileOpen)
+headerString = HandyTools.getTableHeader (tableFileName, creationScript = 'CreateTable_ThermalTideCorrection.py', headerLines = headerLines)
+print (headerString, file = fileOpen)
 
 currentOrbit = ''
 for iSelectedImage in range ( len ( selectedImages [0][0] ) ):
