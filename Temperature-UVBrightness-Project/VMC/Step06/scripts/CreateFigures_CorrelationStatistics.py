@@ -3,7 +3,7 @@
 
 # Version: v20241104
 
-# 
+# Create the figures of Pearson and Spearman Correlation Coefficients for RFR vs Temperature (z), as a function of the altitude z.
 
 # Standard imports.
 import os
@@ -94,14 +94,15 @@ for iST_TableFile in range (2):
     plt.ylabel ( xyLabels [1] )
     plt.title ( titles [iST_TableFile] )
     plt.legend ()
-    plt.savefig ( os.path.join ( '..', '{}_Pearson.png'.format ( plotFileNames [iST_TableFile] ) ) )
+    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step06', '{}_Pearson.png'.format ( plotFileNames [iST_TableFile] ) ) )
     
     plt.figure (2)
     plt.ylabel ( xyLabels [2] )
     plt.title ( titles [iST_TableFile] )
     plt.legend ()
-    plt.savefig ( os.path.join ( '..', '{}_Spearman.png'.format ( plotFileNames [iST_TableFile] ) ) )
+    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step06', '{}_Spearman.png'.format ( plotFileNames [iST_TableFile] ) ) )
     
+    plt.close ()
 
 
 

@@ -68,7 +68,7 @@ temperatureBinSize = 2
 # temperatureBinSize = 8
 
 # Boolean to control correction for thermal tide.
-thermalTideCorrectionApply = True
+thermalTideCorrectionApply = False
 thermalTideString = '_thermalTideCorrection'  if thermalTideCorrectionApply else  ''
 
 

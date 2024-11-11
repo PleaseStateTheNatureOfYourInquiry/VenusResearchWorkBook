@@ -10,8 +10,8 @@
 # orbitIDLimit = [0, 'All orbits']
 orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
 
-figureType = 'T' # Temperature
-# figureType = 'S' # static stability
+# figureOrTableType = 'T' # Temperature
+figureOrTableType = 'S' # static stability
 
 allLatitudes = True
 createFigures = True
@@ -45,7 +45,7 @@ def analyseCorrelation (Temperatures, RFRs):
     pearsonStatistics = stats.pearsonr (Temperatures, RFRs)
     spearmanStatistics = stats.spearmanr (Temperatures, RFRs)
 
-    return linearFit, spearmanStatistics, pearsonStatistics
+    return linearFit, pearsonStatistics, spearmanStatistics
 
 
 
@@ -59,7 +59,7 @@ def createPlot ( Temperatures,
                  fit = [],
                  pearsonStatistics = [],
                  spearmanStatistics = [],                  
-                 figureType = 'temperature' ):
+                 figureOrTableType = 'temperature' ):
 
             
     plt.clf ()
@@ -75,12 +75,12 @@ def createPlot ( Temperatures,
         plt.title ( 'Latitudes between {:3d}˚ and {:3d}˚ - orbits >= {}'.format ( int ( latitudeRange [0] ), int ( latitudeRange [1] ), orbitIDLimit [0] ) )
 
             
-    if figureType == 'T':
+    if figureOrTableType == 'T':
     
-        xLabelString = 'Cloud top temperature {}km (VeRa) (K)'.format (iAltitude + 50)
+        xLabelString = 'Temperature {}km (VeRa) (K)'.format (iAltitude + 50)
  
         
-    if figureType == 'S':  
+    if figureOrTableType == 'S':  
     
         xLabelString = 'Static Stability {}km (VeRa) (K/km)'.format (iAltitude + 50)
         
@@ -98,28 +98,28 @@ def createPlot ( Temperatures,
                fontsize = 11 )
         
 #     plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2, 
-#                label = 'RF = {:7.5f} ($\pm$ {:7.5f}) {} + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], figureType, fit [1], fit [3], fit [4] ) )
+#                label = 'RF = {:7.5f} ($\pm$ {:7.5f}) {} + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], figureOrTableType, fit [1], fit [3], fit [4] ) )
 #     plt.legend ( loc = 'upper left', fontsize = 9 )
     
     
     if allLatitudes:
 
-        HandyTools.createPathToFile ( fullPath = '../plots_{}/AllLatitudes'.format (figureType) )  
+        HandyTools.createPathToFile ( fullPath = '../plots_{}/AllLatitudes'.format (figureOrTableType) )  
           
-        plt.savefig ( '../plots_{}/AllLatitudes/Temperature{}km_vs_RadianceFactorRatio_all_latitudes.png'.format (figureType, iAltitude + 50) )
+        plt.savefig ( '../plots_{}/AllLatitudes/Temperature{}km_vs_RadianceFactorRatio_all_latitudes.png'.format (figureOrTableType, iAltitude + 50) )
 
     else:
     
-        HandyTools.createPathToFile ( fullPath = '../plots_{}/Latitudes_{:3d}_{:3d}'.format (figureType, int ( latitudeRange [0] ), int ( latitudeRange [1] ) ))
+        HandyTools.createPathToFile ( fullPath = '../plots_{}/Latitudes_{:3d}_{:3d}'.format (figureOrTableType, int ( latitudeRange [0] ), int ( latitudeRange [1] ) ))
         
         plt.savefig ( '../plots_{}/Latitudes_{:3d}_{:3d}/Temperature{}km_vs_RadianceFactorRatio_latitudes_{:3d}_{:3d}.png'.
-         format ( figureType, int ( latitudeRange [0] ), int ( latitudeRange [1] ), iAltitude + 50, int ( latitudeRange [0] ), int ( latitudeRange [1] ) ) )
+         format ( figureOrTableType, int ( latitudeRange [0] ), int ( latitudeRange [1] ), iAltitude + 50, int ( latitudeRange [0] ), int ( latitudeRange [1] ) ) )
 
 
 
 
 def performAnalysis ( tableContent = None,
-                      tableContentLatitudeDependence = None,
+                      latitudeDependenceTableFile = '',
                       iAltitudeColumns = [],
                       iOrbitID = [],
                       latitudeRange = [],
@@ -127,47 +127,83 @@ def performAnalysis ( tableContent = None,
                       allLatitudes = True,
                       createFigures = True,
                       createTables = True,
-                      figureType = 'T' ):
+                      figureOrTableType = 'T' ):
 
 
+    
+    if allLatitudes:
+        
+        if figureOrTableType == 'T':
+        
+            tableContentLatitudeDependence = \
+             HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', latitudeDependenceTableFile) )
 
+
+        if figureOrTableType == 'S':
+
+            tableContentLatitudeDependence = \
+             HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', latitudeDependenceTableFile) )
+
+    
 
     if createTables:
-    
-        if allLatitudes:
 
-            tableFileName = '{}_Correlation_All_Latitudes.dat'.format (figureType)
+        if allLatitudes:
         
+            tableFileName = '{}_Correlation_All_Latitudes.dat'.format (figureOrTableType)
         
         else:
         
-            tableFileName = '{}_Correlation_Latitudes_{}_{}.dat'.format ( figureType, latitudeRange [0], latitudeRange [1] )
-
-
-        print (tableFileName)
+            tableFileName = '{}_Correlation_Latitudes_{}_{}.dat'.format ( figureOrTableType, latitudeRange [0], latitudeRange [1] )
         
-        headerLines = [
-        ' Pearson Coef. = Pearson correlation coefficient (-1,+1)',
-        ' dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
-        ' Spearman Coef. = Spearman R correlation coefficient (-1,+1)',
-        ' dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
-        '',
-        ' Altitude   Pearson Coef  dPearson Coef    Spearman Coef. dSpearman Coef   #Points',
-        '   (km)'
-        ]
         
-        tableFileOpen = open ( '../' + tableFileName, 'w' )        
-        print ( HandyTools.getTableHeader (tableFileName, headerLines), file = tableFileOpen )
 
+        tableFileOpen = open ( '../' + tableFileName, 'w' )     
+        
+        
+        if allLatitudes and figureOrTableType == 'T':
+        
+            headerLines = [
+            '',
+            ' Temperature at each altitude level has been corrected for latitude variability by subtracting the linear relation from table {}'.format (latitudeDependenceTableFile),
+            ' Pearson Coef. = Pearson correlation coefficient (-1,+1)',
+            ' dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+            ' Spearman Coef. = Spearman R correlation coefficient (-1,+1)',
+            ' dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+            '',
+            ' Altitude   Pearson Coef  dPearson Coef    Spearman Coef. dSpearman Coef   #Points',
+            '   (km)'
+            ]
+        
+        else:
+        
+            headerLines = [
+            '',
+            ' Pearson Coef. = Pearson correlation coefficient (-1,+1)',
+            ' dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+            ' Spearman Coef. = Spearman R correlation coefficient (-1,+1)',
+            ' dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+            '',
+            ' Altitude   Pearson Coef  dPearson Coef    Spearman Coef. dSpearman Coef   #Points',
+            '   (km)'
+            ]
+        
+        
+        headerString = HandyTools.getTableHeader (tableFileName, creationScript = 'CreateTablesAndFigures_CorrelationAnalysis.py', headerLines = headerLines)
+        print (headerString , file = tableFileOpen)
 
 
     # Loop over the altitude-columns
     for iAltitude, iColumn in enumerate (iAltitudeColumns):
 
+        print ('iAltitude = ', iAltitude)
         VeRaTemperatures = tableContent [0][iColumn][iOrbitID]
         dVeRaTemperatures = tableContent [0][iColumn + 1][iOrbitID]
         #  tableContent [0][4][iOrbitID]  = latitude of the VeRa temperature sounding.
-        if allLatitudes:
+        
+        # Only correct the temperatures at each altitude level for latitude variability if  allLatitudes  has been set to True. 
+        #  If static stability has been chosen (figureOrTableType = 'S'), then do not apply correction.
+        if allLatitudes and figureOrTableType == 'T':
         
             VeRaTemperatures = \
              tableContent [0][iColumn][iOrbitID] - \
@@ -178,13 +214,12 @@ def performAnalysis ( tableContent = None,
                                           tableContentLatitudeDependence [0][4][iAltitude] ** 2 )
 
 
-            if not iAltitude % 10:
-            
-                print (iAltitude)
-                for i in range (len (VeRaTemperatures)):
-                
-                    print ( tableContent [0][iColumn][iOrbitID [i]], VeRaTemperatures [i], tableContent [0][iColumn+1][iOrbitID [i]] , dVeRaTemperatures [i] )
-
+#             if not iAltitude % 10:
+#             
+#                 for i in range (len (VeRaTemperatures)):
+#                 
+#                     print ( tableContent [0][iColumn][iOrbitID [i]], VeRaTemperatures [i], tableContent [0][iColumn+1][iOrbitID [i]] , dVeRaTemperatures [i] )
+# 
 
 
         fit, pearsonStatisticOriginal, spearmanrStatisticOriginal = analyseCorrelation ( VeRaTemperatures, tableContent [0][1][iOrbitID] )
@@ -206,11 +241,6 @@ def performAnalysis ( tableContent = None,
         pearsonStatisticsAverage, pearsonStatisticsStandardDeviation, pearsonStatisticsVariance = DataTools.getAverageVarAndSDPYtoCPP (pearsonStatistics)
         spearmanStatisticsAverage, spearmanStatisticsStandardDeviation, spearmanStatisticsVariance = DataTools.getAverageVarAndSDPYtoCPP (spearmanStatistics)
         
-        print ('iAltitude', iAltitude)
-        print ('Pearson statistic (original, average, standard deviation) = ', pearsonStatisticOriginal.statistic, pearsonStatisticsAverage, pearsonStatisticsStandardDeviation)     
-        print ('Spearman statistic (original, average, standard deviation) = ', spearmanrStatisticOriginal.statistic, spearmanStatisticsAverage, spearmanStatisticsStandardDeviation)   
-        print ()
-
         
         if createFigures:
         
@@ -222,7 +252,7 @@ def performAnalysis ( tableContent = None,
                          fit = fit, 
                          pearsonStatistics = [pearsonStatisticOriginal.statistic, pearsonStatisticsAverage, pearsonStatisticsStandardDeviation],
                          spearmanStatistics = [spearmanrStatisticOriginal.statistic, spearmanStatisticsAverage, spearmanStatisticsStandardDeviation], 
-                         figureType = figureType )
+                         figureOrTableType = figureOrTableType )
     
  
         if createTables:
@@ -239,20 +269,20 @@ def performAnalysis ( tableContent = None,
     if createTables:
     
         tableFileOpen.close ()
-    
-    
+       
 
 
-if figureType == 'T':
+# Set the correct file names to write and read.
+if figureOrTableType == 'T':
 
-    tableContent = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06','RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat') )
-    tableContentLatitudeDependence = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06','TVeRa_vs_latitude_statistics_50-80kmAltitude.dat') )
+    tableContent = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat') )
+    latitudeDependenceTableFile = 'TVeRa_vs_latitude_statistics_50-80kmAltitude.dat'
 
 
-if figureType == 'S':
+if figureOrTableType == 'S':
 
     tableContent = HandyTools.readTable ('../RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat')
-    tableContentLatitudeDependence = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06','SVeRa_vs_latitude_statistics_50-80kmAltitude.dat') )
+    latitudeDependenceTableFile = 'SVeRa_vs_latitude_statistics_50-80kmAltitude.dat'
 
 
 
@@ -275,14 +305,14 @@ if allLatitudes:
 
     iOrbitID = np.where ( orbitIDs >= orbitIDLimit [0] ) [0]
     performAnalysis ( tableContent = tableContent, 
-                      tableContentLatitudeDependence = tableContentLatitudeDependence,
+                      latitudeDependenceTableFile = latitudeDependenceTableFile,
                       iAltitudeColumns = iAltitudeColumns, 
                       iOrbitID = iOrbitID,
                       latitudeRange = [],
                       allLatitudes = allLatitudes,
                       createFigures = createFigures,
                       createTables = createTables,
-                      figureType = figureType )
+                      figureOrTableType = figureOrTableType )
 
 
 else:   
@@ -298,7 +328,7 @@ else:
                           allLatitudes = allLatitudes,
                           createFigures = createFigures,
                           createTables = createTables,
-                          figureType = figureType )
+                          figureOrTableType = figureOrTableType )
 
 
 

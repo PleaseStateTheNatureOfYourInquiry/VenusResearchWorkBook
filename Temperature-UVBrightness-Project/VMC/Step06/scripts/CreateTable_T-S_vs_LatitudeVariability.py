@@ -3,15 +3,19 @@
 
 # Version: v20241107
 
-# Create plots of the cloud top temperatures from the VeRa derived temperature profiles and the results from Marcq et al. 2020 
-#  (Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, (https://doi.org/10.1016/j.icarus.2019.07.002)) 
-#  as a function of latitude, as well as the VMC-derived UV radiance factors as a function of latitude.
+# Calculate the Pearson and Spearman correlation coefficients for the relation the Radiance Factor Ratio and the
+#  temperature  (RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat)  or static stability  (RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat)
+#  for each of the 31 altitude levels between 50 and 80km.
 
 
 # Chose the desired limitation in orbitIDs.
 
 # orbitIDLimit = [0, 'All orbits']
 orbitIDLimit = [1188, 'Radiance Factor Ratios vs Latitude']
+
+# tableType = 'temperature'
+tableType = 'staticStability'
+
 
 
 # Standard imports.
@@ -42,45 +46,51 @@ def analyseCorrelation (X, Y):
     pearsonStatistics = stats.pearsonr (X, Y)
     spearmanStatistics = stats.spearmanr (X, Y)
 
-    return linearFit, spearmanStatistics, pearsonStatistics
-
+    return linearFit, pearsonStatistics, spearmanStatistics
 
 
 numberOfPermutations = 1000
 
 # Load the content of the  RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat  or  the  RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat  table, 
-#  that contains the RFR and the temperatures or static stability  between 50 and 80km altitude.
-
-# RFRvsTorS = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat') )
-# tableFileName = os.path.join (VMCWorkBookDirectory, 'Step06', 'TVeRa_vs_latitude_statistics_50-80kmAltitude.dat') 
-# headerLines = [
-# '',
-# ' T (latitude) = latitude * a + b (latitude range between -90˚ and 0˚)',
-# ' r^2 = goodness of fit (0,1) as defined by: sum ( (y - (a * x + b)) ** 2 )  / sum ( (y - dataAverage) ** 2 ), with dataAverage = np.sum (y) / N ',
-# ' Pearson Coef. = Pearson correlation coefficient (-1,+1)',
-# ' dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
-# ' Spearman Coef. = Spearman R correlation coefficient (-1,+1)',
-# ' dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
-# '',
-# ' Altitude   a      da        b      db     r^2   Pearson Coef  dPearson Coef   Spearman Coef  dSpearman Coef',
-# '   (km)   (K/˚)  (K/˚)     (K/˚)   (K/˚)'
-# ]
+#  that contains the RFR and the temperatures or static stability  between 50 and 80km altitude and perform the statistical analysis.
 
 
-RFRvsTorS = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat') )
-tableFileName = os.path.join (VMCWorkBookDirectory, 'Step06', 'SVeRa_vs_latitude_statistics_50-80kmAltitude.dat') 
-headerLines = [
-'',
-' S (latitude) = latitude * a + b (latitude range between -90˚ and 0˚)',
-' r^2 = goodness of fit (0,1) as defined by: sum ( (y - (a * x + b)) ** 2 )  / sum ( (y - dataAverage) ** 2 ), with dataAverage = np.sum (y) / N ',
-' Pearson Coef. = Pearson correlation coefficient (-1,+1)',
-' dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
-' Spearman Coef. = Spearman R correlation coefficient (-1,+1)',
-' dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
-'',
-' Altitude   a      da        b      db     r^2   Pearson Coef  dPearson Coef   Spearman Coef  dSpearman Coef',
-'   (km)      (K/km/˚)         (K/km/˚) '
-]
+if tableType == 'temperature':
+
+    RFRvsTorS = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat') )
+
+    tableFileName = os.path.join (VMCWorkBookDirectory, 'Step06', 'TVeRa_vs_latitude_statistics_50-80kmAltitude.dat') 
+    headerLines = [
+    '',
+    ' T (latitude) = latitude * a + b (latitude range between -90˚ and 0˚)',
+    ' r^2 = goodness of fit (0,1) as defined by: sum ( (y - (a * x + b)) ** 2 )  / sum ( (y - dataAverage) ** 2 ), with dataAverage = np.sum (y) / N ',
+    ' Pearson Coef. = Pearson correlation coefficient (-1,+1)',
+    ' dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+    ' Spearman Coef. = Spearman R correlation coefficient (-1,+1)',
+    ' dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+    '',
+    ' Altitude   a      da        b      db     r^2   Pearson Coef  dPearson Coef   Spearman Coef  dSpearman Coef',
+    '   (km)   (K/˚)  (K/˚)     (K/˚)   (K/˚)'
+    ]
+
+
+
+if tableType == 'staticStability':
+
+    RFRvsTorS = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat') )
+    tableFileName = os.path.join (VMCWorkBookDirectory, 'Step06', 'SVeRa_vs_latitude_statistics_50-80kmAltitude.dat') 
+    headerLines = [
+    '',
+    ' S (latitude) = latitude * a + b (latitude range between -90˚ and 0˚)',
+    ' r^2 = goodness of fit (0,1) as defined by: sum ( (y - (a * x + b)) ** 2 )  / sum ( (y - dataAverage) ** 2 ), with dataAverage = np.sum (y) / N ',
+    ' Pearson Coef. = Pearson correlation coefficient (-1,+1)',
+    ' dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+    ' Spearman Coef. = Spearman R correlation coefficient (-1,+1)',
+    ' dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on {} permutations.'.format (numberOfPermutations),
+    '',
+    ' Altitude   a      da        b      db     r^2   Pearson Coef  dPearson Coef   Spearman Coef  dSpearman Coef',
+    '   (km)      (K/km/˚)         (K/km/˚) '
+    ]
 
 
 
@@ -102,15 +112,14 @@ dPearsonStatistics = []
 
 # Create the table file to write the results.
 fileOpen = open (tableFileName, 'w')
-headerString = HandyTools.getTableHeader (tableFileName, headerLines = headerLines)
+headerString = HandyTools.getTableHeader (tableFileName, creationScript = 'CreateTable_T-S_vs_LatitudeVariability.py', headerLines = headerLines)
 print (headerString, file = fileOpen)
 
 
 # Go through all the altitudes and evaluate the relation between temperature at that level and latitude.
 for iAltitude in range (31):
 
-
-    print (iAltitude)
+    print ('iAltitude = ', iAltitude)
 
     spearmanStatisticPermutations = []
     pearsonStatisticPermutations = []
@@ -121,7 +130,7 @@ for iAltitude in range (31):
           RFRvsTorS [0][ iColumnAltitudeToAnalyse [iAltitude] ][iValidOrbits], 
           DataTools.getNanFreeNumpyArray ( RFRvsTorS [0][ iColumnAltitudeToAnalyse [iAltitude] + 1 ][iValidOrbits], replaceWithValue = True ) )
 
-        linearFit, spearmanStatistic, pearsonStatistic = \
+        linearFit, pearsonStatistic, spearmanStatistic = \
          analyseCorrelation ( latitudesPerOrbit [iValidOrbits], temperaturesAtLatitudePermutation )
        
         spearmanStatisticPermutations.append (spearmanStatistic.statistic)
@@ -129,7 +138,7 @@ for iAltitude in range (31):
     
 
     
-    linearFit, spearmanStatistic, pearsonStatistic = \
+    linearFit, pearsonStatistic, spearmanStatistic = \
      analyseCorrelation ( latitudesPerOrbit [iValidOrbits], RFRvsTorS [0][ iColumnAltitudeToAnalyse [iAltitude] ][iValidOrbits] )
 
     linearFits.append (linearFit)

@@ -53,6 +53,9 @@ def analyseCorrelation (X, Y):
 # Load the content of the  RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat  table, that contains the RFR and the temperatures between 50 and 80km altitude.
 RFRvsTemperature = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat') )
 
+RVSvsTemperatureStatistics = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'TVeRa_vs_latitude_statistics_50-80kmAltitude.dat') )
+
+
 orbitIDs = np.asarray ( RFRvsTemperature [0][0] )
 latitudesPerOrbit = np.asarray ( RFRvsTemperature [0][4] )
 

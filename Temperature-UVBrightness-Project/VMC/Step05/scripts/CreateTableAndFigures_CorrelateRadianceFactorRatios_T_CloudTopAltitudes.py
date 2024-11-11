@@ -9,8 +9,8 @@
 
 # orbitIDLimit = [0, 'All orbits']
 orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
-createTable = True
-createFigures = False
+createTable = False
+createFigures = True
 fitAndPlot = False
 
 
@@ -35,30 +35,30 @@ from analysisConfiguration import *
 
 # Load the content of the  VMCSelectedImages_CloudTopAltitudes.dat  table created in VMC/Step01. 
 #  In this table the VeRa derived temperatures are taken at 70km altitude, the cloud top temperature assumed (in Step01) constant for all latitudes.
-VMCSelectedImages = HandyTools.readTable ('../../Step03bis/VMCSelectedImages_CloudTopAltitudes.dat')
+VMCSelectedImages = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step03bis', 'VMCSelectedImages_CloudTopAltitudes.dat') )
 numberOfVMCImages = len ( VMCSelectedImages [0][0] )
 
 # Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020 (VMC/Step03bis)
-radianceFactorRatios = HandyTools.readTable ('../../Step03/RadianceFactorRatiosPerOrbit.dat')
+radianceFactorRatios = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step03', 'RadianceFactorRatiosPerOrbit.dat') )
 
 orbitIDVMC = radianceFactorRatios [1][0]
 numberOfVMCOrbits = len (orbitIDVMC)
-radiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][4] )
-dradiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][5] )
+radiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][2] )
+dradiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][3] )
 
 
 # Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020 (VMC/Step03bis)
-figure14Data = HandyTools.readTable ('../../Step03bis/Marcq_2020_Figure14.dat')
+figure14Data = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step03bis', 'Marcq_2020_Figure14.dat') )
 
 
 # Load the thermal tide correction as determined in VMC/Step04.
-thermalTideTable = HandyTools.readTable ('../../Step04/ThermalTideCorrection.dat')
+thermalTideTable = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step04', 'ThermalTideCorrection.dat') )
 
 
 # Load the profiles of both the nominal and extended mission as well as the South Polar Dynamics Campaign from the  .profiles  NumPy files created
 #  in VeRa/Step02 (see VeRa/Step02bis for more details on the structure of the  .profiles  files).
-profilesNominalAndExtendedMission = np.load ('../../../VeRa/Step02/VeRaSelectedProfiles.profiles', allow_pickle = True).tolist ()
-profilesSouthPolarDynamicsCampaign = np.load ('../../../VeRa/Step02/VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
+profilesNominalAndExtendedMission = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02', 'VeRaSelectedProfiles.profiles'), allow_pickle = True).tolist ()
+profilesSouthPolarDynamicsCampaign = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02', 'VeRaSouthPolarDynamicsCampaignProfiles.profiles'), allow_pickle = True).tolist ()
 
 profileSets = [profilesNominalAndExtendedMission, profilesSouthPolarDynamicsCampaign]
 
@@ -187,7 +187,8 @@ for cloudTopAltitude in cloudTopAltitudesUnique:
             radiadanceFactorsRatiosMedianPerOrbitCorrected.append ( radiadanceFactorsRatiosMedianPerOrbit [iVMCImage] )
             dRadiadanceFactorsRatiosMedianPerOrbitCorrected.append ( dradiadanceFactorsRatiosMedianPerOrbit [iVMCImage] )
             cloudTopAltitudes.append (cloudTopAltitude) 
-            latitudes.append ( latitudesVeRa [iVeRaProfile] )    
+            latitudes.append ( latitudesVeRa [iVeRaProfile] )   
+
   
     iVMCImages = np.asarray (iVMCImages) 
     iVeRaProfileForVMCImages = np.asarray (iVeRaProfileForVMCImages)
@@ -230,36 +231,31 @@ for cloudTopAltitude in cloudTopAltitudesUnique:
                        label = 'RF = {:7.5f} ($\pm$ {:7.5f}) T + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], fit [1], fit [3], fit [4] ) )
             plt.legend ( loc = 'upper left', fontsize = 9 )
 
-        plt.savefig ( '../plots/cloudTopTemperature_{:2d}km_vs_RadianceFactorRatio.png'.format (cloudTopAltitude) )
+        plt.savefig ( os.path.join (VMCWorkBookDirectory, 'Step05', 'plots', 'cloudTopTemperature_{:2d}km_vs_RadianceFactorRatio.png'.format (cloudTopAltitude) ) )
 
 
 
 if createTable:
 
-
     tableFileName = os.path.abspath ('../cloudTopTemperature_vs_RadianceFactorRatio.dat')
     fileOpen = open (tableFileName, 'w')
     
-    print (' ', file = fileOpen)
-    print (' File: {}'.format (tableFileName), file = fileOpen)
-    print (' Created at {}'.format ( HandyTools.getDateAndTimeString () ), file = fileOpen)
-    
-    
-    print (' ', file = fileOpen)
-    print (' T_cloudtop_corr = cloud top temperature corrected = T_cloud_uncorr + dT/dz_correction - T_tide_correction', file = fileOpen)
-    print (' T_cloud_uncorr = cloud top temperature from VeRa uncorrected for any effects', file = fileOpen)
-    print (' dT/dz_correction = cloud top temperature correction for the thermal gradient of -1K/km relative to the cloud top altitude of 71km.', file = fileOpen)
-    print (' T_tide_correction = cloud top temperature correction for the thermal tide', file = fileOpen)
-    print (' RFR = Radiance Factor Ratio median for the VMC image (from VMC Step03 - RadianceFactorRatiosPerOrbit.dat)', file = fileOpen)
-    print (' z_cloudtop = cloud top altitude', file = fileOpen)
-    print (' latitude = latitude of the VeRa sounding at 70km altitude', file = fileOpen)
-    
-    
-    
-    print (' ', file = fileOpen)
-    print ('  T_cloud_corr   dT_cloud_corr   T_cloud_uncorr  dT/dz_correction  T_tide_correction    RFR     dRFR   z_cloudtop   latitude', file = fileOpen)
-    print ('     (K)            (K)               (K)             (K)                (K)                             (km)          (˚)', file = fileOpen)
-    print ('C_END', file = fileOpen)
+    headerLines = [
+    '',
+    ' T_cloudtop_corr = cloud top temperature corrected = T_cloud_uncorr + dT/dz_correction - T_tide_correction',
+    ' T_cloud_uncorr = cloud top temperature from VeRa uncorrected for any effects',
+    ' dT/dz_correction = cloud top temperature correction for the thermal gradient of -1K/km relative to the cloud top altitude of 71km',
+    ' T_tide_correction = cloud top temperature correction for the thermal tide',
+    ' RFR = Radiance Factor Ratio (average) for the VMC image (from VMC Step03 - RadianceFactorRatiosPerOrbit.dat)',
+    ' z_cloudtop = cloud top altitude',
+    ' latitude = latitude of the VeRa sounding at 70km altitude',
+    '',
+    '  T_cloud_corr   dT_cloud_corr   T_cloud_uncorr  dT/dz_correction  T_tide_correction    RFR     dRFR   z_cloudtop   latitude',
+    '     (K)            (K)               (K)             (K)                (K)                             (km)          (˚)'
+    ]
+
+    headerString = HandyTools.getTableHeader (tableFileName, creationScript = 'CreateTableAndFigures_CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py', headerLines = headerLines)
+    print (headerString, file = fileOpen)    
         
     for iPoint in range ( len (cloudTopTemperatureVeRaCorrected) ):
         
@@ -308,7 +304,7 @@ if createFigures:
         plt.legend ( loc = 'upper left', fontsize = 9 )
     
     
-    plt.savefig ( '../plots/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png' )
+    plt.savefig ( os.path.join (VMCWorkBookDirectory, 'Step05', 'plots', 'cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png') )
     plt.close (iPlot + 1)
 
 

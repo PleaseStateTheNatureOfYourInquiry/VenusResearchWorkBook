@@ -61,8 +61,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#step-03-investigate-correlation">Step 03 - Investigate correlation</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-03bis-cloud-top-altitudes-as-a-function-of-latitude">Step 03bis - Cloud top altitudes as a function of latitude</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#step-04-thermal-tide-correction">Step 04 - Thermal tide correction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#step-05-first-correlation-analysis">Step 05 - First Correlation analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#step-06-new-correlation-analysis">Step 06 - New Correlation analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-05-first-correlation-analysis">Step 05 - First correlation analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#step-06-final-correlation-analysis">Step 06 - Final correlation analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#interpretation-and-conclusion">Interpretation and conclusion</a></li>
@@ -943,6 +943,7 @@ So it looks like it is safe to state that about <strong>half of the temperature 
 <div class="line-block">
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step04</span></code></div>
 <div class="line">scripts:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFigures_ThermalTideCheck69km.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTable_ThermalTide_Akiba2021_Figure5.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTable_ThermalTideCorrection.py</span></code></div>
 <div class="line">files:</div>
@@ -952,7 +953,7 @@ So it looks like it is safe to state that about <strong>half of the temperature 
 </div>
 <p>There are thermal tides and gravity waves that affect the temperature in the atmosphere.
 Thermal tides are fixed in Local Solar Time.
-I want to try to correct the VeRa-derived temperatures for the thermal tide.
+I want to evaluate the effect of correcting VeRa-derived temperatures for the thermal tide.
 I take one of the most recent publications I can find, based on Akatsuki NIR data, <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al. 2021</span></a>. In their Figure 5, they present the thermal tide anomaly for all latitudes between -62˚.5 and +62˚.5 latitude at 69km altitude, which is only 1km below the VeRa-sounded level analysed here, well within a scale height. The values in the figure are the deviations from the mean zonal temperature at each latitude.</p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/Akiba_2021_Figure5.png"><img alt="_images/Akiba_2021_Figure5.png" src="_images/Akiba_2021_Figure5.png" style="width: 794.0px; height: 609.0px;" /></a>
@@ -961,28 +962,35 @@ I take one of the most recent publications I can find, based on Akatsuki NIR dat
 From the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv</span></code> file found in the <code class="file docutils literal notranslate"><span class="pre">Figure_data_csv/Figure5</span></code> directory of that repository I create a more human (and HandyTools.readTable) readable table <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> using the <code class="file docutils literal notranslate"><span class="pre">./scripts/createTable_ThermalTide_Akiba2021_Figure5.py</span></code> script.</p>
 <p>In the caption of Figure 3 of their paper (the figure shows temperature cross section of thermal tides as a function LST in the northern hemisphere only) it is stated that <strong>… the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right</strong>. I verify by corresponding with the authors that this is also valid for the other figures in the paper. What I find to be confusing in this statement, or at least the way I interpret it, is that it seems as if there are <strong>two Local Solar Times</strong>: one <strong>on Venus</strong> and another one … of <strong>the figure</strong>?
 The <a class="reference internal" href="#longitudeandlocalsolartime"><span class="std std-ref">wind is in the direction of increasing LST</span></a>, hence the last part of their statement corroborates with that.</p>
-<p>In the script <code class="file docutils literal notranslate"><span class="pre">./scripts/thermalTideAkiba2021.py</span></code> I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table. I apply linear interpolation first in latitude and then in LST of the values in the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
+<p>In the script <code class="file docutils literal notranslate"><span class="pre">CreateTable_ThermalTide_Akiba2021_Figure5</span></code> I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table. I apply linear interpolation first in latitude and then in LST of the values in the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>I adapt the <code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code> script in <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> to allow taking into account (subtract) thermal tide amplitude from the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
-<p>Also, the uncertainty in the thermal tide amplitude seems to be on the order of <span class="math notranslate nohighlight">\(\pm\)</span> 0.1K (Figure 7 from <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al.</span></a>), but I am trying to verify this value with the authors.</p>
-<figure class="align-default" id="id23">
-<img alt="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" src="_images/RadianceFactorRatio_vs_Temperature_all_images3.png" />
-<figcaption>
-<p><span class="caption-text">The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
-</figcaption>
+<p>The problem is that the information about thermal tides from this paper only exists for a limited range, about 65 - 72km altitude. I want to analyse the full 50 - 80km altitude, see <a class="reference internal" href="#vmcstep06"><span class="std std-ref">Step06</span></a>.</p>
+<p>However, it is useful evaluate the effect of applying a correction to the correlation results in <a class="reference internal" href="#vmcstep06"><span class="std std-ref">Step06</span></a>.
+For this I take the VeRa temperature values at 69km altitude and compare the Pearson and Spearman correlation coefficients and associated uncertainties when applying or not applying a thermal tide correction (script <code class="file docutils literal notranslate"><span class="pre">CreateFigures_ThermalTideCheck69km.py</span></code>):</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-40_0.png"><img alt="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-40_0.png" src="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-40_0.png" style="width: 480.0px; height: 360.0px;" /></a>
 </figure>
-<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average3.png" style="width: 480.0px; height: 360.0px;" /></a>
-<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_average1.png" style="width: 480.0px; height: 360.0px;" /></a>
-<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_median3.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_median3.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_median3.png" style="width: 480.0px; height: 360.0px;" /></a>
-<a class="reference internal image-reference" href="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png"><img alt="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png" src="_images/RadianceFactorRatio_vs_Temperature_orbits_median1.png" style="width: 480.0px; height: 360.0px;" /></a>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-60_-40.png"><img alt="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-60_-40.png" src="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-60_-40.png" style="width: 480.0px; height: 360.0px;" /></a>
+</figure>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-90_-60.png"><img alt="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-90_-60.png" src="_images/Temperature69km_vs_RadianceFactorRatio_latitudes_-90_-60.png" style="width: 480.0px; height: 360.0px;" /></a>
+</figure>
+<p>The blue dots are the uncorrected temperatures and the above correspond to the exact figures for 69km altitude in
+<code class="file docutils literal notranslate"><span class="pre">Step06/plots_T/Latitudes_-39_-14/</span></code>, <code class="file docutils literal notranslate"><span class="pre">Step06/plots_T/Latitudes_-59_-43</span></code> and <code class="file docutils literal notranslate"><span class="pre">Step06/plots_T/Latitudes_-83_-62</span></code>.</p>
+<p>It is clear from the comparison of the values and uncertainties of the correlation coefficients that the thermal tide correction does not significantly change the correlation statistics. I will not attempt to apply the thermal tide correction in the final analysis.</p>
+<p>The uncertainty in the thermal tide amplitude seems to be on the order of <span class="math notranslate nohighlight">\(\pm\)</span> 0.1K (Figure 7 from <a class="reference internal" href="#akiba2021"><span class="std std-ref">Akiba et al.</span></a>), but I do not take this into account in the above.</p>
 </section>
 <section id="step-05-first-correlation-analysis">
-<span id="vmcstep05"></span><h4>Step 05 - First Correlation analysis<a class="headerlink" href="#step-05-first-correlation-analysis" title="Link to this heading"></a></h4>
+<span id="vmcstep05"></span><h4>Step 05 - First correlation analysis<a class="headerlink" href="#step-05-first-correlation-analysis" title="Link to this heading"></a></h4>
 <div class="admonition-directory-scripts-files admonition">
 <p class="admonition-title">directory, scripts &amp; files</p>
 <div class="line-block">
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step05</span></code></div>
 <div class="line">scripts:</div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTableAndFigures_CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py</span></code></div>
+<div class="line">files:</div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">cloudTopTemperature_vs_RadianceFactorRatio.dat</span></code></div>
 </div>
 </div>
 <p>I think there are two ways to approach the analysis of a correlation between the cloud top temperatures and UV-brightness, based on the results from the steps above.
@@ -1007,17 +1015,18 @@ I take 71km altitude as the reference level:</p>
 <a class="reference internal image-reference" href="_images/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png"><img alt="_images/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png" src="_images/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p>Except for a slight hint at a positive correlation, it is very very weak.</p>
 </section>
-<section id="step-06-new-correlation-analysis">
-<h4>Step 06 - New Correlation analysis<a class="headerlink" href="#step-06-new-correlation-analysis" title="Link to this heading"></a></h4>
+<section id="step-06-final-correlation-analysis">
+<span id="vmcstep06"></span><h4>Step 06 - Final correlation analysis<a class="headerlink" href="#step-06-final-correlation-analysis" title="Link to this heading"></a></h4>
 <a class="reference internal image-reference" href="_images/construction.png" id="lastpointofwork"><img alt="_images/construction.png" id="lastpointofwork" src="_images/construction.png" style="width: 80.0px; height: 80.0px;" /></a>
 <div class="admonition-directory-scripts-files admonition">
 <p class="admonition-title">directory, scripts &amp; files</p>
 <div class="line-block">
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step6</span></code></div>
 <div class="line">scripts:</div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelationAnalysis.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">CorrelationAnalysisTablesAndPlots.py</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFactorRatios_vs_T-SVeRaTables.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFigures_CorrelationStatistics.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTable_RadianceFactorRatio_vs_T-SVeRa.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTable_T-S_vs_LatitudeVariability.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTablesAndFigures_CorrelationAnalysis.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat</span></code></div>
@@ -1062,10 +1071,10 @@ Referring to <a class="reference internal" href="#archinal2018"><span class="std
 <li><p>If the rotation of the planet is <em>retrograde</em> (clockwise seen from the North), then <strong>W</strong> decreases with time. This is the case for the Venus. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude increases with time.</p></li>
 </ul>
 <p>This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise, and the (East) longitude increases in the clockwise direction. This is the case (see also <a class="reference external" href="https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube">VMCTools.readVMCImageAndGeoCube</a>):</p>
-<figure class="align-default" id="id24">
+<figure class="align-default" id="id23">
 <a class="reference internal image-reference" href="_images/longitudeTransformationCheck.png"><img alt="_images/longitudeTransformationCheck.png" src="_images/longitudeTransformationCheck.png" style="width: 1000.0px; height: 408.8px;" /></a>
 <figcaption>
-<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
+<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>It also follows that the <strong>Local Solar Time increases</strong> in the direction of <strong>decreasing East longitude</strong>.
@@ -1104,7 +1113,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Nov 10, 2024, 10:17:20 AM.
+      <span class="lastupdated">Last updated on Nov 11, 2024, 5:05:22 PM.
       </span></p>
   </div>
 

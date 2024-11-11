@@ -1119,6 +1119,7 @@ Step 04 - Thermal tide correction
 
     | top directory: :file:`VMC/Step04`
     | scripts:
+    | :file:`CreateFigures_ThermalTideCheck69km.py`
     | :file:`CreateTable_ThermalTide_Akiba2021_Figure5.py`
     | :file:`CreateTable_ThermalTideCorrection.py`
     | files: 
@@ -1128,7 +1129,7 @@ Step 04 - Thermal tide correction
 
 There are thermal tides and gravity waves that affect the temperature in the atmosphere. 
 Thermal tides are fixed in Local Solar Time.
-I want to try to correct the VeRa-derived temperatures for the thermal tide.
+I want to evaluate the effect of correcting VeRa-derived temperatures for the thermal tide.
 I take one of the most recent publications I can find, based on Akatsuki NIR data, :ref:`Akiba et al. 2021 <Akiba2021>`. In their Figure 5, they present the thermal tide anomaly for all latitudes between -62˚.5 and +62˚.5 latitude at 69km altitude, which is only 1km below the VeRa-sounded level analysed here, well within a scale height. The values in the figure are the deviations from the mean zonal temperature at each latitude. 
 
 .. figure:: ./images/Akiba_2021_Figure5.png
@@ -1140,44 +1141,50 @@ From the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_e
 In the caption of Figure 3 of their paper (the figure shows temperature cross section of thermal tides as a function LST in the northern hemisphere only) it is stated that **... the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right**. I verify by corresponding with the authors that this is also valid for the other figures in the paper. What I find to be confusing in this statement, or at least the way I interpret it, is that it seems as if there are **two Local Solar Times**: one **on Venus** and another one ... of **the figure**? 
 The :ref:`wind is in the direction of increasing LST <longitudeandlocalsolartime>`, hence the last part of their statement corroborates with that.
 
-In the script :file:`./scripts/thermalTideAkiba2021.py` I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the :file:`VMCSelectedImages.dat` table. I apply linear interpolation first in latitude and then in LST of the values in the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the :file:`ThermalTideCorrection.dat` table file.
+In the script :file:`CreateTable_ThermalTide_Akiba2021_Figure5` I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the :file:`VMCSelectedImages.dat` table. I apply linear interpolation first in latitude and then in LST of the values in the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the :file:`ThermalTideCorrection.dat` table file.
 
-I adapt the :file:`./scripts/CorrelateRadianceFactors_Temperature.py` script in :ref:`Step03 <VMCStep03>` to allow taking into account (subtract) thermal tide amplitude from the :file:`ThermalTideCorrection.dat` table file.
+I adapt the :file:`./scripts/CorrelateRadianceFactors_Temperature.py` script in :ref:`Step03 <VMCStep03>` to allow taking into account (subtract) thermal tide amplitude from the :file:`ThermalTideCorrection.dat` table file. 
 
+The problem is that the information about thermal tides from this paper only exists for a limited range, about 65 - 72km altitude. I want to analyse the full 50 - 80km altitude, see :ref:`Step06 <VMCStep06>`.
 
-Also, the uncertainty in the thermal tide amplitude seems to be on the order of :math:`\pm` 0.1K (Figure 7 from :ref:`Akiba et al. <Akiba2021>`), but I am trying to verify this value with the authors.
-
-
-.. figure:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20_thermalTideCorrection/RadianceFactorRatio_vs_Temperature_all_images.png    
-
-    The RFR of the images with more than 20 pixel in the latitude-longitude boxes, as a function of VeRa-derived temperature, corrected for the thermal tide. Note that this excludes the egress images from the South Polar Dynamics Campaign.
+However, it is useful evaluate the effect of applying a correction to the correlation results in :ref:`Step06 <VMCStep06>`.
+For this I take the VeRa temperature values at 69km altitude and compare the Pearson and Spearman correlation coefficients and associated uncertainties when applying or not applying a thermal tide correction (script :file:`CreateFigures_ThermalTideCheck69km.py`):
 
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20_thermalTideCorrection/RadianceFactorRatio_vs_Temperature_orbits_average.png
-    :scale: 75%
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_orbits_average.png
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step04/plots/Temperature69km_vs_RadianceFactorRatio_latitudes_-40_0.png 
     :scale: 75%
 
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20_thermalTideCorrection/RadianceFactorRatio_vs_Temperature_orbits_median.png
-    :scale: 75%
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step03/plots_phase_angle_lt_130_min-points-latlonbox_20/RadianceFactorRatio_vs_Temperature_orbits_median.png
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step04/plots/Temperature69km_vs_RadianceFactorRatio_latitudes_-60_-40.png
     :scale: 75%
 
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step04/plots/Temperature69km_vs_RadianceFactorRatio_latitudes_-90_-60.png
+    :scale: 75%   
+
+
+The blue dots are the uncorrected temperatures and the above correspond to the exact figures for 69km altitude in 
+:file:`Step06/plots_T/Latitudes_-39_-14/`, :file:`Step06/plots_T/Latitudes_-59_-43` and :file:`Step06/plots_T/Latitudes_-83_-62`.
+
+It is clear from the comparison of the values and uncertainties of the correlation coefficients that the thermal tide correction does not significantly change the correlation statistics. I will not attempt to apply the thermal tide correction in the final analysis.
+
+The uncertainty in the thermal tide amplitude seems to be on the order of :math:`\pm` 0.1K (Figure 7 from :ref:`Akiba et al. <Akiba2021>`), but I do not take this into account in the above. 
 
 
 .. _VMCStep05:
 
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Step 05 - First Correlation analysis
+Step 05 - First correlation analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. admonition:: directory, scripts & files
 
     | top directory: :file:`VMC/Step05`
     | scripts:
-    | :file:`CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py`
+    | :file:`CreateTableAndFigures_CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py`
+    | files: 
+    | :file:`cloudTopTemperature_vs_RadianceFactorRatio.dat`
 
 
 I think there are two ways to approach the analysis of a correlation between the cloud top temperatures and UV-brightness, based on the results from the steps above.
@@ -1185,6 +1192,7 @@ I set up the script :file:`CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py`
 
 The **first** way is to split the analysis in several latitude sections.
 These sections would logically be defined by the changes in cloud top altitudes, as indicated by the green points in the figures above in :ref:`Step 3bis <VMCStep03bis>`: 65km for latitudes < -60˚, 71km for latitudes between -60˚ and -40˚, 73km for latitudes between -40˚ and -15˚.
+
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_65km_vs_RadianceFactorRatio.png
     :scale: 80%
@@ -1225,24 +1233,25 @@ Hence, the cloud top temperatures at 65km altitude would be 6K lower due to the 
 Except for a slight hint at a positive correlation, it is very very weak.
 
 
+.. _VMCStep06:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Step 06 - New Correlation analysis
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Step 06 - Final correlation analysis
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. _lastPointOfWork:
 
 .. image:: ./images/construction.png
     :scale: 50%
 
-
 .. admonition:: directory, scripts & files
 
     | top directory: :file:`VMC/Step6`
     | scripts:
-    | :file:`CorrelationAnalysis.py`
-    | :file:`CorrelationAnalysisTablesAndPlots.py`
-    | :file:`CreateFactorRatios_vs_T-SVeRaTables.py`    
+    | :file:`CreateFigures_CorrelationStatistics.py`
+    | :file:`CreateTable_RadianceFactorRatio_vs_T-SVeRa.py`
+    | :file:`CreateTable_T-S_vs_LatitudeVariability.py`  
+    | :file:`CreateTablesAndFigures_CorrelationAnalysis.py`
     | files: 
     | :file:`RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat`
     | :file:`RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat`

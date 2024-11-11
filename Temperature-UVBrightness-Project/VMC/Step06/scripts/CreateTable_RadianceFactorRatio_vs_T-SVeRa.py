@@ -3,9 +3,8 @@
 
 # Version: v20241102
 
-# Create the table with the (median) Radiance Factor Ratios per orbit (VMC/Step03  RadianceFactorRatiosPerOrbit.dat table created with the script  
-#  CreateRadianceFactorRatioTable.py) and the VeRa-derived temperatures at altitudes between 60 and 80km.
-
+# Create the table with the average Radiance Factor Ratios per orbit (VMC/Step03  RadianceFactorRatiosPerOrbit.dat table created with the script  
+#  CreateRadianceFactorRatioTable.py) and the VeRa-derived temperatures at altitudes between 50 and 80km.
 
 # Choose the desired limitation in orbitIDVMC.
 
@@ -28,17 +27,28 @@ sys.path.append ( os.path.abspath ('../../../') )
 from analysisConfiguration import *
 
 
-# Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020 (VMC/Step03bis)
-radianceFactorRatios = HandyTools.readTable ('../../Step03/RadianceFactorRatiosPerOrbit.dat')
+# tableType = 'temperature'
+tableType = 'staticStability'
+
 
 # Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020 (VMC/Step03bis)
-figure14Data = HandyTools.readTable ('../../Step03bis/Marcq_2020_Figure14.dat')
+radianceFactorRatios = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step03', 'RadianceFactorRatiosPerOrbit.dat') )
+
+# Load the median values (red line) from the Figure 14 of Marcq, R. et al., 2020 (VMC/Step03bis)
+figure14Data = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step03bis', 'Marcq_2020_Figure14.dat') )
 
 
 orbitIDVMC = radianceFactorRatios [1][0]
 numberOfVMCOrbits = len (orbitIDVMC)
-radiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][4] )
-dRadiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][5] )
+
+
+radiadanceFactorsRatiosAveragePerOrbit = np.asarray ( radianceFactorRatios [0][2] )
+dRadiadanceFactorsRatiosAveragePerOrbit = np.asarray ( radianceFactorRatios [0][3] )
+
+# radiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][4] )
+# dRadiadanceFactorsRatiosMedianPerOrbit = np.asarray ( radianceFactorRatios [0][5] )
+
+
 iVMCImages = []
 
 
@@ -53,8 +63,6 @@ endAltitude = 80
 referenceAltitude = 65
 iReferenceAltitude = referenceAltitude - startAltitude + 1
 
-tableType = 'temperature'
-# tableType = 'staticStability'
 
 # Calculate the adiabatic lapse rate is from Fig. 18 from Seiff et al. 1980, which I measured and parametrized between 200 and 350K
 # T1 = 200 K, -gamma1 = 11.6 + 9/14.5 * 0.4 K/km
@@ -65,7 +73,6 @@ gamma2 = 10.8 + (5/14.5) * 0.4
 gamma3 =  9.6 + (6.7/14.5) * 0.4
                 
 
-
 orbitIDVeRa = []
 
 latitudesVeRa = []
@@ -73,7 +80,6 @@ altitudesCloudTop = []
 
 temperaturesVeRa = []
 dTemperaturesVeRa = []
-
 
 
 for profileSet in profileSets:
@@ -126,7 +132,7 @@ for profileSet in profileSets:
                             dGamma.append ( profileVeRa [2][iAltitudeLevel] * (gamma3 - gamma2) / (350. - 250.) ) 
 
 
-                    print (profileSet ['OrbitID'][iProfile], iAltitudeLevels [15], profileVeRa [7][ iAltitudeLevels [15] ], gamma [15], profileVeRa [8][iAltitudeLevels [15]], dGamma [15])
+#                     print (profileSet ['OrbitID'][iProfile], iAltitudeLevels [15], profileVeRa [7][ iAltitudeLevels [15] ], gamma [15], profileVeRa [8][iAltitudeLevels [15]], dGamma [15])
                     temperaturesVeRa.append ( profileVeRa [7][iAltitudeLevels] + np.asarray (gamma) )
                     dTemperaturesVeRa.append ( np.sqrt ( profileVeRa [8][iAltitudeLevels] ** 2 + np.asarray (dGamma) ** 2 ) )
 
@@ -138,31 +144,28 @@ for profileSet in profileSets:
     
 
 
-
 if tableType == 'temperature':
 
-    tableFileName = os.path.abspath ( '../RadianceFactorRatio_vs_TVeRa{:2d}-{:2d}kmAltitude.dat'.format (startAltitude, endAltitude) )
+    tableFileName = 'RadianceFactorRatio_vs_TVeRa{:2d}-{:2d}kmAltitude.dat'.format (startAltitude, endAltitude)
+
 
 if tableType == 'staticStability':
 
-    tableFileName = os.path.abspath ( '../RadianceFactorRatio_vs_SVeRa{:2d}-{:2d}kmAltitude.dat'.format (startAltitude, endAltitude) )
+    tableFileName = 'RadianceFactorRatio_vs_SVeRa{:2d}-{:2d}kmAltitude.dat'.format (startAltitude, endAltitude)
 
 
-fileOpen = open (tableFileName, 'w')
+fileOpen = open ( os.path.join (VMCWorkBookDirectory, 'Step06', tableFileName), 'w' )
 
-print (' ', file = fileOpen)
-print (' File: {}'.format (tableFileName), file = fileOpen)
-print (' Created at {}'.format ( HandyTools.getDateAndTimeString () ), file = fileOpen)
+headerLines = [
+'',
+' RFR = Radiance Factor Ratio average for the VMC image (from VMC Step03 - RadianceFactorRatiosPerOrbit.dat)',
+' z_cloudtop = cloud top altitude',
+' latitude = latitude of the VeRa sounding at {:2d}km altitude'.format (referenceAltitude),
+''
+]
 
-
-print (' ', file = fileOpen)
-print (' RFR = Radiance Factor Ratio median for the VMC image (from VMC Step03 - RadianceFactorRatiosPerOrbit.dat)', file = fileOpen)
-print (' z_cloudtop = cloud top altitude', file = fileOpen)
-print (' latitude = latitude of the VeRa sounding at {:2d}km altitude'.format (referenceAltitude), file = fileOpen)
-
-
-
-print (' ', file = fileOpen)
+headerString = HandyTools.getTableHeader (tableFileName, creationScript = 'CreateTable_RadianceFactorRatios_vs_T-SVeRa.py', headerLines = headerLines, addC_END = False)
+print (headerString, file = fileOpen)
 
 if tableType == 'temperature':
 
@@ -196,17 +199,17 @@ if tableType == 'staticStability':
     print (' '.join (lineStringList), file = fileOpen)
 
 
-
 print ('C_END', file = fileOpen)
-    
+
+
 for iPoint in range ( len (iVMCImages) ):
     
     if tableType == 'temperature':
 
         lineStringList = [ '{:5.1f}  {:3.1f}  '.format (T, dT)  for T, dT in zip (temperaturesVeRa [iPoint], dTemperaturesVeRa [iPoint] ) ]
         lineString = '   {}      {:5.3f}   {:6.4f}      {:2d}      {:7.2f}    '.format ( orbitIDVMC [ iVMCImages [iPoint] ], 
-                                                                                         radiadanceFactorsRatiosMedianPerOrbit [ iVMCImages [iPoint] ],
-                                                                                         dRadiadanceFactorsRatiosMedianPerOrbit [ iVMCImages [iPoint] ],
+                                                                                         radiadanceFactorsRatiosAveragePerOrbit [ iVMCImages [iPoint] ],
+                                                                                         dRadiadanceFactorsRatiosAveragePerOrbit [ iVMCImages [iPoint] ],
                                                                                          altitudesCloudTop [iPoint],
                                                                                          latitudesVeRa [iPoint] )
         lineStringList.insert (0, lineString)
@@ -214,12 +217,12 @@ for iPoint in range ( len (iVMCImages) ):
         print (' '.join (lineStringList), file = fileOpen)    
 
  
-    if tableType == 'staticStability':   
+    if tableType == 'staticStability':
 
         lineStringList = [ '{:5.1f}  {:3.1f}  '.format (T, dT)  for T, dT in zip (temperaturesVeRa [iPoint], dTemperaturesVeRa [iPoint] ) ]
         lineString = '   {}      {:5.3f}   {:6.4f}      {:2d}      {:7.2f}    '.format ( orbitIDVMC [ iVMCImages [iPoint] ], 
-                                                                                         radiadanceFactorsRatiosMedianPerOrbit [ iVMCImages [iPoint] ],
-                                                                                         dRadiadanceFactorsRatiosMedianPerOrbit [ iVMCImages [iPoint] ],
+                                                                                         radiadanceFactorsRatiosAveragePerOrbit [ iVMCImages [iPoint] ],
+                                                                                         dRadiadanceFactorsRatiosAveragePerOrbit [ iVMCImages [iPoint] ],
                                                                                          altitudesCloudTop [iPoint],
                                                                                          latitudesVeRa [iPoint] )
         lineStringList.insert (0, lineString)
