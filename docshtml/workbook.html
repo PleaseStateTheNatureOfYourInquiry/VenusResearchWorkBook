@@ -362,8 +362,8 @@ I try it out with the Python script <code class="file docutils literal notransla
 <p>The calibrated radiance factor <span class="math notranslate nohighlight">\(RF_{x,y}\)</span> for a valid (= on Venus disk) pixel <span class="math notranslate nohighlight">\((x,y)\)</span> in a VMC image is:</p>
 <div class="math notranslate nohighlight">
 \[RF_{x,y} = \pi \beta R_{observed - x,y} \frac {d_{Venus}}{S_{Sun}}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the calibration correction factor (see <a class="reference internal" href="#shalygina2015"><span class="std std-ref">Shalygina  et al. 2015</span></a>, their Table 1), <span class="math notranslate nohighlight">\(R_{observed - x,y}\)</span> is the value at the pixel in ADU times the radiance scaling factor read from the VMC image header (<code class="code docutils literal notranslate"><span class="pre">VMCImage.label</span> <span class="pre">['RADIANCE_SCALING_FACTOR'].value</span></code>, when read with <a class="reference external" href="https://planetaryimage.readthedocs.io/en/latest/index.html">planetaryimage module</a> in Python) in <span class="math notranslate nohighlight">\(W/m^2/\mu m/ster/ADU\)</span>, <span class="math notranslate nohighlight">\(d_{Venus}\)</span> is the distance of Venus to the Sun in AU and <span class="math notranslate nohighlight">\(S_{Sun}\)</span> the solar flux in <span class="math notranslate nohighlight">\(W/m^2/\mu m\)</span> at 1AU (see <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. 2015</span></a> their Equation 2).</p>
-<p>For <span class="math notranslate nohighlight">\(S_{Sun}\)</span> (from <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. 2015</span></a> their Equation 1):</p>
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the calibration correction factor (see <a class="reference internal" href="#shalygina2015"><span class="std std-ref">Shalygina  et al. 2015</span></a>, their Table 1), <span class="math notranslate nohighlight">\(R_{observed - x,y}\)</span> is the value at the pixel in ADU times the radiance scaling factor read from the VMC image header (<code class="code docutils literal notranslate"><span class="pre">VMCImage.label</span> <span class="pre">['RADIANCE_SCALING_FACTOR'].value</span></code>, when read with <a class="reference external" href="https://planetaryimage.readthedocs.io/en/latest/index.html">planetaryimage module</a> in Python) in <span class="math notranslate nohighlight">\(W/m^2/\mu m/ster/ADU\)</span>, <span class="math notranslate nohighlight">\(d_{Venus}\)</span> is the distance of Venus to the Sun in AU and <span class="math notranslate nohighlight">\(S_{Sun}\)</span> the solar flux in <span class="math notranslate nohighlight">\(W/m^2/\mu m\)</span> at 1AU (see <a class="reference internal" href="#lee2015a"><span class="std std-ref">Lee et al. 2015</span></a> their Equation 2).</p>
+<p>For <span class="math notranslate nohighlight">\(S_{Sun}\)</span> (from <a class="reference internal" href="#lee2015a"><span class="std std-ref">Lee et al. 2015</span></a> their Equation 1):</p>
 <div class="math notranslate nohighlight">
 \[S_{Sun} = \frac {\int S_{irradiance}(\lambda) T(\lambda) d\lambda}{\int T (\lambda) d\lambda}\]</div>
 <p>I determined the <span class="math notranslate nohighlight">\(S_{irradiance}\)</span> using the <a class="reference external" href="https://www.nrel.gov/grid/solar-resource/spectra.html">Solar Spectra website</a> and the transmission function of the UV filter of the VMC camera (<a class="reference internal" href="#markiewicz2007"><span class="std std-ref">Markiewicz et al. 2007</span></a> their Figure 3):</p>
@@ -561,10 +561,10 @@ The 1374 selected images from 73 orbits cover a phase angle range between 27˚ a
 These images have been selected during <a class="reference internal" href="#vmcstep01"><span class="std std-ref">Step 1</span></a> above and the plots (with the same files names as the .IMG and .GEO files) are located in the :file`UsedImages` subfolders for each orbit.</p>
 <p>For each selected image, I use all the pixels on the visible disk and take the average and the median values.
 Initially, I had set the incidence and emission angles limits both to 89˚.
-I changed that to 84˚ and 81˚ respectively in line with the results presented by <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. (2015)</span></a> in their section 3.2.
+I changed that to 84˚ and 81˚ respectively in line with the results presented by <a class="reference internal" href="#lee2015a"><span class="std std-ref">Lee et al. (2015)</span></a> in their section 3.2.
 The difference in the final resulting coefficients of the phase angle curve fit are on the order or 2%.</p>
 <p>By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
-This was also noted by <a class="reference internal" href="#lee2015"><span class="std std-ref">Lee et al. (2015)</span></a> who adapoted another condition on the selection of the image pixel that the radiance factor be larger than 0.05. I address this perhaps more rigorously using the process described below. In order to avoid the effect of these outliers, I apply an iterative averaging process:</p>
+This was also noted by <a class="reference internal" href="#lee2015a"><span class="std std-ref">Lee et al. (2015)</span></a> who adapoted another condition on the selection of the image pixel that the radiance factor be larger than 0.05. I address this perhaps more rigorously using the process described below. In order to avoid the effect of these outliers, I apply an iterative averaging process:</p>
 <ul class="simple">
 <li><p>Step 1: calculate the average;</p></li>
 <li><p>Step 2: check if the current average value is different by more than a given <strong>percentage</strong> (set by the user) from the one from the previous iteration;</p></li>
@@ -1024,35 +1024,52 @@ I take 71km altitude as the reference level:</p>
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step6</span></code></div>
 <div class="line">scripts:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFigures_CorrelationStatistics.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateFigures_LatitudeVariability.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTable_RadianceFactorRatio_vs_T-SVeRa.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTable_T-S_vs_LatitudeVariability.py</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">CreateTablesAndFigures_CorrelationAnalysis.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_All_Latitudes.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-39.69_-14.97.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-59.14_-43.12.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-83.8_-62.06.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_All_Latitudes.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-39.69_-14.97.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-59.14_-43.12.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-83.8_-62.06.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_All_Latitudes_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-40_-60_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-60_-90_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_0_-40_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_All_Latitudes_normalised.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_All_Latitudes_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-40_-60_normalised.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-40_-60_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-60_-90_normalised.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-60_-90_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_0_-40_normalised.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_0_-40_uncorrected.dat</span></code></div>
 </div>
 </div>
-<p>In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude.
-We separated this analysis in several latitude bins to avoid, as much as possible, the effect of the change in temperature as a function of latitude.</p>
-<p>The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known.</p>
-<p>I am not sure. <a class="reference internal" href="#crisp1986"><span class="std std-ref">Crisp (1986)</span></a> state the the vertical distribution of the UV_absorberis constrained below the cloud tops at 70-71km altitude. This would mean that the UV-radiation we see reflected back from across Venus is always from a similar altitude level?
-If this is the case, would we not expect to see the largest correlation between temperature and UV-brightness around those levels?</p>
+<p>In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude. The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known and should be rather diffuse, but in the 70 +/- 4km altitude range, as can be seen from the figures in <a class="reference internal" href="#crisp1986"><span class="std std-ref">Crisp (1986)</span></a> and <span class="xref std std-ref">Lee et al. (2015b) &lt;Lee2015b</span>.</p>
+<p>We separated this analysis in several latitude bins to avoid as much as possible the effect of the change in temperature as a function of latitude.
+So I can do that again, but I think only three latitude bins are necessary. When I look at the variation of the RFR with latitude I see:</p>
+<p>First I create the tables <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat</span></code> and <code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat</span></code>
+using the <code class="file docutils literal notranslate"><span class="pre">CreateTable_RadianceFactorRatio_vs_T-SVeRa.py</span></code> script. With this script I extract the temperatures at the 31 levels and export them to
+the tables. It makes life a bit easier than needing to extract these values from the original file all the time.</p>
+<p>Secondly, I looked at the variability of temperature and RFR with latitude.
+With the script <code class="file docutils literal notranslate"><span class="pre">CreateFigures_LatitudeVariability.py</span></code> I create three plots:</p>
+<figure class="align-default" id="id23">
+<img alt="_images/Radiance_vs_latitude_variability.png" src="_images/Radiance_vs_latitude_variability.png" />
+<figcaption>
+<p><span class="caption-text">RFR versus latitude, the green lines are the boundaries of the latitude bins.</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>The mid latitudes have generally higher UV-brightness as compared to the low latitudes and high latitudes.
+Based on this, and on the cloud top altitudes variations reported by <a class="reference internal" href="#marcq2019"><span class="std std-ref">Marcq et al. (2019)</span></a> and <span class="xref std std-ref">Lee et al. (2012)</span>, I decide on three latitudes bins, 0˚ - -40˚, -40˚ - -60˚ and -60˚ - -90˚. This should compensate for any latitudinal variation of RFR.</p>
+<a class="reference internal image-reference" href="_images/Temperature_vs_latitude_variability_examples.png"><img alt="_images/Temperature_vs_latitude_variability_examples.png" src="_images/Temperature_vs_latitude_variability_examples.png" style="width: 300.0px; height: 500.0px;" /></a>
+<a class="reference internal image-reference" href="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png"><img alt="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png" src="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p>The Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude.</p>
+<p>The …</p>
 </section>
 </section>
 <section id="interpretation-and-conclusion">
 <span id="interepretationandconclusion"></span><h3>Interpretation and conclusion<a class="headerlink" href="#interpretation-and-conclusion" title="Link to this heading"></a></h3>
-<p>I think that when considering the uncertainty in the measurements, even after the correction that I tried to apply, there is no clear detectable correlation
-between the cloud top temperature and the corresponding UV-brightness, only a slight hint.</p>
-<p>I now seek a better / more suitable (?) statistical method other than trying to fit a least square line (see last figure above).</p>
-<a class="reference internal image-reference" href="_images/thinking.png"><img alt="_images/thinking.png" src="_images/thinking.png" style="width: 80.0px; height: 80.0px;" /></a>
+<p>…</p>
 </section>
 <section id="longitude-and-local-solar-time-on-venus">
 <span id="longitudeandlocalsolartime"></span><h3>Longitude and Local Solar Time on Venus<a class="headerlink" href="#longitude-and-local-solar-time-on-venus" title="Link to this heading"></a></h3>
@@ -1071,10 +1088,10 @@ Referring to <a class="reference internal" href="#archinal2018"><span class="std
 <li><p>If the rotation of the planet is <em>retrograde</em> (clockwise seen from the North), then <strong>W</strong> decreases with time. This is the case for the Venus. It means that for a given Solar Time (point fixed relative to the Sun direction), East longitude increases with time.</p></li>
 </ul>
 <p>This means that looking down at the south pole of Venus, which is the orientation of the VEX VMC images used in this work, the rotation of the planet is counter-clockwise, and the (East) longitude increases in the clockwise direction. This is the case (see also <a class="reference external" href="https://venustools.readthedocs.io/en/latest/vmctools.html#VMCTools.VMCTools.readVMCImageAndGeoCube">VMCTools.readVMCImageAndGeoCube</a>):</p>
-<figure class="align-default" id="id23">
+<figure class="align-default" id="id24">
 <a class="reference internal image-reference" href="_images/longitudeTransformationCheck.png"><img alt="_images/longitudeTransformationCheck.png" src="_images/longitudeTransformationCheck.png" style="width: 1000.0px; height: 408.8px;" /></a>
 <figcaption>
-<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
+<p><span class="caption-text">(left) the values in the longitude backplane of a VMC-cube. Longitude is East longitude as defined above. (right) East longitude running from 0˚ to 360˚.</span><a class="headerlink" href="#id24" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>It also follows that the <strong>Local Solar Time increases</strong> in the direction of <strong>decreasing East longitude</strong>.
@@ -1090,7 +1107,9 @@ The <strong>zonal wind</strong> moves the clouds in the direction of <strong>inc
 <p id="crisp1986"><strong>Crisp, D.</strong> 1986. Radiative forcing of the Venus Mesosphere. I. Solar fluxes and heating rates. Icarus 67, 484 - 514. <a class="reference external" href="https://doi.org/10.1016/0019-1035(86)90126-0">DOI 10.1016/0019-1035(86)90126-0</a>.</p>
 <p id="crisp1989"><strong>Crisp, D.</strong> 1989. Radiative forcing of the Venus Mesosphere. II. Thermal fluxes, cooling rates and radiative equilibrium temperatures. Icarus 77, 391 - 413. <a class="reference external" href="https://doi.org/10.1016/0019-1035(89)90096-1">DOI doi.org/10.1016/0019-1035(89)90096-1</a>.</p>
 <p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> <em>et al.</em>, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
-<p id="lee2015"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
+<p id="lee2015a"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
+<p id="lee2015b"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. The radiative forcing variability caused by the changes of the upper cloud vertical structure in the Venus mesosphere.
+PSS 113-114, 298-308. <a class="reference external" href="https://doi.org/10.1016/j.pss.2014.12.006">DOI 10.1016/j.pss.2014.12.006</a>.</p>
 <p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> <em>et al.</em>, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
 <p id="marcq2019"><strong>Marcq, R.</strong> <em>et al.</em>, 2019. Discovery of cloud top ozone on Venus. Icarus 319, 419-498, <a class="reference external" href="https://doi.org/10.1016/j.icarus.2018.10.006">DOI 10.1016/j.icarus.2018.10.006</a>.</p>
 <p id="marcq2020"><strong>Marcq, R.</strong> <em>et al.</em>, 2020. Climatology of SO2 and UV absorber at Venus’ cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, <a class="reference external" href="https://doi.org/10.1016/j.icarus.2019.07.002">DOI 10.1016/j.icarus.2019.07.002</a>.</p>
@@ -1113,7 +1132,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Nov 11, 2024, 5:05:22 PM.
+      <span class="lastupdated">Last updated on Nov 15, 2024, 2:25:32 PM.
       </span></p>
   </div>
 

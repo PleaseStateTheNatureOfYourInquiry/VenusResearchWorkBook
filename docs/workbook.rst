@@ -321,10 +321,10 @@ The calibrated radiance factor :math:`RF_{x,y}` for a valid (= on Venus disk) pi
     RF_{x,y} = \pi \beta R_{observed - x,y} \frac {d_{Venus}}{S_{Sun}}
 
 
-where :math:`\beta` is the calibration correction factor (see :ref:`Shalygina  et al. 2015 <Shalygina2015>`, their Table 1), :math:`R_{observed - x,y}` is the value at the pixel in ADU times the radiance scaling factor read from the VMC image header (:code:`VMCImage.label ['RADIANCE_SCALING_FACTOR'].value`, when read with `planetaryimage module <https://planetaryimage.readthedocs.io/en/latest/index.html>`_ in Python) in :math:`W/m^2/\mu m/ster/ADU`, :math:`d_{Venus}` is the distance of Venus to the Sun in AU and :math:`S_{Sun}` the solar flux in :math:`W/m^2/\mu m` at 1AU (see :ref:`Lee et al. 2015 <Lee2015>` their Equation 2).
+where :math:`\beta` is the calibration correction factor (see :ref:`Shalygina  et al. 2015 <Shalygina2015>`, their Table 1), :math:`R_{observed - x,y}` is the value at the pixel in ADU times the radiance scaling factor read from the VMC image header (:code:`VMCImage.label ['RADIANCE_SCALING_FACTOR'].value`, when read with `planetaryimage module <https://planetaryimage.readthedocs.io/en/latest/index.html>`_ in Python) in :math:`W/m^2/\mu m/ster/ADU`, :math:`d_{Venus}` is the distance of Venus to the Sun in AU and :math:`S_{Sun}` the solar flux in :math:`W/m^2/\mu m` at 1AU (see :ref:`Lee et al. 2015 <Lee2015a>` their Equation 2).
 
 
-For :math:`S_{Sun}` (from :ref:`Lee et al. 2015 <Lee2015>` their Equation 1):
+For :math:`S_{Sun}` (from :ref:`Lee et al. 2015 <Lee2015a>` their Equation 1):
 
 .. math::
 
@@ -544,11 +544,11 @@ These images have been selected during :ref:`Step 1<VMCStep01>` above and the pl
 
 For each selected image, I use all the pixels on the visible disk and take the average and the median values.
 Initially, I had set the incidence and emission angles limits both to 89˚.
-I changed that to 84˚ and 81˚ respectively in line with the results presented by :ref:`Lee et al. (2015) <Lee2015>` in their section 3.2.
+I changed that to 84˚ and 81˚ respectively in line with the results presented by :ref:`Lee et al. (2015) <Lee2015a>` in their section 3.2.
 The difference in the final resulting coefficients of the phase angle curve fit are on the order or 2%. 
 
 By selecting the valid pixels in this way, I note that there are significant outliers in the radiances, especially in the low value range.
-This was also noted by :ref:`Lee et al. (2015) <Lee2015>` who adapoted another condition on the selection of the image pixel that the radiance factor be larger than 0.05. I address this perhaps more rigorously using the process described below. In order to avoid the effect of these outliers, I apply an iterative averaging process:
+This was also noted by :ref:`Lee et al. (2015) <Lee2015a>` who adapoted another condition on the selection of the image pixel that the radiance factor be larger than 0.05. I address this perhaps more rigorously using the process described below. In order to avoid the effect of these outliers, I apply an iterative averaging process:
 
 - Step 1: calculate the average;
 - Step 2: check if the current average value is different by more than a given **percentage** (set by the user) from the one from the previous iteration;
@@ -1249,34 +1249,62 @@ Step 06 - Final correlation analysis
     | top directory: :file:`VMC/Step6`
     | scripts:
     | :file:`CreateFigures_CorrelationStatistics.py`
+    | :file:`CreateFigures_LatitudeVariability.py`
     | :file:`CreateTable_RadianceFactorRatio_vs_T-SVeRa.py`
     | :file:`CreateTable_T-S_vs_LatitudeVariability.py`  
     | :file:`CreateTablesAndFigures_CorrelationAnalysis.py`
     | files: 
     | :file:`RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat`
     | :file:`RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat`
-    | :file:`S_Correlation_All_Latitudes.dat`
-    | :file:`S_Correlation_Latitudes_-39.69_-14.97.dat`
-    | :file:`S_Correlation_Latitudes_-59.14_-43.12.dat`
-    | :file:`S_Correlation_Latitudes_-83.8_-62.06.dat`
-    | :file:`T_Correlation_All_Latitudes.dat`
-    | :file:`T_Correlation_Latitudes_-39.69_-14.97.dat`
-    | :file:`T_Correlation_Latitudes_-59.14_-43.12.dat`
-    | :file:`T_Correlation_Latitudes_-83.8_-62.06.dat`
-    
-
-
-In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude. 
-We separated this analysis in several latitude bins to avoid, as much as possible, the effect of the change in temperature as a function of latitude.
-
-The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known.
-
-I am not sure. :ref:`Crisp (1986) <crisp1986>` state the the vertical distribution of the UV_absorberis constrained below the cloud tops at 70-71km altitude. This would mean that the UV-radiation we see reflected back from across Venus is always from a similar altitude level?
-If this is the case, would we not expect to see the largest correlation between temperature and UV-brightness around those levels?
+    | :file:`S_Correlation_All_Latitudes_uncorrected.dat`
+    | :file:`S_Correlation_Latitudes_-40_-60_uncorrected.dat`
+    | :file:`S_Correlation_Latitudes_-60_-90_uncorrected.dat`
+    | :file:`S_Correlation_Latitudes_0_-40_uncorrected.dat`
+    | :file:`T_Correlation_All_Latitudes_normalised.dat`
+    | :file:`T_Correlation_All_Latitudes_uncorrected.dat`
+    | :file:`T_Correlation_Latitudes_-40_-60_normalised.dat`
+    | :file:`T_Correlation_Latitudes_-40_-60_uncorrected.dat`
+    | :file:`T_Correlation_Latitudes_-60_-90_normalised.dat`
+    | :file:`T_Correlation_Latitudes_-60_-90_uncorrected.dat`
+    | :file:`T_Correlation_Latitudes_0_-40_normalised.dat`
+    | :file:`T_Correlation_Latitudes_0_-40_uncorrected.dat`
 
 
 
+In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude. The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known and should be rather diffuse, but in the 70 +/- 4km altitude range, as can be seen from the figures in :ref:`Crisp (1986) <crisp1986>` and :ref:`Lee et al. (2015b) <Lee2015b`.
 
+We separated this analysis in several latitude bins to avoid as much as possible the effect of the change in temperature as a function of latitude.
+So I can do that again, but I think only three latitude bins are necessary. When I look at the variation of the RFR with latitude I see:
+
+First I create the tables :file:`RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat` and :file:`RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat`
+using the :file:`CreateTable_RadianceFactorRatio_vs_T-SVeRa.py` script. With this script I extract the temperatures at the 31 levels and export them to 
+the tables. It makes life a bit easier than needing to extract these values from the original file all the time.
+
+Secondly, I looked at the variability of temperature and RFR with latitude.
+With the script :file:`CreateFigures_LatitudeVariability.py` I create three plots:
+
+
+.. figure:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/Radiance_vs_latitude_variability.png
+
+    RFR versus latitude, the green lines are the boundaries of the latitude bins.
+
+
+The mid latitudes have generally higher UV-brightness as compared to the low latitudes and high latitudes. 
+Based on this, and on the cloud top altitudes variations reported by :ref:`Marcq et al. (2019) <Marcq2019>` and :ref:`Lee et al. (2012) <Lee2012>`, I decide on three latitudes bins, 0˚ - -40˚, -40˚ - -60˚ and -60˚ - -90˚. This should compensate for any latitudinal variation of RFR.
+
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/Temperature_vs_latitude_variability_examples.png
+    :scale: 50%
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png
+    :scale: 100%
+
+
+The Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude.
+
+The ...
 
 
 
@@ -1285,14 +1313,7 @@ If this is the case, would we not expect to see the largest correlation between 
 Interpretation and conclusion
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-I think that when considering the uncertainty in the measurements, even after the correction that I tried to apply, there is no clear detectable correlation 
-between the cloud top temperature and the corresponding UV-brightness, only a slight hint. 
-
-I now seek a better / more suitable (?) statistical method other than trying to fit a least square line (see last figure above).
-
-.. image:: ./images/thinking.png
-    :scale: 50%
+...
 
 
 
@@ -1366,9 +1387,15 @@ References
 
 **Khatuntsev, I.V.** *et al.*, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. `DOI 10.1016/j.icarus.2013.05.018 <http://dx.doi.org/10.1016/j.icarus.2013.05.018>`_.
 
-.. _Lee2015:
+.. _Lee2015a:
 
 **Lee, Y.J.** *et al.*, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. `DOI 10.1016/j.icarus.2015.02.015 <http://dx.doi.org/10.1016/j.icarus.2015.02.015>`_.
+
+
+.. _Lee2015b:
+
+**Lee, Y.J.** *et al.*, 2015. The radiative forcing variability caused by the changes of the upper cloud vertical structure in the Venus mesosphere. 
+PSS 113-114, 298-308. `DOI 10.1016/j.pss.2014.12.006 <https://doi.org/10.1016/j.pss.2014.12.006>`_.
 
 
 .. _Markiewicz2007:

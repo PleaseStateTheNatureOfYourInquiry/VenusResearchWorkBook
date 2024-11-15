@@ -54,8 +54,8 @@ iVMCImages = []
 
 # Load the profiles of both the nominal and extended mission as well as the South Polar Dynamics Campaign from the  .profiles  NumPy files created
 #  in VeRa/Step02 (see VeRa/Step02bis for more details on the structure of the  .profiles  files).
-profilesNominalAndExtendedMission = np.load ('../../../VeRa/Step02/VeRaSelectedProfiles.profiles', allow_pickle = True).tolist ()
-profilesSouthPolarDynamicsCampaign = np.load ('../../../VeRa/Step02/VeRaSouthPolarDynamicsCampaignProfiles.profiles', allow_pickle = True).tolist ()
+profilesNominalAndExtendedMission = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02', 'VeRaSelectedProfiles.profiles'), allow_pickle = True).tolist ()
+profilesSouthPolarDynamicsCampaign = np.load ( os.path.join (VeRaWorkBookDirectory, 'Step02',' VeRaSouthPolarDynamicsCampaignProfiles.profiles'), allow_pickle = True).tolist ()
 
 profileSets = [profilesNominalAndExtendedMission, profilesSouthPolarDynamicsCampaign]
 startAltitude = 50

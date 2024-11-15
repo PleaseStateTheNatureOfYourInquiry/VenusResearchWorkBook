@@ -1,7 +1,7 @@
 # Author: Maarten Roos-Serote
 # ORCID author: 0000 0001 5001 1347
 
-# Version: v20241104
+# Version: v20241112
 
 # Create the figures of Pearson and Spearman Correlation Coefficients for RFR vs Temperature (z), as a function of the altitude z.
 
@@ -19,31 +19,38 @@ sys.path.append ( os.path.abspath ('../../../') )
 from analysisConfiguration import *
 
 
-ST_TableFiles = [ [
- 'S_Correlation_All_Latitudes.dat',
- 'S_Correlation_Latitudes_-39.69_-14.97.dat',
- 'S_Correlation_Latitudes_-59.14_-43.12.dat',
- 'S_Correlation_Latitudes_-83.8_-62.06.dat'
-],
-[
-'T_Correlation_All_Latitudes.dat',
-'T_Correlation_Latitudes_-39.69_-14.97.dat',
-'T_Correlation_Latitudes_-59.14_-43.12.dat',
-'T_Correlation_Latitudes_-83.8_-62.06.dat'
-] ]
+ST_TableFiles = [
 
-plotFileNames = ['S_Correction', 'T_correlation']
+[ 'S_Correlation_All_Latitudes.dat',
+  'S_Correlation_Latitudes_0_-40.dat',
+  'S_Correlation_Latitudes_-40_-60.dat',
+  'S_Correlation_Latitudes_-60_-90.dat' ],
 
-labels = [ '(-90˚, 0˚)', '(-39˚,-15˚)', '(-59˚,-43˚)', '(-84˚, -62˚)' ]
+[ 'T_Correlation_All_Latitudes_normalised.dat',
+  'T_Correlation_Latitudes_0_-40_normalised.dat',
+  'T_Correlation_Latitudes_-40_-60_normalised.dat',
+  'T_Correlation_Latitudes_-60_-90_normalised.dat'],
+
+[ 'T_Correlation_All_Latitudes_uncorrected.dat',
+  'T_Correlation_Latitudes_0_-40_uncorrected.dat',
+  'T_Correlation_Latitudes_-40_-60_uncorrected.dat',
+  'T_Correlation_Latitudes_-60_-90_uncorrected.dat']
+
+]
+
+
+plotFileNames = ['S_Correction', 'T_correlation_normalised', 'T_correlation_uncorrected']
+
+labels = [ '(-90˚, 0˚)', '(-15˚,-40˚)', '(-40˚,-60˚)', '(-60˚, -90˚)' ]
 xyLabels = [ 'Altitude km)', 'Pearson Correlation Coefficient', 'Spearman Correlation Coefficient' ]
-titles = [ 'UV-Brightness vs VeRa Static Stabiity at Altitude', 'UV-Brightness vs VeRa Temperature at Altitude' ]
+titles = [ 'UV-Brightness vs VeRa Static Stabiity at Altitude', 'UV-Brightness vs VeRa Temperature (normalised)', 'UV-Brightness vs VeRa Temperature (uncorrected)' ]
 
 colours = ['blue', 'green', 'red', 'black']
 
 # The Pearson or Spearman correlation coefficient has values between -1 and +1. Moderate correlation is when the coefficient has values < -0.5 or > 0.5.
 moderateCorrelationLevel = 0.5
 
-for iST_TableFile in range (2):
+for iST_TableFile in range (3):
 
     plt.figure (1)
     plt.clf ()
@@ -76,7 +83,7 @@ for iST_TableFile in range (2):
     
         tableFile = ST_TableFiles [iST_TableFile][iTableFile] 
       
-        tableContent = HandyTools.readTable ( os.path.join ('..', tableFile) )
+        tableContent = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', tableFile) )
         
         plt.figure (1)
         plt.scatter ( tableContent [0][0], tableContent [0][1], c = colours [iTableFile], label = labels [iTableFile] )
@@ -95,6 +102,8 @@ for iST_TableFile in range (2):
     plt.title ( titles [iST_TableFile] )
     plt.legend ()
     plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step06', '{}_Pearson.png'.format ( plotFileNames [iST_TableFile] ) ) )
+    
+    plt.close ()
     
     plt.figure (2)
     plt.ylabel ( xyLabels [2] )
