@@ -1031,6 +1031,8 @@ I take 71km altitude as the reference level:</p>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">SVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">TVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_All_Latitudes_uncorrected.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-40_-60_uncorrected.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-60_-90_uncorrected.dat</span></code></div>
@@ -1063,8 +1065,13 @@ With the script <code class="file docutils literal notranslate"><span class="pre
 Based on this, and on the cloud top altitudes variations reported by <a class="reference internal" href="#marcq2019"><span class="std std-ref">Marcq et al. (2019)</span></a> and <span class="xref std std-ref">Lee et al. (2012)</span>, I decide on three latitudes bins, 0˚ - -40˚, -40˚ - -60˚ and -60˚ - -90˚. This should compensate for any latitudinal variation of RFR.</p>
 <a class="reference internal image-reference" href="_images/Temperature_vs_latitude_variability_examples.png"><img alt="_images/Temperature_vs_latitude_variability_examples.png" src="_images/Temperature_vs_latitude_variability_examples.png" style="width: 300.0px; height: 500.0px;" /></a>
 <a class="reference internal image-reference" href="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png"><img alt="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png" src="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p>The Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude.</p>
-<p>The …</p>
+<p>The right plot above show the Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude (<code class="file docutils literal notranslate"><span class="pre">TVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code>).</p>
+<p>Here is the same for the static stability:</p>
+<a class="reference internal image-reference" href="_images/Staticstability_vs_latitude_variability_examples.png"><img alt="_images/Staticstability_vs_latitude_variability_examples.png" src="_images/Staticstability_vs_latitude_variability_examples.png" style="width: 300.0px; height: 500.0px;" /></a>
+<a class="reference internal image-reference" href="_images/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png"><img alt="_images/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png" src="_images/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p>Initially I did the rest of the analysis with the latitude bins defined above and no further corrections. In terms of the variability of the temperature with latitude, it can be seen from the figure above that in the 65-70km altitude range, there is none. But at lower and higher altitudes there is quite stronger correlation, which can be described surprisingly with a line (Pearson correlation coefficient), though I am not sure why this would be.
+Even within the latitude bins, there is still quite some variation of the temperature at these altitudes. So, i think it would be better to correct for it. I could either subtract the least square fitted line at each altitude, or perhaps more accurate, normalise to the least square fitted line.</p>
+<p>With the <code class="file docutils literal notranslate"><span class="pre">CreateTable_T-S_vs_LatitudeVariability.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">TVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code> table, as well as the <code class="file docutils literal notranslate"><span class="pre">SVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code> table, that contain the least square line fitting parameters, the Spearman and Pearson correlation coefficients and their uncertainties. I create the same for the</p>
 </section>
 </section>
 <section id="interpretation-and-conclusion">
@@ -1132,7 +1139,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Nov 15, 2024, 2:25:32 PM.
+      <span class="lastupdated">Last updated on Nov 15, 2024, 9:57:37 PM.
       </span></p>
   </div>
 

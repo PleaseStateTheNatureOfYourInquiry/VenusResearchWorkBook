@@ -1256,6 +1256,8 @@ Step 06 - Final correlation analysis
     | files: 
     | :file:`RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat`
     | :file:`RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat`
+    | :file:`SVeRa_vs_latitude_statistics_50-80kmAltitude.dat`
+    | :file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat` 
     | :file:`S_Correlation_All_Latitudes_uncorrected.dat`
     | :file:`S_Correlation_Latitudes_-40_-60_uncorrected.dat`
     | :file:`S_Correlation_Latitudes_-60_-90_uncorrected.dat`
@@ -1302,9 +1304,23 @@ Based on this, and on the cloud top altitudes variations reported by :ref:`Marcq
     :scale: 100%
 
 
-The Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude.
+The right plot above show the Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude (:file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat`).
 
-The ...
+Here is the same for the static stability:
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/Staticstability_vs_latitude_variability_examples.png
+    :scale: 50%
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png
+    :scale: 100%
+
+
+
+Initially I did the rest of the analysis with the latitude bins defined above and no further corrections. In terms of the variability of the temperature with latitude, it can be seen from the figure above that in the 65-70km altitude range, there is none. But at lower and higher altitudes there is quite stronger correlation, which can be described surprisingly with a line (Pearson correlation coefficient), though I am not sure why this would be.
+Even within the latitude bins, there is still quite some variation of the temperature at these altitudes. So, i think it would be better to correct for it. I could either subtract the least square fitted line at each altitude, or perhaps more accurate, normalise to the least square fitted line. 
+
+With the :file:`CreateTable_T-S_vs_LatitudeVariability.py` I create the :file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, as well as the :file:`SVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, that contain the least square line fitting parameters, the Spearman and Pearson correlation coefficients and their uncertainties. I create the same for the 
 
 
 
