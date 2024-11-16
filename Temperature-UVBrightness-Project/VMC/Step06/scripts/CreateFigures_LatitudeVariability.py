@@ -8,8 +8,8 @@
 
 
 # Set which plots to produce.
-plotToProduce = { 'Temperature vs latitude': True,
-                  'Static stability vs latitude' : False,
+plotToProduce = { 'Temperature vs latitude': False,
+                  'Static stability vs latitude' : True,
                   'Radiance Factor Ratios vs latitude': False }
 
 
@@ -246,7 +246,7 @@ if plotToProduce ['Static stability vs latitude']:
         subPlotAxis [iPlot].legend (fontsize = 8)
 
 
-    plt.savefig ( os.path.join (VMCWorkBookDirectory, 'Step06', 'plots', 'StaticStability_vs_latitude_variability_examples.png') )
+    plt.savefig ( os.path.join (VMCWorkBookDirectory, 'Step06', 'plots', 'StaticStability_vs_latitude_variability_examples.jpg') )
     
     plt.close ()
 
