@@ -1304,11 +1304,13 @@ The right plot above show the Spearman (blue) and Pearson (red) correlation coef
 
 Here is the same for the static stability:
 
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png
+    :scale: 100%
+
+
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/Staticstability_vs_latitude_variability_examples.jpg
     :scale: 50%
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png
-    :scale: 100%
 
 
 Initially I did the rest of the analysis with the three latitude bins as defined above and no further corrections. In terms of the variability of the temperature with latitude, it can be seen from the figure above that in the 65-70km altitude range, there is no significant correlation, both the Spearman and Pearson correlation coefficients are smaller than 0.5. However, at lower and higher altitudes there is a quite strong correlation, which in addition can be described with a line (Pearson correlation coefficient), though I am not sure why this would be linear.
