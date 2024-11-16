@@ -1139,7 +1139,7 @@ The corresponding data files (tables) can be found at `this Zenodo repository <h
 From the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv` file found in the :file:`Figure_data_csv/Figure5` directory of that repository I create a more human (and HandyTools.readTable) readable table :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` using the :file:`./scripts/createTable_ThermalTide_Akiba2021_Figure5.py` script. 
 
 In the caption of Figure 3 of their paper (the figure shows temperature cross section of thermal tides as a function LST in the northern hemisphere only) it is stated that **... the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right**. I verify by corresponding with the authors that this is also valid for the other figures in the paper. What I find to be confusing in this statement, or at least the way I interpret it, is that it seems as if there are **two Local Solar Times**: one **on Venus** and another one ... of **the figure**? 
-The :ref:`wind is in the direction of increasing LST <longitudeandlocalsolartime>`, hence the last part of their statement corroborates with that.
+The :ref:`wind is in the direction of increasing LST <appendixlongitudeandlocalsolartime>`, hence the last part of their statement corroborates with that.
 
 In the script :file:`CreateTable_ThermalTide_Akiba2021_Figure5` I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the :file:`VMCSelectedImages.dat` table. I apply linear interpolation first in latitude and then in LST of the values in the :file:`temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat` table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the :file:`ThermalTideCorrection.dat` table file.
 
@@ -1454,10 +1454,10 @@ the low and mid latitudes and the other way around for the high latitudes. Thoug
 
 
 
-.. _longitudeandlocalsolartime:
+.. _appendixlongitudeandlocalsolartime:
 
-Longitude and Local Solar Time on Venus
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Appendix: Longitude and Local Solar Time on Venus
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 I (obviously) need to make sure I do the comparisons between Venus Express data and Akatsuki data / results correctly. Confusion on my end about definition of Local (Solar) Time and the direction of (East) longitude triggered me looking into this topic and I went into some length to fully understand rotation directions and longitude definitions. 
 Referring to :ref:`Archinal et al. 2018 <Archinal2018>` (their Section 2 and Figure 1):

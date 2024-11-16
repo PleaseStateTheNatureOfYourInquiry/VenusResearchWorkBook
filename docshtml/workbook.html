@@ -70,7 +70,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#radiance-factor-ratio-vs-temperature">Radiance Factor Ratio vs temperature</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#longitude-and-local-solar-time-on-venus">Longitude and Local Solar Time on Venus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#appendix-longitude-and-local-solar-time-on-venus">Appendix: Longitude and Local Solar Time on Venus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
@@ -965,7 +965,7 @@ I take one of the most recent publications I can find, based on Akatsuki NIR dat
 <p>The corresponding data files (tables) can be found at <a class="reference external" href="https://doi.org/10.5281/zenodo.5159027">this Zenodo repository</a>.
 From the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.csv</span></code> file found in the <code class="file docutils literal notranslate"><span class="pre">Figure_data_csv/Figure5</span></code> directory of that repository I create a more human (and HandyTools.readTable) readable table <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> using the <code class="file docutils literal notranslate"><span class="pre">./scripts/createTable_ThermalTide_Akiba2021_Figure5.py</span></code> script.</p>
 <p>In the caption of Figure 3 of their paper (the figure shows temperature cross section of thermal tides as a function LST in the northern hemisphere only) it is stated that <strong>… the local time is in the opposite direction to that on Venus as mapped by cylindrical projection. The direction of the mean zonal wind is from left to right</strong>. I verify by corresponding with the authors that this is also valid for the other figures in the paper. What I find to be confusing in this statement, or at least the way I interpret it, is that it seems as if there are <strong>two Local Solar Times</strong>: one <strong>on Venus</strong> and another one … of <strong>the figure</strong>?
-The <a class="reference internal" href="#longitudeandlocalsolartime"><span class="std std-ref">wind is in the direction of increasing LST</span></a>, hence the last part of their statement corroborates with that.</p>
+The <a class="reference internal" href="#appendixlongitudeandlocalsolartime"><span class="std std-ref">wind is in the direction of increasing LST</span></a>, hence the last part of their statement corroborates with that.</p>
 <p>In the script <code class="file docutils literal notranslate"><span class="pre">CreateTable_ThermalTide_Akiba2021_Figure5</span></code> I take the data from the thermal tide table and the latitudes and LST values for each VeRa sounding from the <code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code> table. I apply linear interpolation first in latitude and then in LST of the values in the <code class="file docutils literal notranslate"><span class="pre">temp_devi_contour_lt_to_lat_distributions_at_constant_altitude_each_value_whole_wider_period.dat</span></code> table to estimate the amplitude of the thermal tide for each VeRa sounding location. I write the results in the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>I adapt the <code class="file docutils literal notranslate"><span class="pre">./scripts/CorrelateRadianceFactors_Temperature.py</span></code> script in <a class="reference internal" href="#vmcstep03"><span class="std std-ref">Step03</span></a> to allow taking into account (subtract) thermal tide amplitude from the <code class="file docutils literal notranslate"><span class="pre">ThermalTideCorrection.dat</span></code> table file.</p>
 <p>The problem is that the information about thermal tides from this paper only exists for a limited range, about 65 - 72km altitude. I want to analyse the full 50 - 80km altitude, see <a class="reference internal" href="#vmcstep06"><span class="std std-ref">Step06</span></a>.</p>
@@ -1135,8 +1135,8 @@ it results in an increase in the atmospheric temperature: hence the temperature 
 the low and mid latitudes and the other way around for the high latitudes. Though it is a faint signal.</p>
 </section>
 </section>
-<section id="longitude-and-local-solar-time-on-venus">
-<span id="longitudeandlocalsolartime"></span><h3>Longitude and Local Solar Time on Venus<a class="headerlink" href="#longitude-and-local-solar-time-on-venus" title="Link to this heading"></a></h3>
+<section id="appendix-longitude-and-local-solar-time-on-venus">
+<span id="appendixlongitudeandlocalsolartime"></span><h3>Appendix: Longitude and Local Solar Time on Venus<a class="headerlink" href="#appendix-longitude-and-local-solar-time-on-venus" title="Link to this heading"></a></h3>
 <p>I (obviously) need to make sure I do the comparisons between Venus Express data and Akatsuki data / results correctly. Confusion on my end about definition of Local (Solar) Time and the direction of (East) longitude triggered me looking into this topic and I went into some length to fully understand rotation directions and longitude definitions.
 Referring to <a class="reference internal" href="#archinal2018"><span class="std std-ref">Archinal et al. 2018</span></a> (their Section 2 and Figure 1):</p>
 <figure class="align-default">
@@ -1198,7 +1198,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Nov 16, 2024, 2:27:23 PM.
+      <span class="lastupdated">Last updated on Nov 16, 2024, 10:39:21 PM.
       </span></p>
   </div>
 
