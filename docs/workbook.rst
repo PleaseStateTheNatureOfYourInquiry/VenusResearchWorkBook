@@ -1308,8 +1308,6 @@ Here is the same for the static stability:
     :scale: 100%
 
 
-.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/Staticstability_vs_latitude_variability_examples.jpg
-    :scale: 50%
 
 
 
