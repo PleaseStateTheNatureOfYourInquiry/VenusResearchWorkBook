@@ -1306,7 +1306,7 @@ The right plot above show the Spearman (blue) and Pearson (red) correlation coef
 Here is the same for the static stability:
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/Staticstability_vs_latitude_variability_examples.png
-    :scale: 50%
+    :scale: 49%
 
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png
