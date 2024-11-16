@@ -56,9 +56,9 @@ thermalTideCorrection = HandyTools.readTable ( os.path.join (VMCWorkBookDirector
 # Take orbits with ID >= validOrbitID
 validOrbitID = 1188
 latitudesRanges = [[-90, -60], [-60, -40], [-40, 0]]
-statisticTableFiles = [ 'T_Correlation_Latitudes_-83.8_-62.06.dat', 
-                        'T_Correlation_Latitudes_-59.14_-43.12.dat',
-                        'T_Correlation_Latitudes_-39.69_-14.97.dat' ]
+statisticTableFiles = [ 'T_Correlation_Latitudes_-60_-90_normalised.dat', 
+                        'T_Correlation_Latitudes_-40_-60_normalised.dat',
+                        'T_Correlation_Latitudes_0_-40_normalised.dat' ]
 
 
 for iLatitudeRange, latitudeRange in enumerate (latitudesRanges):
@@ -77,7 +77,7 @@ for iLatitudeRange, latitudeRange in enumerate (latitudesRanges):
         
             iLine += 1 
         
-        TemperaturesCorrected.append ( Temperatures [iValidPoint] - thermalTideCorrection[0][5][iLine] )
+        TemperaturesCorrected.append ( Temperatures [iValidPoint] - thermalTideCorrection [0][5][iLine] )
 
 
     plt.figure (iLatitudeRange)
@@ -96,7 +96,7 @@ for iLatitudeRange, latitudeRange in enumerate (latitudesRanges):
                             statisticUncorrected [0][3][19], statisticUncorrected [0][4][19] ) )
     HandyTools.plotErrorBars ( Temperatures [iValidPoints], RFRs [iValidPoints], 
                                xErrors = dTemperatures [iValidPoints],
-                               yErrors = dRFRs [iValidPoints], colours = 'blue' )
+                               yErrors = dRFRs [iValidPoints], colours = 'blue', alpha = 0.3 )
 
 
 
@@ -127,7 +127,7 @@ for iLatitudeRange, latitudeRange in enumerate (latitudesRanges):
                             spearmanStatistics.statistic, spearmanStatisticsStandardDeviation ) )
     HandyTools.plotErrorBars ( TemperaturesCorrected, RFRs [iValidPoints], 
                                xErrors = dTemperatures [iValidPoints],
-                               yErrors = dRFRs [iValidPoints], colours = 'red' )
+                               yErrors = dRFRs [iValidPoints], colours = 'red', alpha = 0.3 )
     
     plt.legend (fontsize = 8)
     

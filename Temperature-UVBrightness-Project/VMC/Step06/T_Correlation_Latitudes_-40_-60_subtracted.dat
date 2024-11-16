@@ -1,0 +1,45 @@
+
+ File: T_Correlation_Latitudes_-40_-60_subtracted.dat
+ Created at 2024-11-16 at 11:44:41
+ Created with CreateTablesAndFigures_CorrelationAnalysis.py
+
+ Temperature at each altitude level has been corrected for latitude variability by subtracting the linear relation from table TVeRa_vs_latitude_statistics_50-80kmAltitude.dat
+ Pearson Coef. = Pearson correlation coefficient (-1,+1)
+ dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on 1000 permutations.
+ Spearman Coef. = Spearman R correlation coefficient (-1,+1)
+ dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on 1000 permutations.
+
+ Altitude   Pearson Coef  dPearson Coef    Spearman Coef. dSpearman Coef   #Points
+   (km)
+C_END
+   50           0.065        0.1784             0.158        0.1787           30
+   51           0.037        0.1753             0.064        0.1755           30
+   52           0.025        0.1791             0.013        0.1811           30
+   53           0.100        0.1829             0.162        0.1833           30
+   54           0.028        0.1785             0.127        0.1762           30
+   55           0.012        0.1880             0.080        0.1862           30
+   56           0.000        0.1828             0.139        0.1795           30
+   57          -0.010        0.1795             0.094        0.1785           30
+   58          -0.222        0.1783            -0.042        0.1812           30
+   59          -0.250        0.1689            -0.054        0.1713           30
+   60          -0.371        0.1525            -0.361        0.1588           30
+   61          -0.268        0.1368            -0.185        0.1479           30
+   62          -0.128        0.1473             0.038        0.1537           30
+   63          -0.268        0.1501            -0.156        0.1569           30
+   64          -0.407        0.1490            -0.267        0.1499           30
+   65          -0.454        0.1630            -0.291        0.1578           30
+   66          -0.418        0.1567            -0.230        0.1535           30
+   67          -0.413        0.1641            -0.242        0.1579           30
+   68          -0.472        0.1653            -0.342        0.1605           30
+   69          -0.433        0.1561            -0.364        0.1522           30
+   70          -0.345        0.1502            -0.288        0.1556           30
+   71          -0.271        0.1486            -0.304        0.1536           30
+   72          -0.079        0.1773            -0.120        0.1617           30
+   73          -0.096        0.1836            -0.209        0.1593           30
+   74          -0.020        0.2021            -0.128        0.1757           30
+   75           0.078        0.1845            -0.052        0.1667           30
+   76          -0.012        0.1778            -0.047        0.1679           30
+   77          -0.242        0.1601            -0.210        0.1592           30
+   78          -0.275        0.1486            -0.316        0.1562           30
+   79          -0.286        0.1437            -0.336        0.1528           30
+   80          -0.332        0.1433            -0.385        0.1562           30

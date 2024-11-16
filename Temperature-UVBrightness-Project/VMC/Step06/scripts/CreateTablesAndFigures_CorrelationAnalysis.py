@@ -3,22 +3,41 @@
 
 # Version: v20241112
 
-# 
+# Create the tables and figures of the correlation between the Radiance Ratio Factor and the temperature (T) or static stability (S) for the altitude levels
+#  between 50 and 80 km (31 levels).
+
+# The temperature has latitudinal variation for all altitudes not in the 65-70km range. The variation can or not be corrected for, using the  
+#  correctionType  string: "uncorrected", "normalised" or "subtracted" , at the top of the script.
+
+# The  allLatitudes  boolean determines whether all latitudes are considered together, or the (three) latitude bins defined by 
+#  latitudeRanges = [ [0, -40], [-40, -60], [-60, -90] ] .
+
+# There is no significant variation of static stability with latitude, and hence no correction scheme is necessary.
+
+# The plots are stored in folders: plot_S, plot_T_uncorrected, plot_T_normalised, plot_T_subtracted . 
+
+# The tables that are created also have the  "uncorrected", "normalised" or "subtracted"  strings in the names, as well as a reference to the latitudes
+#  (all latitudes, or bins). They contain the Spearman and Pearson correlation coefficients for each altitude, which correspond to the plots. 
+
+
 
 # Choose the desired limitation in orbitIDVMC.
-
 orbitIDLimit = [1188, 'Orbits >= 1188 (Ext. 2)']
 
-# figureOrTableType = 'T' # Temperature
+# Choose whether to calculate the RFR version temperature (T) or static stability (S).
+# figureOrTableType = 'T'  # Temperature
 figureOrTableType = 'S' # static stability
 
+
+# If  allLatitudes  is True, then consider all latitudes together, otherwise split the analysis in the latitudes bins defined by  latitudeRanges  list.
 allLatitudes = True
-createFigures = True
+createFigures = False
 createTables = True
 
-correctionType = 'uncorrected'
+# Select the type of temperature variation correction.
+# correctionType = 'uncorrected'
 # correctionType = 'normalised'
-# correctionType = 'subtracted'
+correctionType = 'subtracted'
 
 
 # Standard imports.
@@ -101,6 +120,7 @@ def createPlot ( Temperatures,
                format (iAltitude + 50, len (Temperatures), pearsonStatistics [0], pearsonStatistics [2], spearmanStatistics [0], spearmanStatistics [2] ), 
                fontsize = 11 )
         
+# This is to draw the linear least square fitted lines, but since this can be misleading, it has been commented out.
 #     plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2, 
 #                label = 'RF = {:7.5f} ($\pm$ {:7.5f}) {} + {:7.5f} ($\pm$ {:7.5f}) | $r^2$ = {:5.3f} '.format ( fit [0], fit [2], figureOrTableType, fit [1], fit [3], fit [4] ) )
 #     plt.legend ( loc = 'upper left', fontsize = 9 )
@@ -113,10 +133,10 @@ def createPlot ( Temperatures,
             fullPath = '../plots_{}_{}/AllLatitudes'.format (figureOrTableType, correctionType)          
             figureFileName = '../plots_{}_{}/AllLatitudes/Temperature{}km_vs_RadianceFactorRatio_all_latitudes.png'.format (figureOrTableType, correctionType, iAltitude + 50)
 
-        else:
+        if figureOrTableType == 'S':
 
             fullPath = '../plots_{}/AllLatitudes'.format (figureOrTableType)          
-            figureFileName = '../plots_{}/AllLatitudes/Temperature{}km_vs_RadianceFactorRatio_all_latitudes.png'.format (figureOrTableType, iAltitude + 50)
+            figureFileName = '../plots_{}/AllLatitudes/StaticStability{}km_vs_RadianceFactorRatio_all_latitudes.png'.format (figureOrTableType, iAltitude + 50)
         
 
         HandyTools.createPathToFile (fullPath = fullPath)        
@@ -131,10 +151,10 @@ def createPlot ( Temperatures,
             figureFileName = '../plots_{}_{}/Latitudes_{}_{}/Temperature{}km_vs_RadianceFactorRatio_latitudes_{}_{}.png'.\
              format ( figureOrTableType, correctionType, int ( latitudeRange [0] ), int ( latitudeRange [1] ), iAltitude + 50, int ( latitudeRange [0] ), int ( latitudeRange [1] ) )
 
-        else:
+        if figureOrTableType == 'S':
         
             fullPath = '../plots_{}/Latitudes_{}_{}'.format (figureOrTableType, int ( latitudeRange [0] ), int ( latitudeRange [1] ) )            
-            figureFileName = '../plots_{}/Latitudes_{}_{}/Temperature{}km_vs_RadianceFactorRatio_latitudes_{}_{}.png'.\
+            figureFileName = '../plots_{}/Latitudes_{}_{}/StaticStability{}km_vs_RadianceFactorRatio_latitudes_{}_{}.png'.\
              format ( figureOrTableType, int ( latitudeRange [0] ), int ( latitudeRange [1] ), iAltitude + 50, int ( latitudeRange [0] ), int ( latitudeRange [1] ) )
 
 
@@ -156,10 +176,11 @@ def performAnalysis ( tableContent = None,
                       correctionType = 'uncorrected' ):
 
 
-    
+
+# Initially any latitudinal variation in temperature was corrected only when choosing all latitudes together (no bins), but it has been found better
+#  to perform the correction (set with the  correctionType  string) for all situations.
 #     if allLatitudes:
     if True:
-
         
         if figureOrTableType == 'T':
         
@@ -178,12 +199,23 @@ def performAnalysis ( tableContent = None,
 
         if allLatitudes:
         
-            tableFileName = '{}_Correlation_All_Latitudes_{}.dat'.format (figureOrTableType, correctionType)
+            if figureOrTableType == 'T':
+        
+                tableFileName = '{}_Correlation_All_Latitudes_{}.dat'.format (figureOrTableType, correctionType)
+                
+            if figureOrTableType == 'S':
+            
+                tableFileName = '{}_Correlation_All_Latitudes.dat'.format (figureOrTableType)
         
         else:
         
-            tableFileName = '{}_Correlation_Latitudes_{}_{}_{}.dat'.format ( figureOrTableType, latitudeRange [0], latitudeRange [1], correctionType)
+            if figureOrTableType == 'T':
+            
+                tableFileName = '{}_Correlation_Latitudes_{}_{}_{}.dat'.format ( figureOrTableType, latitudeRange [0], latitudeRange [1], correctionType)
         
+            if figureOrTableType == 'S':
+            
+                tableFileName = '{}_Correlation_Latitudes_{}_{}.dat'.format ( figureOrTableType, latitudeRange [0], latitudeRange [1])
         
 
         tableFileOpen = open ( os.path.join (VMCWorkBookDirectory, 'Step06', tableFileName), 'w' )     
@@ -217,36 +249,37 @@ def performAnalysis ( tableContent = None,
     # Loop over the altitude-columns
     for iAltitude, iColumn in enumerate (iAltitudeColumns):
 
-#         print ('iAltitude = ', iAltitude)
         VeRaTemperatures = tableContent [0][iColumn][iOrbitIDs]
         dVeRaTemperatures = tableContent [0][iColumn + 1][iOrbitIDs]
-        #  tableContent [0][4][iOrbitIDs]  = latitude of the VeRa temperature sounding.
-        
-        # Only correct the temperatures at each altitude level for latitude variability if  allLatitudes  has been set to True. 
-        #  If static stability has been chosen (figureOrTableType = 'S'), then do not apply correction.
+        latitudes = tableContent [0][4][iOrbitIDs]
+
+# Initially any latitudinal variation in temperature was corrected only when choosing all latitudes together (no bins), but it has been found better
+#  to perform the correction (set with the  correctionType  string) for all situations.        
 #         if allLatitudes and figureOrTableType == 'T':
+
+        #  If static stability has been chosen (figureOrTableType = 'S'), then do not apply correction.
         if figureOrTableType == 'T':
 
             if correctionType == 'subtracted':
             
                 VeRaTemperatures = \
                  tableContent [0][iColumn][iOrbitIDs] - \
-                 ( tableContentLatitudeDependence [0][1][iAltitude] * tableContent [0][4][iOrbitIDs] + tableContentLatitudeDependence [0][3][iAltitude] )
+                 ( tableContentLatitudeDependence [0][1][iAltitude] * latitudes + tableContentLatitudeDependence [0][3][iAltitude] )
                 
                 dVeRaTemperatures = np.sqrt ( dVeRaTemperatures ** 2 + 
-                                              ( tableContentLatitudeDependence [0][2][iAltitude] * tableContent [0][4][iOrbitIDs] ) ** 2 +
+                                              ( tableContentLatitudeDependence [0][2][iAltitude] * latitudes ) ** 2 +
                                                 tableContentLatitudeDependence [0][4][iAltitude] ** 2 )
 
 
             elif correctionType == 'normalised':
 
-                denominator = tableContentLatitudeDependence [0][1][iAltitude] * tableContent [0][4][iOrbitIDs] + tableContentLatitudeDependence [0][3][iAltitude]
+                denominator = tableContentLatitudeDependence [0][1][iAltitude] * latitudes + tableContentLatitudeDependence [0][3][iAltitude]
 
                 VeRaTemperatures = tableContent [0][iColumn][iOrbitIDs] / denominator
                 
                 dVeRaTemperatures = \
                  np.sqrt ( (dVeRaTemperatures / denominator) ** 2 + 
-                           (tableContentLatitudeDependence [0][2][iAltitude] * tableContent [0][iColumn][iOrbitIDs] * tableContent [0][4][iOrbitIDs] / denominator ** 2) ** 2 +
+                           (tableContentLatitudeDependence [0][2][iAltitude] * tableContent [0][iColumn][iOrbitIDs] * latitudes / denominator ** 2) ** 2 +
                            (tableContentLatitudeDependence [0][4][iAltitude] * tableContent [0][iColumn][iOrbitIDs] / denominator ** 2) ** 2 )
                                               
 
@@ -303,7 +336,7 @@ def performAnalysis ( tableContent = None,
        
 
 
-# Set the correct file names to write and read.
+# Table file names to read the Radiance Ratio Factors and temperarutes or static stability between 50-80km altitude.
 if figureOrTableType == 'T':
 
     tableContent = HandyTools.readTable ( os.path.join (VMCWorkBookDirectory, 'Step06', 'RadianceFactorRatio_vs_TVeRa50-80kmAltitude.dat') )

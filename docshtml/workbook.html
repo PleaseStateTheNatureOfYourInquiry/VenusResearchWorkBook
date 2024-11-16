@@ -65,7 +65,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#step-06-final-correlation-analysis">Step 06 - Final correlation analysis</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#interpretation-and-conclusion">Interpretation and conclusion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#results-and-interpretation">Results and interpretation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#radiance-factor-ratio-vs-static-stability">Radiance Factor Ratio vs static stability</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#radiance-factor-ratio-vs-temperature">Radiance Factor Ratio vs temperature</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#longitude-and-local-solar-time-on-venus">Longitude and Local Solar Time on Venus</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
 </ul>
@@ -1033,18 +1037,14 @@ I take 71km altitude as the reference level:</p>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">SVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">TVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_All_Latitudes_uncorrected.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-40_-60_uncorrected.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-60_-90_uncorrected.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_0_-40_uncorrected.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_All_Latitudes_normalised.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_All_Latitudes_uncorrected.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-40_-60_normalised.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-40_-60_uncorrected.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-60_-90_normalised.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-60_-90_uncorrected.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_0_-40_normalised.dat</span></code></div>
-<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_0_-40_uncorrected.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_All_Latitudes.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_0_-40.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-40_-60.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">S_Correlation_Latitudes_-60_-90.dat</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_All_Latitudes_normalised.dat</span></code>  or <code class="file docutils literal notranslate"><span class="pre">_uncorrected</span></code>, <code class="file docutils literal notranslate"><span class="pre">_subtracted</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_0_-40_normalised.dat</span></code>  or <code class="file docutils literal notranslate"><span class="pre">_uncorrected</span></code>, <code class="file docutils literal notranslate"><span class="pre">_subtracted</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-40_-60_normalised.dat</span></code>  or <code class="file docutils literal notranslate"><span class="pre">_uncorrected</span></code>, <code class="file docutils literal notranslate"><span class="pre">_subtracted</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">T_Correlation_Latitudes_-60_-90_normalised.dat</span></code>  or <code class="file docutils literal notranslate"><span class="pre">_uncorrected</span></code>, <code class="file docutils literal notranslate"><span class="pre">_subtracted</span></code></div>
 </div>
 </div>
 <p>In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude. The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known and should be rather diffuse, but in the 70 +/- 4km altitude range, as can be seen from the figures in <a class="reference internal" href="#crisp1986"><span class="std std-ref">Crisp (1986)</span></a> and <span class="xref std std-ref">Lee et al. (2015b) &lt;Lee2015b</span>.</p>
@@ -1054,29 +1054,86 @@ So I can do that again, but I think only three latitude bins are necessary. When
 using the <code class="file docutils literal notranslate"><span class="pre">CreateTable_RadianceFactorRatio_vs_T-SVeRa.py</span></code> script. With this script I extract the temperatures at the 31 levels and export them to
 the tables. It makes life a bit easier than needing to extract these values from the original file all the time.</p>
 <p>Secondly, I looked at the variability of temperature and RFR with latitude.
-With the script <code class="file docutils literal notranslate"><span class="pre">CreateFigures_LatitudeVariability.py</span></code> I create three plots:</p>
+With the script <code class="file docutils literal notranslate"><span class="pre">CreateFigures_LatitudeVariability.py</span></code> I create several plots:</p>
 <figure class="align-default" id="id23">
-<img alt="_images/Radiance_vs_latitude_variability.png" src="_images/Radiance_vs_latitude_variability.png" />
+<span id="figurerfrlatitudevariability"></span><img alt="_images/Radiance_vs_latitude_variability.png" src="_images/Radiance_vs_latitude_variability.png" />
 <figcaption>
 <p><span class="caption-text">RFR versus latitude, the green lines are the boundaries of the latitude bins.</span><a class="headerlink" href="#id23" title="Link to this image"></a></p>
 </figcaption>
 </figure>
 <p>The mid latitudes have generally higher UV-brightness as compared to the low latitudes and high latitudes.
-Based on this, and on the cloud top altitudes variations reported by <a class="reference internal" href="#marcq2019"><span class="std std-ref">Marcq et al. (2019)</span></a> and <span class="xref std std-ref">Lee et al. (2012)</span>, I decide on three latitudes bins, 0˚ - -40˚, -40˚ - -60˚ and -60˚ - -90˚. This should compensate for any latitudinal variation of RFR.</p>
+Based on this, and on the cloud top altitudes variations reported by <a class="reference internal" href="#marcq2019"><span class="std std-ref">Marcq et al. (2019)</span></a> and <a class="reference internal" href="#lee2012"><span class="std std-ref">Lee et al. (2012)</span></a>, I decide on three latitudes bins, 0˚ - -40˚, -40˚ - -60˚ and -60˚ - -90˚. This should compensate for any latitudinal variation of RFR.</p>
 <a class="reference internal image-reference" href="_images/Temperature_vs_latitude_variability_examples.png"><img alt="_images/Temperature_vs_latitude_variability_examples.png" src="_images/Temperature_vs_latitude_variability_examples.png" style="width: 300.0px; height: 500.0px;" /></a>
 <a class="reference internal image-reference" href="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png"><img alt="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png" src="_images/SpearmanPearsonCorrelationCoefficient_T_vs_latitude.png" style="width: 640.0px; height: 480.0px;" /></a>
 <p>The right plot above show the Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude (<code class="file docutils literal notranslate"><span class="pre">TVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code>).</p>
 <p>Here is the same for the static stability:</p>
 <a class="reference internal image-reference" href="_images/Staticstability_vs_latitude_variability_examples.png"><img alt="_images/Staticstability_vs_latitude_variability_examples.png" src="_images/Staticstability_vs_latitude_variability_examples.png" style="width: 300.0px; height: 500.0px;" /></a>
 <a class="reference internal image-reference" href="_images/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png"><img alt="_images/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png" src="_images/SpearmanPearsonCorrelationCoefficient_S_vs_latitude.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p>Initially I did the rest of the analysis with the latitude bins defined above and no further corrections. In terms of the variability of the temperature with latitude, it can be seen from the figure above that in the 65-70km altitude range, there is none. But at lower and higher altitudes there is quite stronger correlation, which can be described surprisingly with a line (Pearson correlation coefficient), though I am not sure why this would be.
-Even within the latitude bins, there is still quite some variation of the temperature at these altitudes. So, i think it would be better to correct for it. I could either subtract the least square fitted line at each altitude, or perhaps more accurate, normalise to the least square fitted line.</p>
-<p>With the <code class="file docutils literal notranslate"><span class="pre">CreateTable_T-S_vs_LatitudeVariability.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">TVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code> table, as well as the <code class="file docutils literal notranslate"><span class="pre">SVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code> table, that contain the least square line fitting parameters, the Spearman and Pearson correlation coefficients and their uncertainties. I create the same for the</p>
+<p>Initially I did the rest of the analysis with the three latitude bins as defined above and no further corrections. In terms of the variability of the temperature with latitude, it can be seen from the figure above that in the 65-70km altitude range, there is no significant correlation, both the Spearman and Pearson correlation coefficients are smaller than 0.5. However, at lower and higher altitudes there is a quite strong correlation, which in addition can be described with a line (Pearson correlation coefficient), though I am not sure why this would be linear.
+Even within the latitude bins, there is still quite some variation of the temperature at these altitudes.
+Hence, I think it would be better to correct for it.
+I could either subtract the least square fitted line at each altitude from the observed values, or, perhaps more accurate, normalise all the observed values to the least square fitted line.</p>
+<p>With the <code class="file docutils literal notranslate"><span class="pre">CreateTable_T-S_vs_LatitudeVariability.py</span></code> I create the <code class="file docutils literal notranslate"><span class="pre">TVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code> table, as well as the <code class="file docutils literal notranslate"><span class="pre">SVeRa_vs_latitude_statistics_50-80kmAltitude.dat</span></code> table, that contain the least square line fitting parameters, the Spearman and Pearson correlation coefficients and their uncertainties (see Figures above and the <code class="file docutils literal notranslate"><span class="pre">CreateFigures_LatitudeVariability.py</span></code> script).</p>
+<p>Using the <code class="file docutils literal notranslate"><span class="pre">CreateTablesAndFigures_CorrelationAnalysis.py</span></code> script I create a series of table files and plots:
+the <code class="file docutils literal notranslate"><span class="pre">T_Correlation_N_C.dat</span></code>, where <code class="file docutils literal notranslate"><span class="pre">N</span></code> is the latitude bin and <code class="file docutils literal notranslate"><span class="pre">C</span></code> is file:<cite>uncorrected</cite> file:<cite>normalised</cite> or file:<cite>subtracted</cite>, and
+the <code class="file docutils literal notranslate"><span class="pre">S_Correlation_N_uncorrected.dat,</span> <span class="pre">as</span> <span class="pre">well</span> <span class="pre">as</span> <span class="pre">a</span> <span class="pre">all</span> <span class="pre">the</span> <span class="pre">corresponding</span> <span class="pre">plots</span>
+<span class="pre">in</span> <span class="pre">the</span> <span class="pre">:file:`plots_S</span></code>, <code class="file docutils literal notranslate"><span class="pre">plots_T_uncorrected</span></code>, <code class="file docutils literal notranslate"><span class="pre">plots_T_normalised</span></code>, and <code class="file docutils literal notranslate"><span class="pre">plots_T_subtracted</span></code> folders.</p>
+<p>As example, the RFR versus normalised temperature at <strong>68km altitude</strong> for the three latitude bins:</p>
+<a class="reference internal image-reference" href="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_0_-40.png"><img alt="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_0_-40.png" src="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_0_-40.png" style="width: 320.0px; height: 240.0px;" /></a>
+<a class="reference internal image-reference" href="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_-40_-60.png"><img alt="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_-40_-60.png" src="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_-40_-60.png" style="width: 320.0px; height: 240.0px;" /></a>
+<a class="reference internal image-reference" href="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_-60_-90.png"><img alt="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_-60_-90.png" src="_images/Temperature68km_vs_RadianceFactorRatio_latitudes_-60_-90.png" style="width: 320.0px; height: 240.0px;" /></a>
+<p>As example, the RFR versus static stability at <strong>57km altitude</strong> for the three latitude bins:</p>
+<a class="reference internal image-reference" href="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_0_-40.png"><img alt="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_0_-40.png" src="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_0_-40.png" style="width: 320.0px; height: 240.0px;" /></a>
+<a class="reference internal image-reference" href="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_-40_-60.png"><img alt="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_-40_-60.png" src="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_-40_-60.png" style="width: 320.0px; height: 240.0px;" /></a>
+<a class="reference internal image-reference" href="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_-60_-90.png"><img alt="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_-60_-90.png" src="_images/StaticStability57km_vs_RadianceFactorRatio_latitudes_-60_-90.png" style="width: 320.0px; height: 240.0px;" /></a>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is important to note the difference in the number of points per latitude bin: 9 for (0˚, -40˚), 30 for (-40˚, -60˚) and 17 for (-60˚, -90˚)!</p>
+</div>
+<p>Finally, using the <code class="file docutils literal notranslate"><span class="pre">CreateFigures_CorrelationStatistics.py</span></code> script, I create all the figures of the correlation analysis: the plots of the Spearman and
+Pearson correlation coefficients for the RFR versus uncorrected (normalised, subtracted) temperatures and the static stabilities for all the 31
+levels between 50 and 80km altitude.</p>
+<p>The results and interpretation are in the next section.</p>
 </section>
 </section>
-<section id="interpretation-and-conclusion">
-<span id="interepretationandconclusion"></span><h3>Interpretation and conclusion<a class="headerlink" href="#interpretation-and-conclusion" title="Link to this heading"></a></h3>
-<p>…</p>
+<section id="results-and-interpretation">
+<span id="resultsandinterpretation"></span><h3>Results and interpretation<a class="headerlink" href="#results-and-interpretation" title="Link to this heading"></a></h3>
+<p>First of all I note that both correlations, Radiance Factor Ratio versus static stability and Radiance Factor Ratio versus temperature, are noisy.
+This is the result of all the propagated uncertainties in the entire analysis process.
+Because I tried to thoroughly take into account the uncertainties, I am convinced of the validity of the correlation results, their final uncertainties
+and what can or cannot be concluded.</p>
+<p>In terms of significance of the correlation, when the Spearman (Pearson) correlation coefficient is larger than (smaller than) (-)+0.5, there is a good
+indication of correlation.</p>
+<section id="radiance-factor-ratio-vs-static-stability">
+<h4>Radiance Factor Ratio vs static stability<a class="headerlink" href="#radiance-factor-ratio-vs-static-stability" title="Link to this heading"></a></h4>
+<p>The correlation results for RFR versus <strong>static stability</strong>: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):</p>
+<a class="reference internal image-reference" href="_images/S_Correction_Spearman.png"><img alt="_images/S_Correction_Spearman.png" src="_images/S_Correction_Spearman.png" style="width: 448.0px; height: 336.0px;" /></a>
+<a class="reference internal image-reference" href="_images/S_Correction_Pearson.png"><img alt="_images/S_Correction_Pearson.png" src="_images/S_Correction_Pearson.png" style="width: 448.0px; height: 336.0px;" /></a>
+<p>First of all the correlation between Radiance Factor Ratio and static stability is very noisy and not significant, except for one peak in the low
+latitude bin at 57km altitude.</p>
+</section>
+<section id="radiance-factor-ratio-vs-temperature">
+<h4>Radiance Factor Ratio vs temperature<a class="headerlink" href="#radiance-factor-ratio-vs-temperature" title="Link to this heading"></a></h4>
+<p>The correlation results for RFR versus <strong>uncorrected</strong> temperature between 50-80km altitude: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):</p>
+<a class="reference internal image-reference" href="_images/T_correlation_uncorrected_Spearman.png"><img alt="_images/T_correlation_uncorrected_Spearman.png" src="_images/T_correlation_uncorrected_Spearman.png" style="width: 448.0px; height: 336.0px;" /></a>
+<a class="reference internal image-reference" href="_images/T_correlation_uncorrected_Pearson.png"><img alt="_images/T_correlation_uncorrected_Pearson.png" src="_images/T_correlation_uncorrected_Pearson.png" style="width: 448.0px; height: 336.0px;" /></a>
+<p>The correlation results for RFR versus <strong>subtracted</strong> temperature between 50-80km altitude: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):</p>
+<a class="reference internal image-reference" href="_images/T_correlation_subtracted_Spearman.png"><img alt="_images/T_correlation_subtracted_Spearman.png" src="_images/T_correlation_subtracted_Spearman.png" style="width: 448.0px; height: 336.0px;" /></a>
+<a class="reference internal image-reference" href="_images/T_correlation_subtracted_Pearson.png"><img alt="_images/T_correlation_subtracted_Pearson.png" src="_images/T_correlation_subtracted_Pearson.png" style="width: 448.0px; height: 336.0px;" /></a>
+<p>The correlation results for RFR versus <strong>normalised</strong> temperature between 50-80km altitude: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):</p>
+<a class="reference internal image-reference" href="_images/T_correlation_normalised_Spearman.png"><img alt="_images/T_correlation_normalised_Spearman.png" src="_images/T_correlation_normalised_Spearman.png" style="width: 448.0px; height: 336.0px;" /></a>
+<a class="reference internal image-reference" href="_images/T_correlation_normalised_Pearson.png"><img alt="_images/T_correlation_normalised_Pearson.png" src="_images/T_correlation_normalised_Pearson.png" style="width: 448.0px; height: 336.0px;" /></a>
+<p>I take the <strong>normalised</strong> temperature results as the final results.
+The correlation has more structure. I think there is good hint for an anti-correlation in the 65-70km altitude range for the low and mid-latitudes.
+For the high latitudes it is opposite, but weak in this altitude range.
+There is anti-correlation also for all latitude bins around 60km altitude, but overal somewhat weaker.</p>
+<p>Could this be a detection, though faint, of the solar UV-energy deposition in the atmosphere at the cloud top levels?
+It would corroborate with the radiative forcing studies by <a class="reference internal" href="#crisp1986"><span class="std std-ref">Crisp (1986)</span></a> and <a class="reference internal" href="#lee2015b"><span class="std std-ref">Lee et al. (2015b)</span></a>.
+The cloud tops are lower in the high altitudes. An anti-correlation would mean that when UV-energy is absorbed (darker UV, more UV-absorber),
+it results in an increase in the atmospheric temperature: hence the temperature would not be one-to-one related to origin of the UV-absorber.</p>
+<p>A second, much more challenging hint, is that the trend of the correlation from 50 to 80km altitude: it seems to go from correlation to anti-correlation for
+the low and mid latitudes and the other way around for the high latitudes. Though it is a faint signal.</p>
+</section>
 </section>
 <section id="longitude-and-local-solar-time-on-venus">
 <span id="longitudeandlocalsolartime"></span><h3>Longitude and Local Solar Time on Venus<a class="headerlink" href="#longitude-and-local-solar-time-on-venus" title="Link to this heading"></a></h3>
@@ -1114,6 +1171,8 @@ The <strong>zonal wind</strong> moves the clouds in the direction of <strong>inc
 <p id="crisp1986"><strong>Crisp, D.</strong> 1986. Radiative forcing of the Venus Mesosphere. I. Solar fluxes and heating rates. Icarus 67, 484 - 514. <a class="reference external" href="https://doi.org/10.1016/0019-1035(86)90126-0">DOI 10.1016/0019-1035(86)90126-0</a>.</p>
 <p id="crisp1989"><strong>Crisp, D.</strong> 1989. Radiative forcing of the Venus Mesosphere. II. Thermal fluxes, cooling rates and radiative equilibrium temperatures. Icarus 77, 391 - 413. <a class="reference external" href="https://doi.org/10.1016/0019-1035(89)90096-1">DOI doi.org/10.1016/0019-1035(89)90096-1</a>.</p>
 <p id="khatuntsev2013"><strong>Khatuntsev, I.V.</strong> <em>et al.</em>, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2013.05.018">DOI 10.1016/j.icarus.2013.05.018</a>.</p>
+<p id="lee2012"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2012. Vertical structure of the Venus cloud top from the VeRa and VIRTIS observations onboard Venus Express.
+Icarus 271, 599 - 609. <a class="reference external" href="https://doi.org/10.1016/j.icarus.2011.07.001">doi.org/10.1016/j.icarus.2011.07.001</a>.</p>
 <p id="lee2015a"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. Long-term variations of the UV contrast on Venus observed by the Venus Monitoring Camera on board Venus Express. Icarus 253, 1-15. <a class="reference external" href="http://dx.doi.org/10.1016/j.icarus.2015.02.015">DOI 10.1016/j.icarus.2015.02.015</a>.</p>
 <p id="lee2015b"><strong>Lee, Y.J.</strong> <em>et al.</em>, 2015. The radiative forcing variability caused by the changes of the upper cloud vertical structure in the Venus mesosphere.
 PSS 113-114, 298-308. <a class="reference external" href="https://doi.org/10.1016/j.pss.2014.12.006">DOI 10.1016/j.pss.2014.12.006</a>.</p>
@@ -1139,7 +1198,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Nov 15, 2024, 9:57:37 PM.
+      <span class="lastupdated">Last updated on Nov 16, 2024, 2:27:23 PM.
       </span></p>
   </div>
 

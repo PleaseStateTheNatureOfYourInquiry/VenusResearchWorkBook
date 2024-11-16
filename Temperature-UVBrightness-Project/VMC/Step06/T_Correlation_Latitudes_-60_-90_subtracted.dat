@@ -1,0 +1,45 @@
+
+ File: T_Correlation_Latitudes_-60_-90_subtracted.dat
+ Created at 2024-11-16 at 11:45:21
+ Created with CreateTablesAndFigures_CorrelationAnalysis.py
+
+ Temperature at each altitude level has been corrected for latitude variability by subtracting the linear relation from table TVeRa_vs_latitude_statistics_50-80kmAltitude.dat
+ Pearson Coef. = Pearson correlation coefficient (-1,+1)
+ dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on 1000 permutations.
+ Spearman Coef. = Spearman R correlation coefficient (-1,+1)
+ dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on 1000 permutations.
+
+ Altitude   Pearson Coef  dPearson Coef    Spearman Coef. dSpearman Coef   #Points
+   (km)
+C_END
+   50          -0.360        0.2391            -0.311        0.2252           17
+   51          -0.361        0.2146            -0.301        0.2085           17
+   52          -0.264        0.2271            -0.263        0.2198           17
+   53          -0.238        0.2235            -0.266        0.2166           17
+   54          -0.189        0.2170            -0.208        0.2059           17
+   55          -0.171        0.2177            -0.165        0.2094           17
+   56          -0.185        0.2215            -0.138        0.2123           17
+   57          -0.195        0.2021            -0.321        0.1997           17
+   58          -0.188        0.2049            -0.294        0.2020           17
+   59          -0.194        0.1932            -0.177        0.2083           17
+   60          -0.487        0.2089            -0.389        0.2127           17
+   61          -0.433        0.2110            -0.309        0.2129           17
+   62          -0.460        0.2040            -0.378        0.2109           17
+   63          -0.354        0.2037            -0.271        0.2096           17
+   64          -0.002        0.2087             0.097        0.2180           17
+   65           0.130        0.2147             0.060        0.2095           17
+   66           0.317        0.2136             0.231        0.2077           17
+   67           0.397        0.2127             0.213        0.2115           17
+   68           0.289        0.2068             0.216        0.2115           17
+   69           0.306        0.2081             0.162        0.2147           17
+   70           0.280        0.1942             0.230        0.2223           17
+   71           0.339        0.1818             0.271        0.2043           17
+   72           0.429        0.1793             0.387        0.1978           17
+   73           0.280        0.1864             0.349        0.2092           17
+   74           0.227        0.2007             0.137        0.2140           17
+   75           0.216        0.1874             0.033        0.2049           17
+   76           0.130        0.1808            -0.071        0.2007           17
+   77           0.109        0.2077             0.030        0.2176           17
+   78           0.231        0.2063             0.240        0.2173           17
+   79           0.367        0.1947             0.296        0.2044           17
+   80           0.413        0.2144             0.406        0.2205           17

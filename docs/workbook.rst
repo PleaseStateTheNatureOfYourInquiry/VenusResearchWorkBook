@@ -1258,18 +1258,14 @@ Step 06 - Final correlation analysis
     | :file:`RadianceFactorRatio_vs_SVeRa50-80kmAltitude.dat`
     | :file:`SVeRa_vs_latitude_statistics_50-80kmAltitude.dat`
     | :file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat` 
-    | :file:`S_Correlation_All_Latitudes_uncorrected.dat`
-    | :file:`S_Correlation_Latitudes_-40_-60_uncorrected.dat`
-    | :file:`S_Correlation_Latitudes_-60_-90_uncorrected.dat`
-    | :file:`S_Correlation_Latitudes_0_-40_uncorrected.dat`
-    | :file:`T_Correlation_All_Latitudes_normalised.dat`
-    | :file:`T_Correlation_All_Latitudes_uncorrected.dat`
-    | :file:`T_Correlation_Latitudes_-40_-60_normalised.dat`
-    | :file:`T_Correlation_Latitudes_-40_-60_uncorrected.dat`
-    | :file:`T_Correlation_Latitudes_-60_-90_normalised.dat`
-    | :file:`T_Correlation_Latitudes_-60_-90_uncorrected.dat`
-    | :file:`T_Correlation_Latitudes_0_-40_normalised.dat`
-    | :file:`T_Correlation_Latitudes_0_-40_uncorrected.dat`
+    | :file:`S_Correlation_All_Latitudes.dat`
+    | :file:`S_Correlation_Latitudes_0_-40.dat`
+    | :file:`S_Correlation_Latitudes_-40_-60.dat`
+    | :file:`S_Correlation_Latitudes_-60_-90.dat`
+    | :file:`T_Correlation_All_Latitudes_normalised.dat`  or :file:`_uncorrected`, :file:`_subtracted` 
+    | :file:`T_Correlation_Latitudes_0_-40_normalised.dat`  or :file:`_uncorrected`, :file:`_subtracted`
+    | :file:`T_Correlation_Latitudes_-40_-60_normalised.dat`  or :file:`_uncorrected`, :file:`_subtracted`
+    | :file:`T_Correlation_Latitudes_-60_-90_normalised.dat`  or :file:`_uncorrected`, :file:`_subtracted`
 
 
 
@@ -1283,8 +1279,9 @@ using the :file:`CreateTable_RadianceFactorRatio_vs_T-SVeRa.py` script. With thi
 the tables. It makes life a bit easier than needing to extract these values from the original file all the time.
 
 Secondly, I looked at the variability of temperature and RFR with latitude.
-With the script :file:`CreateFigures_LatitudeVariability.py` I create three plots:
+With the script :file:`CreateFigures_LatitudeVariability.py` I create several plots:
 
+.. _figureRFRlatitudevariability:
 
 .. figure:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/Radiance_vs_latitude_variability.png
 
@@ -1316,20 +1313,143 @@ Here is the same for the static stability:
     :scale: 100%
 
 
+Initially I did the rest of the analysis with the three latitude bins as defined above and no further corrections. In terms of the variability of the temperature with latitude, it can be seen from the figure above that in the 65-70km altitude range, there is no significant correlation, both the Spearman and Pearson correlation coefficients are smaller than 0.5. However, at lower and higher altitudes there is a quite strong correlation, which in addition can be described with a line (Pearson correlation coefficient), though I am not sure why this would be linear.
+Even within the latitude bins, there is still quite some variation of the temperature at these altitudes.
+Hence, I think it would be better to correct for it.
+I could either subtract the least square fitted line at each altitude from the observed values, or, perhaps more accurate, normalise all the observed values to the least square fitted line.
 
-Initially I did the rest of the analysis with the latitude bins defined above and no further corrections. In terms of the variability of the temperature with latitude, it can be seen from the figure above that in the 65-70km altitude range, there is none. But at lower and higher altitudes there is quite stronger correlation, which can be described surprisingly with a line (Pearson correlation coefficient), though I am not sure why this would be.
-Even within the latitude bins, there is still quite some variation of the temperature at these altitudes. So, i think it would be better to correct for it. I could either subtract the least square fitted line at each altitude, or perhaps more accurate, normalise to the least square fitted line. 
+With the :file:`CreateTable_T-S_vs_LatitudeVariability.py` I create the :file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, as well as the :file:`SVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, that contain the least square line fitting parameters, the Spearman and Pearson correlation coefficients and their uncertainties (see Figures above and the :file:`CreateFigures_LatitudeVariability.py` script).
 
-With the :file:`CreateTable_T-S_vs_LatitudeVariability.py` I create the :file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, as well as the :file:`SVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, that contain the least square line fitting parameters, the Spearman and Pearson correlation coefficients and their uncertainties. I create the same for the 
+Using the :file:`CreateTablesAndFigures_CorrelationAnalysis.py` script I create a series of table files and plots:
+the :file:`T_Correlation_N_C.dat`, where :file:`N` is the latitude bin and :file:`C` is file:`uncorrected` file:`normalised` or file:`subtracted`, and
+the :file:`S_Correlation_N_uncorrected.dat, as well as a all the corresponding plots
+in the :file:`plots_S`, :file:`plots_T_uncorrected`, :file:`plots_T_normalised`, and :file:`plots_T_subtracted` folders.
+
+As example, the RFR versus normalised temperature at **68km altitude** for the three latitude bins:
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_normalised/Latitudes_0_-40/Temperature68km_vs_RadianceFactorRatio_latitudes_0_-40.png
+    :scale: 50%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_normalised/Latitudes_-40_-60/Temperature68km_vs_RadianceFactorRatio_latitudes_-40_-60.png
+    :scale: 50%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_normalised/Latitudes_-60_-90/Temperature68km_vs_RadianceFactorRatio_latitudes_-60_-90.png
+    :scale: 50%
+
+
+As example, the RFR versus static stability at **57km altitude** for the three latitude bins:
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_S/Latitudes_0_-40/StaticStability57km_vs_RadianceFactorRatio_latitudes_0_-40.png
+    :scale: 50%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_S/Latitudes_-40_-60/StaticStability57km_vs_RadianceFactorRatio_latitudes_-40_-60.png
+    :scale: 50%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_S/Latitudes_-60_-90/StaticStability57km_vs_RadianceFactorRatio_latitudes_-60_-90.png
+    :scale: 50%
+
+
+.. warning::
+
+    It is important to note the difference in the number of points per latitude bin: 9 for (0˚, -40˚), 30 for (-40˚, -60˚) and 17 for (-60˚, -90˚)!
+
+
+Finally, using the :file:`CreateFigures_CorrelationStatistics.py` script, I create all the figures of the correlation analysis: the plots of the Spearman and
+Pearson correlation coefficients for the RFR versus uncorrected (normalised, subtracted) temperatures and the static stabilities for all the 31 
+levels between 50 and 80km altitude. 
+
+.. note:
+
+    For completeness, I have plotted the correlation for *all latitudes* as well (blue in the plots above), but I think it is more accurate to work in 
+    latitude bin, because of the RFR latitude variability (:ref:`see figure <figureRFRlatitudevariability>`). 
+
+
+The results and interpretation are in the next section.
+
+
+.. _resultsandinterpretation:
+
+Results and interpretation
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+First of all I note that both correlations, Radiance Factor Ratio versus static stability and Radiance Factor Ratio versus temperature, are noisy.
+This is the result of all the propagated uncertainties in the entire analysis process. 
+Because I tried to thoroughly take into account the uncertainties, I am convinced of the validity of the correlation results, their final uncertainties 
+and what can or cannot be concluded.
+
+In terms of significance of the correlation, when the Spearman (Pearson) correlation coefficient is larger than (smaller than) (-)+0.5, there is a good
+indication of correlation. 
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Radiance Factor Ratio vs static stability
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The correlation results for RFR versus **static stability**: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/S_Correction_Spearman.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/S_Correction_Pearson.png
+    :scale: 70%
+
+
+First of all the correlation between Radiance Factor Ratio and static stability is very noisy and not significant, except for one peak in the low
+latitude bin at 57km altitude. 
 
 
 
-.. _interepretationandconclusion:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Radiance Factor Ratio vs temperature
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Interpretation and conclusion
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-...
+The correlation results for RFR versus **uncorrected** temperature between 50-80km altitude: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/T_correlation_uncorrected_Spearman.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/T_correlation_uncorrected_Pearson.png
+    :scale: 70%
+
+
+
+The correlation results for RFR versus **subtracted** temperature between 50-80km altitude: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/T_correlation_subtracted_Spearman.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/T_correlation_subtracted_Pearson.png
+    :scale: 70%
+
+
+
+The correlation results for RFR versus **normalised** temperature between 50-80km altitude: Spearman correlation coefficients (left) and Pearson correlation coefficients (right):
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/T_correlation_normalised_Spearman.png
+    :scale: 70%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots/T_correlation_normalised_Pearson.png
+    :scale: 70%
+
+
+I take the **normalised** temperature results as the final results. 
+The correlation has more structure. I think there is good hint for an anti-correlation in the 65-70km altitude range for the low and mid-latitudes.
+For the high latitudes it is opposite, but weak in this altitude range.
+There is anti-correlation also for all latitude bins around 60km altitude, but overal somewhat weaker. 
+
+Could this be a detection, though faint, of the solar UV-energy deposition in the atmosphere at the cloud top levels?
+It would corroborate with the radiative forcing studies by :ref:`Crisp (1986) <crisp1986>` and :ref:`Lee et al. (2015b) <Lee2015b>`.
+The cloud tops are lower in the high altitudes. An anti-correlation would mean that when UV-energy is absorbed (darker UV, more UV-absorber),
+it results in an increase in the atmospheric temperature: hence the temperature would not be one-to-one related to origin of the UV-absorber. 
+
+A second, much more challenging hint, is that the trend of the correlation from 50 to 80km altitude: it seems to go from correlation to anti-correlation for 
+the low and mid latitudes and the other way around for the high latitudes. Though it is a faint signal.
 
 
 
@@ -1402,6 +1522,11 @@ References
 .. _Khatuntsev2013:
 
 **Khatuntsev, I.V.** *et al.*, 2013. Cloud level winds from Venus Express Monitoring Camera imaging. Icarus 226, 140-158. `DOI 10.1016/j.icarus.2013.05.018 <http://dx.doi.org/10.1016/j.icarus.2013.05.018>`_.
+
+.. _Lee2012:
+
+**Lee, Y.J.** *et al.*, 2012. Vertical structure of the Venus cloud top from the VeRa and VIRTIS observations onboard Venus Express. 
+Icarus 271, 599 - 609. `doi.org/10.1016/j.icarus.2011.07.001 <https://doi.org/10.1016/j.icarus.2011.07.001>`_.
 
 .. _Lee2015a:
 

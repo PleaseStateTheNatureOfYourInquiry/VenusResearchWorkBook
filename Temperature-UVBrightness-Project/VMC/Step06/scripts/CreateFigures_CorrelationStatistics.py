@@ -31,6 +31,12 @@ ST_TableFiles = [
   'T_Correlation_Latitudes_-40_-60_normalised.dat',
   'T_Correlation_Latitudes_-60_-90_normalised.dat'],
 
+[ 'T_Correlation_All_Latitudes_subtracted.dat',
+  'T_Correlation_Latitudes_0_-40_subtracted.dat',
+  'T_Correlation_Latitudes_-40_-60_subtracted.dat',
+  'T_Correlation_Latitudes_-60_-90_subtracted.dat'],
+
+
 [ 'T_Correlation_All_Latitudes_uncorrected.dat',
   'T_Correlation_Latitudes_0_-40_uncorrected.dat',
   'T_Correlation_Latitudes_-40_-60_uncorrected.dat',
@@ -39,18 +45,21 @@ ST_TableFiles = [
 ]
 
 
-plotFileNames = ['S_Correction', 'T_correlation_normalised', 'T_correlation_uncorrected']
+plotFileNames = ['S_Correction', 'T_correlation_normalised', 'T_correlation_subtracted', 'T_correlation_uncorrected']
 
-labels = [ '(-90˚, 0˚)', '(-15˚,-40˚)', '(-40˚,-60˚)', '(-60˚, -90˚)' ]
+labels = [ '(0˚, -90˚)', '(-0˚,-40˚)', '(-40˚,-60˚)', '(-60˚, -90˚)' ]
 xyLabels = [ 'Altitude km)', 'Pearson Correlation Coefficient', 'Spearman Correlation Coefficient' ]
-titles = [ 'UV-Brightness vs VeRa Static Stabiity at Altitude', 'UV-Brightness vs VeRa Temperature (normalised)', 'UV-Brightness vs VeRa Temperature (uncorrected)' ]
+titles = [ 'UV-Brightness vs VeRa Static Stabiity at Altitude',
+           'UV-Brightness vs VeRa Temperature (normalised)',
+           'UV-Brightness vs VeRa Temperature (subtracted)',
+           'UV-Brightness vs VeRa Temperature (uncorrected)' ]
 
 colours = ['blue', 'green', 'red', 'black']
 
 # The Pearson or Spearman correlation coefficient has values between -1 and +1. Moderate correlation is when the coefficient has values < -0.5 or > 0.5.
 moderateCorrelationLevel = 0.5
 
-for iST_TableFile in range (3):
+for iST_TableFile in range ( len (ST_TableFiles) ):
 
     plt.figure (1)
     plt.clf ()
@@ -101,7 +110,7 @@ for iST_TableFile in range (3):
     plt.ylabel ( xyLabels [1] )
     plt.title ( titles [iST_TableFile] )
     plt.legend ()
-    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step06', '{}_Pearson.png'.format ( plotFileNames [iST_TableFile] ) ) )
+    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step06', 'plots', '{}_Pearson.png'.format ( plotFileNames [iST_TableFile] ) ) )
     
     plt.close ()
     
@@ -109,7 +118,7 @@ for iST_TableFile in range (3):
     plt.ylabel ( xyLabels [2] )
     plt.title ( titles [iST_TableFile] )
     plt.legend ()
-    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step06', '{}_Spearman.png'.format ( plotFileNames [iST_TableFile] ) ) )
+    plt.savefig ( os.path.join ( VMCWorkBookDirectory, 'Step06', 'plots', '{}_Spearman.png'.format ( plotFileNames [iST_TableFile] ) ) )
     
     plt.close ()
 

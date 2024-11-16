@@ -1,0 +1,45 @@
+
+ File: T_Correlation_All_Latitudes_subtracted.dat
+ Created at 2024-11-16 at 11:41:31
+ Created with CreateTablesAndFigures_CorrelationAnalysis.py
+
+ Temperature at each altitude level has been corrected for latitude variability by subtracting the linear relation from table TVeRa_vs_latitude_statistics_50-80kmAltitude.dat
+ Pearson Coef. = Pearson correlation coefficient (-1,+1)
+ dPearson Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on 1000 permutations.
+ Spearman Coef. = Spearman R correlation coefficient (-1,+1)
+ dSpearman Coef. = Uncertainty in the Pearson correlation coefficient (-1,+1) based on 1000 permutations.
+
+ Altitude   Pearson Coef  dPearson Coef    Spearman Coef. dSpearman Coef   #Points
+   (km)
+C_END
+   50           0.282        0.1222             0.262        0.1058           56
+   51           0.274        0.1135             0.245        0.1033           56
+   52           0.279        0.1213             0.226        0.1120           56
+   53           0.287        0.1196             0.266        0.1087           56
+   54           0.267        0.1210             0.264        0.1088           56
+   55           0.269        0.1201             0.260        0.1114           56
+   56           0.242        0.1165             0.265        0.1065           56
+   57           0.191        0.1177             0.188        0.1083           56
+   58           0.023        0.1097             0.007        0.1050           56
+   59          -0.125        0.1059            -0.085        0.1071           56
+   60          -0.344        0.1065            -0.323        0.1069           56
+   61          -0.329        0.0977            -0.279        0.1018           56
+   62          -0.286        0.1059            -0.217        0.1089           56
+   63          -0.334        0.1106            -0.362        0.1108           56
+   64          -0.287        0.1076            -0.330        0.1057           56
+   65          -0.319        0.1120            -0.330        0.0996           56
+   66          -0.341        0.1139            -0.331        0.1031           56
+   67          -0.385        0.1058            -0.378        0.0937           56
+   68          -0.439        0.1074            -0.425        0.0975           56
+   69          -0.375        0.1027            -0.368        0.0968           56
+   70          -0.317        0.1015            -0.327        0.0987           56
+   71          -0.188        0.1056            -0.258        0.1063           56
+   72          -0.068        0.1101            -0.136        0.1076           56
+   73          -0.061        0.1112            -0.097        0.1063           56
+   74           0.043        0.1103             0.017        0.1068           56
+   75           0.087        0.1098             0.002        0.1091           56
+   76           0.067        0.1066            -0.015        0.1111           56
+   77           0.019        0.1089            -0.013        0.1117           56
+   78           0.012        0.1059            -0.016        0.1068           56
+   79          -0.010        0.1013            -0.056        0.1042           56
+   80          -0.036        0.0983            -0.069        0.0996           56
