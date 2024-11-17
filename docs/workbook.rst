@@ -1190,8 +1190,8 @@ Step 05 - First correlation analysis
 I think there are two ways to approach the analysis of a correlation between the cloud top temperatures and UV-brightness, based on the results from the steps above.
 I set up the script :file:`CorrelateRadianceFactorRatios_T_CloudTopAltitudes.py` for both these ways and use the :file:`VMCSelectedImages_CloudTopAltitudes.dat` table from :ref:`Step 3bis <VMCStep03bis>` as well as :file:`RadianceFactorRatiosPerOrbit.dat` from :ref:`Step 3 <VMCStep03>`
 
-The **first** way is to split the analysis in several latitude sections.
-These sections would logically be defined by the changes in cloud top altitudes, as indicated by the green points in the figures above in :ref:`Step 3bis <VMCStep03bis>`: 65km for latitudes < -60˚, 71km for latitudes between -60˚ and -40˚, 73km for latitudes between -40˚ and -15˚.
+The **first** way is to split the analysis in several latitude bins.
+It would make sense to select these bins based on the by the changes in cloud top altitudes, as indicated by the green points in the figures above in :ref:`Step 3bis <VMCStep03bis>`: 65km for latitudes (-60˚, -90˚), 71km for latitudes (-40˚, -60˚), 73km for latitudes (0˚, -40˚).
 
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_65km_vs_RadianceFactorRatio.png
@@ -1203,15 +1203,13 @@ These sections would logically be defined by the changes in cloud top altitudes,
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperature_73km_vs_RadianceFactorRatio.png
     :scale: 80%
 
-The cloud top temperatures have been corrected for the thermal tide at 69km altitude (:file:`ThermalTideCorrection.dat`) as described in :ref:`Step04 <VMCStep04>`), even though none of the cloud top altitudes is exactly at 69km altitude: I assume this amplitude to be a good indication.
-I also determined linear fits to the points, but clearly the linear correlation is very weak if even existent at all. 
+The cloud top temperatures can be corrected for thermal tide at 69km altitude as described in :ref:`Step04 <VMCStep04>` using the information in (:file:`ThermalTideCorrection.dat`). Even though none of the cloud top altitudes is exactly at 69km altitude, I assume this amplitude to be a good indication.
+It is the only altitude that I have the amplitudes for all the latitudes from the :ref:`Akiba et al. (2021) <Akiba2021>` paper.
+I use the :ref:`Spearman ranked and Pearson correlation coefficients <correlationcoefficients>` to evaluate whether a correlation exists or not. 
 
-I need to do another statistical analysis test here!
 
-
-The **second** way I correct the cloud top temperature variation due to the temperature gradient in the atmosphere,
-so that the values can be compared across latitudes when doing the correlation with the VMC UV-brightness. 
-I take 71km altitude as the reference level: 
+A **second** way to look at this is to take all the latitudes into account and correct for the cloud top temperature variation due to the temperature gradient in the atmosphere. In that way, the values should be comparable across latitudes. 
+If I take 71km altitude as the reference level, then
 
 .. math::
 
@@ -1224,13 +1222,16 @@ with
     \frac {dT}{dz}_{average} = -1K/km
 
 
-Hence, the cloud top temperatures at 65km altitude would be 6K lower due to the average temperature gradient if they were at 71km, the cloud top temperatures at 73km would be 2K higher.
+The cloud top temperatures at 65km altitude would be 6K lower due to the average temperature gradient if they were at 71km, the cloud top temperatures at 73km would be 2K higher.
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step05/plots/cloudTopTemperatureCorrected_vs_RadianceFactorRatio.png
     :scale: 100%
 
 
-Except for a slight hint at a positive correlation, it is very very weak.
+Based on the values of the :ref:`Spearman ranked and Pearson correlation coefficients <correlationcoefficients>` there is no evidence for any correlation when looking 
+at the problem in either of both ways presented above.
+
+
 
 
 .. _VMCStep06:
@@ -1269,7 +1270,7 @@ Step 06 - Final correlation analysis
 
 
 
-In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude. The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known and should be rather diffuse, but in the 70 +/- 4km altitude range, as can be seen from the figures in :ref:`Crisp (1986) <crisp1986>` and :ref:`Lee et al. (2015b) <Lee2015b`.
+In the initial draft paper from 2015, we looked at the RFR values as a function of the temperatures and static stabilities at the same altitude level between 50 and 80km altitude. The idea is that the UV-deposition depth, and hence the level that we actually sound in the UV-filter, is not well known and should be rather diffuse, but in the 70 +/- 4km altitude range, as can be seen from the figures in :ref:`Crisp (1986) <crisp1986>` and :ref:`Lee et al. (2015b) <Lee2015b>`.
 
 We separated this analysis in several latitude bins to avoid as much as possible the effect of the change in temperature as a function of latitude.
 So I can do that again, but I think only three latitude bins are necessary. When I look at the variation of the RFR with latitude I see:
@@ -1300,7 +1301,7 @@ Based on this, and on the cloud top altitudes variations reported by :ref:`Marcq
     :scale: 100%
 
 
-The right plot above show the Spearman (blue) and Pearson (red) correlation coefficients of the variability of temperature with latitude between 50 and 80km altitude (:file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat`).
+The right plot above show the :ref:`Spearman ranked (blue) and Pearson (red) correlation coefficients <correlationcoefficients>` of the variability of temperature with latitude between 50 and 80km altitude (:file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat`).
 
 Here is the same for the static stability:
 
@@ -1487,6 +1488,32 @@ It also follows that the **Local Solar Time increases** in the direction of **de
 The **zonal wind** moves the clouds in the direction of **increasing LST** and **decreasing East longitude**.
 
 LST is calculated from the difference in longitude of a pixel on the Venus disk and the longitude of the **Sub Solar Point**. I verify that for the LST values reported in the VeRa :file:`.TXT` files, this gives the correct results. For example for the file :file:`Orb0260_EGR/V32ICL1L04_AEX_070060729_60.TXT` the **Sub-Solar Longitude (lowest sample)** is 178˚.51 and the longitude of the VeRa-sounded location lowest sample) is 244˚.58. The difference is 66˚.07, which corresponds to 6h x 90˚ / 66˚.07 = 4.40467h. As the longitude of the VeRa-location is larger than that of the sub-solar point, and from the conclusion that LST increases in the direction of decreasing longitude, it means that the VeRa-sounded location is more towards the morning limb, before noon: 12h - 4.40467h = 7.6h. The reported LST in the :file:`.TXT` file is 7.61h at 1bar, which is slightly becasue it is not corresponding to the lowest sample. 
+
+
+
+.. _correlationcoefficients:
+
+Appendix: Correlation coefficients
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+I have made use of the `Spearman ranked correlation coefficient <https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient>`_ and 
+`Pearson <https://en.wikipedia.org/wiki/Pearson_correlation_coefficient>`_ correlation coefficient to evaluate the (linear) dependencies between the UV-brightness and the temperatures and static stabilities. 
+I have used the `scipy.stats.spearmanr <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.spearmanr.html>`_ and
+`scipy.stats.pearsonr <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.pearsonr.html>`_ methods.
+
+
+The Pearson correlation coefficient is the covariance of the two variables divided by the product of their standard deviations.
+For a sample (x,y) it can be written as:
+
+.. math::
+
+    r_{xy} = \frac { \sum (x_i - x_{average}) (y_i - y_{average}) } { \sqrt \sum (x_i - x_{average})^2  \sqrt \sum (y_i - y_{average})^2 }
+    
+
+In the essence, the Spearman ranked correlation coefficient is the pearson correlation coefficient of the ranked data: while Pearson's correlation assesses linear relationships, Spearman's correlation assesses monotonic relationships (whether linear or not).
+
+Both have values between -1 and +1, where more negative negative means stronger anti-correlation, and more positive stronger correlation.
+Values around zero mean no correlation. Moderate correlation is when the absolute value is > 0.5.
 
 
 

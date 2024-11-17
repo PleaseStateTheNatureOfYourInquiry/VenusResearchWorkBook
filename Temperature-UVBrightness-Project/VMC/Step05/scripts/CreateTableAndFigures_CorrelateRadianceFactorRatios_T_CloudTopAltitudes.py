@@ -21,6 +21,7 @@ separatorCharacter = '\\' if sys.platform == 'win32' else '/'
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import stats
 
 
 # Custom imports.
@@ -31,6 +32,18 @@ from DataTools import DataTools
 # Import the analysis configuration settings.
 sys.path.append ( os.path.abspath ('../../../') ) 
 from analysisConfiguration import *
+
+
+
+def analyseCorrelation (X, Y):
+
+    linearFit = DataTools.linearLeastSquare (X, Y)
+    
+    pearsonStatistics = stats.pearsonr (X, Y)
+    spearmanStatistics = stats.spearmanr (X, Y)
+
+    return linearFit, pearsonStatistics, spearmanStatistics
+
 
 
 # Load the content of the  VMCSelectedImages_CloudTopAltitudes.dat  table created in VMC/Step01. 
@@ -202,25 +215,34 @@ for cloudTopAltitude in cloudTopAltitudesUnique:
         plt.figure (iPlot)
         plt.clf ()
 
-        plt.scatter ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, radiadanceFactorsRatiosMedianPerOrbit [iVMCImages] )
+        fit, pearsonStatistics, spearmanStatistics = analyseCorrelation ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, 
+                                                                          radiadanceFactorsRatiosMedianPerOrbit [iVMCImages] )
+
+
+        plt.scatter ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, radiadanceFactorsRatiosMedianPerOrbit [iVMCImages], 
+                      label = 'Spearman, Pearson correlation coef = {:6.3f}, {:6.3f}'.format (spearmanStatistics.statistic, pearsonStatistics.statistic) )
         plt.xlim (195,240)
         plt.ylim (0.6, 1.5)
 
         plt.title ( '{:2d}km — latitudes from {:3.0f}˚ to {:-3.0f}˚'.format (cloudTopAltitude, latitudeMinimum, latitudeMaximum) )
         plt.xlabel ( 'Cloud top temperature at {:2d}km (K) (VeRa)'.format (cloudTopAltitude) )
         plt.ylabel ( 'Radiance Factor Ratio (VMC)')
-        
+
+        plt.legend ()        
 
         HandyTools.plotErrorBars ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, radiadanceFactorsRatiosMedianPerOrbit [iVMCImages], 
                                    xErrors = dCloudTopTemperatureVeRa [iVeRaProfileForVMCImages],
                                    yErrors = dradiadanceFactorsRatiosMedianPerOrbit [iVMCImages], colours = 'blue' )
 
 
+        plt.close ()
+        
+
         if fitAndPlot:
             
-            fit = DataTools.linearLeastSquare ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, 
-                                                radiadanceFactorsRatiosMedianPerOrbit [iVMCImages], 
-                                                fractionBeyondXRange = 0.1 )
+#             fit = DataTools.linearLeastSquare ( cloudTopTemperatureVeRa [iVeRaProfileForVMCImages] - thermalTideCorrection, 
+#                                                 radiadanceFactorsRatiosMedianPerOrbit [iVMCImages], 
+#                                                 fractionBeyondXRange = 0.1 )
             
             print (cloudTopAltitude)
             print ('a = ', fit [0], fit [2])
@@ -279,8 +301,12 @@ if createFigures:
     
     plt.figure (iPlot + 1)
     plt.clf ()
+ 
+    fit, pearsonStatistics, spearmanStatistics = analyseCorrelation (cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected)
+
     
-    plt.scatter ( cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected )
+    plt.scatter ( cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected,
+                  label = 'Spearman, Pearson correlation coef = {:6.3f}, {:6.3f}'.format (spearmanStatistics.statistic, pearsonStatistics.statistic) )
     plt.xlim (195,240)
     plt.ylim (0.6, 1.5)
     
@@ -288,6 +314,7 @@ if createFigures:
     plt.xlabel ( 'Cloud top temperature corrected to 71km (VeRa)'.format (cloudTopAltitude) )
     plt.ylabel ( 'Radiance Factor Ratio (VMC)')
     
+    plt.legend ()
     
     HandyTools.plotErrorBars ( cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected, 
                                xErrors = dcloudTopTemperatureVeRaCorrected,
@@ -296,7 +323,7 @@ if createFigures:
 
     if fitAndPlot:
         
-        fit = DataTools.linearLeastSquare (cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected, fractionBeyondXRange = 0.1)
+#         fit = DataTools.linearLeastSquare (cloudTopTemperatureVeRaCorrected, radiadanceFactorsRatiosMedianPerOrbitCorrected, fractionBeyondXRange = 0.1)
         
         
         plt.plot ( fit [5], fit [6], c = 'black', alpha = 0.2, 
