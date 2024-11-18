@@ -107,8 +107,6 @@
              
   <section id="workbook">
 <h1>Workbook<a class="headerlink" href="#workbook" title="Link to this heading"></a></h1>
-<p>Go to <a class="reference internal" href="#lastpointofwork"><span class="std std-ref">last point of work</span></a>.</p>
-<a class="reference internal image-reference" href="_images/construction.png"><img alt="_images/construction.png" src="_images/construction.png" style="width: 80.0px; height: 80.0px;" /></a>
 <div class="admonition-abbreviations admonition" id="abbrevations">
 <p class="admonition-title">abbreviations</p>
 <div class="line-block">
@@ -120,11 +118,20 @@
 <div class="line"><strong>VMC</strong> - Venus Monitoring Camera</div>
 </div>
 </div>
-<div class="admonition-vex-orbit-ids admonition">
-<p class="admonition-title">VEX Orbit IDs</p>
+<div class="admonition-data-availability-and-vex-orbit-ids admonition" id="dataavailability">
+<p class="admonition-title">Data availability and VEX Orbit IDs</p>
+<p>For now I have put a zip file containing the entire <code class="file docutils literal notranslate"><span class="pre">Data</span></code> directory on my personal (paid) WeTransfer as <a class="reference external" href="https://we.tl/t-JGq0pLkuCV">Roos-Serote-etal-Temperature-UVBrightness-Project-Data.zip</a> with no expiration date.
+The subdirectories are in the unzipped <code class="file docutils literal notranslate"><span class="pre">Data</span></code> directory are:</p>
+<div class="line-block">
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">Data/VEX/VeRa</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">Data/VEX/VMC</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">Data/Akatsuki</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">Data/EmmanuelMarcq2020</span></code></div>
+</div>
 <p>The information about the orbit IDs per mission section comes from the file
-<code class="file docutils literal notranslate"><span class="pre">SOMEWHEREONYOURCOMPUTER/Data/VEX/VEX-SCIOPS-LI-053_1_1_VEX_Orbit_Date_DOY_Listing_2014Sep15.numbers</span></code>,
-see also the link to <a class="reference external" href="https://www.cosmos.esa.int/web/psa/venus-express">Venus Express at the ESA PSA</a>.</p>
+<code class="file docutils literal notranslate"><span class="pre">YOURDATADIRECTORY/Data/VEX/VEX-SCIOPS-LI-053_1_1_VEX_Orbit_Date_DOY_Listing_2014Sep15.numbers</span></code>,
+see also the link to <a class="reference external" href="https://www.cosmos.esa.int/web/psa/venus-express">Venus Express at the ESA PSA</a>.
+The <code class="file docutils literal notranslate"><span class="pre">YOURDATADIRECTORY</span></code> directory is where the user unpacks the zip-file from the WeTransfer link above.</p>
 <table class="docutils align-default" id="id5">
 <caption><span class="caption-text"><strong>VEX Orbit IDs</strong></span><a class="headerlink" href="#id5" title="Link to this table"></a></caption>
 <thead>
@@ -161,23 +168,17 @@ see also the link to <a class="reference external" href="https://www.cosmos.esa.
 </tbody>
 </table>
 </div>
-<div class="admonition-unresolved-questions-not-to-forget admonition" id="unresolvedquestionnottoforget">
-<p class="admonition-title">unresolved questions not to forget</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#unresolvedquestion1"><span class="std std-ref">Why during the some orbits, in the same orbit different calibration factors where used?</span></a></p></li>
-</ul>
-</div>
 <div class="admonition-analysisconfiguration-py-file admonition" id="analysisconfigurationfile">
 <p class="admonition-title">analysisConfiguration.py file</p>
 <p>This file contains configuration settings needed for the scripts in this project to run.
 It <em>should</em> be easy to migrate this entire project to another computer, just by substituting the paths and names of these directories in this file.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">VeRaDataDirectory</span> <span class="o">=</span> <span class="s1">&#39;/Users/maarten/Science/Venus/Data/VEX/VeRa&#39;</span>
-<span class="n">VMCDataDictectory</span> <span class="o">=</span> <span class="s1">&#39;/Users/maarten/Science/Venus/Data/VEX/VMC&#39;</span>
-<span class="n">AkatsukiDataDirectory</span> <span class="o">=</span> <span class="s1">&#39;/Users/maarten/Science/Venus/Data/Akatsuki&#39;</span>
-<span class="n">SPICAVUCDataDirectory</span> <span class="o">=</span> <span class="s1">&#39;/Users/maarten/Science/Venus/Data/EmmanuelMarcq2020&#39;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">VeRaDataDirectory</span> <span class="o">=</span> <span class="s1">&#39;YOURDATADIRECTORY/Data/VEX/VeRa&#39;</span>
+<span class="n">VMCDataDictectory</span> <span class="o">=</span> <span class="s1">&#39;YOURDATADIRECTORY/Data/VEX/VMC&#39;</span>
+<span class="n">AkatsukiDataDirectory</span> <span class="o">=</span> <span class="s1">&#39;YOURDATADIRECTORY/Data/Akatsuki&#39;</span>
+<span class="n">SPICAVUCDataDirectory</span> <span class="o">=</span> <span class="s1">&#39;YOURDATADIRECTORY/Data/EmmanuelMarcq2020&#39;</span>
 
-<span class="n">VeRaWorkBookDirectory</span> <span class="o">=</span> <span class="s1">&#39;/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa&#39;</span>
-<span class="n">VMCWorkBookDirectory</span> <span class="o">=</span> <span class="s1">&#39;/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC&#39;</span>
+<span class="n">VeRaWorkBookDirectory</span> <span class="o">=</span> <span class="s1">&#39;YOURPROJECTDIRECTORY/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa&#39;</span>
+<span class="n">VMCWorkBookDirectory</span> <span class="o">=</span> <span class="s1">&#39;YOURPROJECTDIRECTORY/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC&#39;</span>
 
 <span class="n">radiusOfVenus</span> <span class="o">=</span> <span class="mi">6052</span> <span class="c1">#km</span>
 </pre></div>
@@ -190,6 +191,20 @@ It <em>should</em> be easy to migrate this entire project to another computer, j
 <span class="kn">from</span> <span class="nn">analysisConfiguration</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
+<div class="line-block">
+<div class="line">The <code class="file docutils literal notranslate"><span class="pre">YOURDATADIRECTORY</span></code> is the directory where the user parks the data from the project, as can be downloaded from the <a class="reference internal" href="#dataavailability"><span class="std std-ref">zip-file on WeTransfer</span></a>.</div>
+<div class="line">The <code class="file docutils literal notranslate"><span class="pre">YOURPROJECTDIRECTORY</span></code> is the directory where the user clones the <a class="reference external" href="https://github.com/PleaseStateTheNatureOfYourInquiry/VenusResearchWorkBook">Github repository of this project</a> to.</div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The scripts should be run from the directories where they are placed!</p>
+</div>
+</div>
+<div class="admonition-unresolved-questions-not-to-forget admonition" id="unresolvedquestionnottoforget">
+<p class="admonition-title">unresolved questions not to forget</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#unresolvedquestion1"><span class="std std-ref">Why during the some orbits, in the same orbit different calibration factors where used?</span></a></p></li>
+</ul>
 </div>
 <section id="temperature-vs-uv-brightness">
 <span id="temperaturevsuvbrightness"></span><h2>Temperature vs UV-brightness<a class="headerlink" href="#temperature-vs-uv-brightness" title="Link to this heading"></a></h2>
@@ -1022,7 +1037,6 @@ at the problem in either of both ways presented above.</p>
 </section>
 <section id="step-06-final-correlation-analysis">
 <span id="vmcstep06"></span><h4>Step 06 - Final correlation analysis<a class="headerlink" href="#step-06-final-correlation-analysis" title="Link to this heading"></a></h4>
-<a class="reference internal image-reference" href="_images/construction.png" id="lastpointofwork"><img alt="_images/construction.png" id="lastpointofwork" src="_images/construction.png" style="width: 80.0px; height: 80.0px;" /></a>
 <div class="admonition-directory-scripts-files admonition">
 <p class="admonition-title">directory, scripts &amp; files</p>
 <div class="line-block">
@@ -1213,7 +1227,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Nov 17, 2024, 11:04:25 AM.
+      <span class="lastupdated">Last updated on Nov 18, 2024, 12:53:29 PM.
       </span></p>
   </div>
 

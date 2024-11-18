@@ -3,11 +3,15 @@
 Workbook 
 ========
 
-Go to :ref:`last point of work <lastPointOfWork>`.
+.. COMMENTED OUT
 
-.. image:: ./images/construction.png
-    :scale: 50%
+    Go to :ref:`last point of work <lastPointOfWork>`.
+    
+    .. image:: ./images/construction.png
+        :scale: 50%
 
+
+    
 .. _abbrevations:
 
 .. admonition:: abbreviations
@@ -20,11 +24,26 @@ Go to :ref:`last point of work <lastPointOfWork>`.
     | **VMC** - Venus Monitoring Camera
 
 
-.. admonition:: VEX Orbit IDs
+    
+.. _dataavailability:
+
+.. admonition:: Data availability and VEX Orbit IDs
+
+    
+    For now I have put a zip file containing the entire :file:`Data` directory on my personal (paid) WeTransfer as `Roos-Serote-etal-Temperature-UVBrightness-Project-Data.zip <https://we.tl/t-JGq0pLkuCV>`_ with no expiration date.
+    The subdirectories are in the unzipped :file:`Data` directory are:
+
+    | :file:`Data/VEX/VeRa`
+    | :file:`Data/VEX/VMC`    
+    | :file:`Data/Akatsuki`
+    | :file:`Data/EmmanuelMarcq2020`
+
+
 
     The information about the orbit IDs per mission section comes from the file 
-    :file:`SOMEWHEREONYOURCOMPUTER/Data/VEX/VEX-SCIOPS-LI-053_1_1_VEX_Orbit_Date_DOY_Listing_2014Sep15.numbers`,
+    :file:`YOURDATADIRECTORY/Data/VEX/VEX-SCIOPS-LI-053_1_1_VEX_Orbit_Date_DOY_Listing_2014Sep15.numbers`,
     see also the link to `Venus Express at the ESA PSA <https://www.cosmos.esa.int/web/psa/venus-express>`_.
+    The :file:`YOURDATADIRECTORY` directory is where the user unpacks the zip-file from the WeTransfer link above.
 
     .. csv-table:: **VEX Orbit IDs**
        :header: "mission section", "orbit ID range", date range
@@ -38,13 +57,6 @@ Go to :ref:`last point of work <lastPointOfWork>`.
         
 
 
-.. _unresolvedquestionnottoforget:
-
-.. admonition:: unresolved questions not to forget
-
-    - :ref:`Why during the some orbits, in the same orbit different calibration factors where used? <unresolvedquestion1>`
-
-
 .. _analysisconfigurationfile:
 
 .. admonition:: analysisConfiguration.py file
@@ -54,13 +66,13 @@ Go to :ref:`last point of work <lastPointOfWork>`.
 
     .. code-block:: Python
     
-        VeRaDataDirectory = '/Users/maarten/Science/Venus/Data/VEX/VeRa'
-        VMCDataDictectory = '/Users/maarten/Science/Venus/Data/VEX/VMC'
-        AkatsukiDataDirectory = '/Users/maarten/Science/Venus/Data/Akatsuki'
-        SPICAVUCDataDirectory = '/Users/maarten/Science/Venus/Data/EmmanuelMarcq2020'
+        VeRaDataDirectory = 'YOURDATADIRECTORY/Data/VEX/VeRa'
+        VMCDataDictectory = 'YOURDATADIRECTORY/Data/VEX/VMC'
+        AkatsukiDataDirectory = 'YOURDATADIRECTORY/Data/Akatsuki'
+        SPICAVUCDataDirectory = 'YOURDATADIRECTORY/Data/EmmanuelMarcq2020'
 
-        VeRaWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa'
-        VMCWorkBookDirectory = '/Users/maarten/Science/Venus/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC'
+        VeRaWorkBookDirectory = 'YOURPROJECTDIRECTORY/VenusResearchWorkBook/Temperature-UVBrightness-Project/VeRa'
+        VMCWorkBookDirectory = 'YOURPROJECTDIRECTORY/VenusResearchWorkBook/Temperature-UVBrightness-Project/VMC'
         
         radiusOfVenus = 6052 #km
         
@@ -76,8 +88,23 @@ Go to :ref:`last point of work <lastPointOfWork>`.
         # Import the content of the  analysisConfiguration.py  file.
         from analysisConfiguration import *
 
-        
+
+
+    | The :file:`YOURDATADIRECTORY` is the directory where the user parks the data from the project, as can be downloaded from the :ref:`zip-file on WeTransfer <dataavailability>`. 
+    | The :file:`YOURPROJECTDIRECTORY` is the directory where the user clones the `Github repository of this project <https://github.com/PleaseStateTheNatureOfYourInquiry/VenusResearchWorkBook>`_ to. 
+
+    .. attention::
     
+        The scripts should be run from the directories where they are placed!
+
+
+.. _unresolvedquestionnottoforget:
+
+.. admonition:: unresolved questions not to forget
+
+    - :ref:`Why during the some orbits, in the same orbit different calibration factors where used? <unresolvedquestion1>`
+
+
 
 
 .. _temperaturevsuvbrightness:
@@ -1240,10 +1267,12 @@ at the problem in either of both ways presented above.
 Step 06 - Final correlation analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _lastPointOfWork:
+.. COMMENTED OUT
 
-.. image:: ./images/construction.png
-    :scale: 50%
+    .. _lastPointOfWork:
+    
+    .. image:: ./images/construction.png
+        :scale: 50%
 
 .. admonition:: directory, scripts & files
 
