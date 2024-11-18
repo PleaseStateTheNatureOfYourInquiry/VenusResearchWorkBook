@@ -13,7 +13,7 @@ To make life easier, for now (November 2024) it is available as a [downloadable 
 
 
 A detailed description of the data, the files, the scripts and all the work and its irregular flow is in the files in the docs section. 
-These have been compiled to a nice html-format and can be viewed at  
-[Venus Research Workbook at ReadTheDocs](https://venusresearchworkbook.readthedocs.io/en/latest/).
+These have been compiled to a nice html-format which can be viewed at 
+[Venus Research Workbook at ReadTheDocs](https://venusresearchworkbook.readthedocs.io/en/latest/), or locally via the `index.html` in the `doc-html` folder of the repository.
 
 
