@@ -11,6 +11,7 @@ Workbook
         :scale: 50%
 
 
+
     
 .. _abbrevations:
 
@@ -1352,11 +1353,20 @@ I could either subtract the least square fitted line at each altitude from the o
 With the :file:`CreateTable_T-S_vs_LatitudeVariability.py` I create the :file:`TVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, as well as the :file:`SVeRa_vs_latitude_statistics_50-80kmAltitude.dat` table, that contain the least square line fitting parameters, the Spearman and Pearson correlation coefficients and their uncertainties (see Figures above and the :file:`CreateFigures_LatitudeVariability.py` script).
 
 Using the :file:`CreateTablesAndFigures_CorrelationAnalysis.py` script I create a series of table files and plots:
-the :file:`T_Correlation_N_C.dat`, where :file:`N` is the latitude bin and :file:`C` is file:`uncorrected` file:`normalised` or file:`subtracted`, and
-the :file:`S_Correlation_N_uncorrected.dat, as well as a all the corresponding plots
+the :file:`T_Correlation_N_C.dat`, where :file:`N` is the latitude bin and :file:`C` is :file:`uncorrected`, :file:`normalised` or :file:`subtracted`, and the :file:`S_Correlation_N_uncorrected.dat, as well as a all the corresponding plots
 in the :file:`plots_S`, :file:`plots_T_uncorrected`, :file:`plots_T_normalised`, and :file:`plots_T_subtracted` folders.
 
-As example, the RFR versus normalised temperature at **68km altitude** for the three latitude bins:
+As example, the RFR versus uncorrected and normalised temperature at **68km altitude** for the three latitude bins:
+
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_uncorrected/Latitudes_0_-40/Temperature68km_vs_RadianceFactorRatio_latitudes_0_-40_uncorrected.png
+    :scale: 50%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_uncorrected/Latitudes_-40_-60/Temperature68km_vs_RadianceFactorRatio_latitudes_-40_-60_uncorrected.png
+    :scale: 50%
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_uncorrected/Latitudes_-60_-90/Temperature68km_vs_RadianceFactorRatio_latitudes_-60_-90_uncorrected.png
+    :scale: 50%
 
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_normalised/Latitudes_0_-40/Temperature68km_vs_RadianceFactorRatio_latitudes_0_-40.png
@@ -1367,6 +1377,9 @@ As example, the RFR versus normalised temperature at **68km altitude** for the t
 
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step06/plots_T_normalised/Latitudes_-60_-90/Temperature68km_vs_RadianceFactorRatio_latitudes_-60_-90.png
     :scale: 50%
+
+
+
 
 
 As example, the RFR versus static stability at **57km altitude** for the three latitude bins:
@@ -1474,13 +1487,25 @@ The correlation has more structure. I think there is good hint for an anti-corre
 For the high latitudes it is opposite, but weak in this altitude range.
 There is anti-correlation also for all latitude bins around 60km altitude, but overal somewhat weaker. 
 
-Could this be a detection, though faint, of the solar UV-energy deposition in the atmosphere at the cloud top levels?
+Could this be a detection of the solar UV-energy deposition in the atmosphere around the cloud top levels?
 It would corroborate with the radiative forcing studies by :ref:`Crisp (1986) <crisp1986>` and :ref:`Lee et al. (2015b) <Lee2015b>`.
 The cloud tops are lower in the high altitudes. An anti-correlation would mean that when UV-energy is absorbed (darker UV, more UV-absorber),
 it results in an increase in the atmospheric temperature: hence the temperature would not be one-to-one related to origin of the UV-absorber. 
 
-A second, much more challenging hint, is that the trend of the correlation from 50 to 80km altitude: it seems to go from correlation to anti-correlation for 
-the low and mid latitudes and the other way around for the high latitudes. Though it is a faint signal.
+A second, much more challenging hint, is that the trend of the correlation from 50 to 80km altitude: it seems to go from correlation to anti-correlation for the low and mid latitudes and the other way around for the high latitudes. Though it is very marginal.
+
+Going back to the anti-correlation in the 65-70km altitude range for the low and mid latitude bin (0˚, -40˚): the temperature change is on the order of 10K. 
+Colin does a nice estimation based on the differences in global heating rates between models with a low and high UV-absorber as presented by :ref:`Crisp (1986) <crisp1986>`. 
+This difference in on the order of 2-4 K/day.
+The global heating rate is about 1/4 ($/frac{\pi \times r^2}{4 \times \pi \times r^2}) the local heating rate at the sub-solar point.
+An atmospheric parcel at the equator (low latitude) travels from dawn to dusk, passing through the sub-solar point, in about 2 Earth days at these altitudes, being pushed by the zonal winds.
+The average insolation by the local solar zenith angle for parcels at the equator is therefore 
+the ratio between the projected and the real path: $\frac{2 \times r}{\pi \times r} = \frac{2}{\pi} times the sub-solar heating rate.
+
+Hence the difference in total heating of a low and high UV-absorber parcel at the equator can be estimated to be on the order of 
+$2-4 K/day \times 4 \times \frac{2}{\pi} \times 2 days \approx 10-20K. 
+For each latitude this has to be multiplied by the cosine of the solar zenith angle, and averaged of latitudes up to 40˚ the difference in heating rate is somewhat less.
+The observed and predicted values are in the right ball park, which is encouraging.
 
 
 
