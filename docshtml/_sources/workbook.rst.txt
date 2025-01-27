@@ -1497,13 +1497,13 @@ A second, much more challenging hint, is that the trend of the correlation from 
 Going back to the anti-correlation in the 65-70km altitude range for the low and mid latitude bin (0˚, -40˚): the temperature change is on the order of 10K. 
 Colin does a nice estimation based on the differences in global heating rates between models with a low and high UV-absorber as presented by :ref:`Crisp (1986) <crisp1986>`. 
 This difference in on the order of 2-4 K/day.
-The global heating rate is about 1/4 ($/frac{\pi \times r^2}{4 \times \pi \times r^2}) the local heating rate at the sub-solar point.
+The global heating rate is about 1/4 (:math:`= \frac{\pi r^2}{4 \pi r^2}`) the local heating rate at the sub-solar point.
 An atmospheric parcel at the equator (low latitude) travels from dawn to dusk, passing through the sub-solar point, in about 2 Earth days at these altitudes, being pushed by the zonal winds.
 The average insolation by the local solar zenith angle for parcels at the equator is therefore 
-the ratio between the projected and the real path: $\frac{2 \times r}{\pi \times r} = \frac{2}{\pi} times the sub-solar heating rate.
+the ratio between the projected and the real path: :math:`\frac{2 r}{\pi r} = \frac{2}{\pi}` times the sub-solar heating rate.
 
 Hence the difference in total heating of a low and high UV-absorber parcel at the equator can be estimated to be on the order of 
-$2-4 K/day \times 4 \times \frac{2}{\pi} \times 2 days \approx 10-20K. 
+:math:`2-4 K/day \times 4 \times \frac{2}{\pi} \times 2 days \approx 10-20K`. 
 For each latitude this has to be multiplied by the cosine of the solar zenith angle, and averaged of latitudes up to 40˚ the difference in heating rate is somewhat less.
 The observed and predicted values are in the right ball park, which is encouraging.
 
