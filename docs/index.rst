@@ -13,7 +13,7 @@ Here I share my Venus research project advances.
 These pages are compiled from the **docs** section of the corresponding public 
 `GitHub repository <https://github.com/PleaseStateTheNatureOfYourInquiry/VenusResearchWorkBook>`_.
 
-The manuscript has been submitted to A&A on 27 January 2025.
+The manuscript has been submitted to A&A on 27 January 2025 (`ArXiv version <https://arxiv.org/abs/2502.04650>`_). It received a positive review with minor corrections.
 
 
 .. toctree::
