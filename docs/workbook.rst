@@ -680,7 +680,7 @@ with :math:`v` being the average value of :math:`(x_1, x_2, ..., x_N)`, the indi
 
 .. math::
 
-    \sigma_v^2 = \sum  \sigma_{xi}^2 / N^2
+    \sigma_v^2 = \sum  \sigma_{x_i}^2 / N^2
 
 
 I run this test 1000 times, and for each set of new binned values I recalculate the fit and plot it in light transparent grey. These are the grey areas in the plots, around the fitted phase curves.
@@ -1043,7 +1043,8 @@ at -85˚, -75˚, etc., I get (:file:`./scripts/CloudTopAltitudesSPICAV-UV.py`):
 .. image:: ../Temperature-UVBrightness-Project/VMC/Step03bis/plots/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png
     :scale: 70%
 
-*The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from :ref:`Marcq et al. 2020 <Marcq2020>` Figure 14.*
+*The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set.
+The red line is from* :ref:`Marcq et al. 2020 <Marcq2020>` *Figure 14.*
 
 It can be seen there are roughly two latitude regions: :code:`|latitude| < +50˚` with cloud tops around 72km and :code:`|latitude| > +50˚` with clouds tops near 65km.
 This distribution has been known for quite a while and the above result confirms it.

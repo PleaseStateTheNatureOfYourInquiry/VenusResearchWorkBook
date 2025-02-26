@@ -651,7 +651,7 @@ This random value is taken from a normal distribution: the standard deviation of
 \[\sigma_v^2 = \sum \sigma_{x_i}^2    \frac{\partial v}{\partial x_i}^2\]</div>
 <p>with <span class="math notranslate nohighlight">\(v\)</span> being the average value of <span class="math notranslate nohighlight">\((x_1, x_2, ..., x_N)\)</span>, the individual values in the bin, hence <span class="math notranslate nohighlight">\(v = \sum x_i / N\)</span>, and thus:</p>
 <div class="math notranslate nohighlight" id="uncertaintyinaverage">
-\[\sigma_v^2 = \sum  \sigma_{xi}^2 / N^2\]</div>
+\[\sigma_v^2 = \sum  \sigma_{x_i}^2 / N^2\]</div>
 <p>I run this test 1000 times, and for each set of new binned values I recalculate the fit and plot it in light transparent grey. These are the grey areas in the plots, around the fitted phase curves.
 I also keep the values for all these tests to estimate the uncertainties in the fitted phase curve. There are possibly two ways to determine this uncertainty. One would be to calculate the standard deviation of the radiance factors of the 1000 experiments for each phase angle bin.
 The other is to simply take the difference between the maximum and the minimum value of the 1000 experiments for each phase angle bin.
@@ -909,7 +909,8 @@ From model calculations and fitting to the SPICAV-UV data for the cloud top alti
 at -85˚, -75˚, etc., I get (<code class="file docutils literal notranslate"><span class="pre">./scripts/CloudTopAltitudesSPICAV-UV.py</span></code>):</p>
 <a class="reference internal image-reference" href="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png"><img alt="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" src="_images/SPICAV-UV-Orbits_1193-2811_withO3_binsize_10.png" style="width: 448.0px; height: 336.0px;" /></a>
 <a class="reference internal image-reference" href="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png"><img alt="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png" src="_images/SPICAV-UV-Orbits_1193-2811_withoutO3_binsize_10.png" style="width: 448.0px; height: 336.0px;" /></a>
-<p><em>The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set. The red line is from :ref:`Marcq et al. 2020 &lt;Marcq2020&gt;` Figure 14.</em></p>
+<p><em>The orange values are the median values resulting from the sub-set of SPICAV data that corresponds to the VMC data set.
+The red line is from</em> <a class="reference internal" href="#marcq2020"><span class="std std-ref">Marcq et al. 2020</span></a> <em>Figure 14.</em></p>
 <p>It can be seen there are roughly two latitude regions: <code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&lt;</span> <span class="pre">+50˚</span></code> with cloud tops around 72km and <code class="code docutils literal notranslate"><span class="pre">|latitude|</span> <span class="pre">&gt;</span> <span class="pre">+50˚</span></code> with clouds tops near 65km.
 This distribution has been known for quite a while and the above result confirms it.</p>
 <p>It can be seen that the sub-set with O3 gives similar results when compared with the full-set, with the advantage that the full set has more data points, especially around -40˚ latitude.
@@ -1239,7 +1240,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Feb 25, 2025, 11:56:08 AM.
+      <span class="lastupdated">Last updated on Feb 26, 2025, 9:35:47 AM.
       </span></p>
   </div>
 
