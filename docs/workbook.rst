@@ -384,6 +384,7 @@ Step 01 - Select & process VMC images
     | top directory: :file:`VMC/Step01`
     | scripts:
     | :file:`./scripts/VMCImagesEvaluate.py`
+    | :file:`./scripts/checkLatLonBoxsizes.py`
     | files:
     | :file:`VMCSelectedImages.dat`
     | :file:`VMCSelectedImages_orbits_later_than_1188.dat`
@@ -546,6 +547,17 @@ Some examples of a some of the selected images for orbit 2811 (South Polar Dynam
 
 The top row is from ingress, the bottom two images are from egress. The time of the egress images is very close to the VeRa-observation, as can be clearly seen by the positions of the **X** and the gray boxes. Note also that the size of the gray boxes is small, because the uncertainty in the latitude and longitude is a function of the time difference between the VeRa and VMC observations. 
    
+I checked the variation of the sizes of the *latitude-longitude-box* using the script :file:`/scripts/checkLatLonBoxsizes.py`. 
+Horizontal gravity waves have been observed with wavelengths up to about 20km (:ref:`Piccialli et al. 2014 <Piccialli2014>`).
+The average size of the box is an order of magnitude larger, the minimum a factor of 2:
+
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step01/plots/latitudeLongitudeBoxSizes.png
+    :scale: 60%
+.. image:: ../Temperature-UVBrightness-Project/VMC/Step01/plots/latitudeLongitudeBoxSizes-0-100km.png
+    :scale: 60%
+
+Hence, averaging in these boxes will eliminate any horizontal gravity wave effects.
+
 
 .. _VMCStep02:
 
@@ -1636,6 +1648,10 @@ PSS 113-114, 298-308. `DOI 10.1016/j.pss.2014.12.006 <https://doi.org/10.1016/j.
 
 **Marcq, R.** *et al.*, 2020. Climatology of SO2 and UV absorber at Venus' cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, `DOI 10.1016/j.icarus.2019.07.002 <https://doi.org/10.1016/j.icarus.2019.07.002>`_.
 
+
+.. _Piccialli2014:
+
+**Piccialli, A.** *et al.* 2014. High latitude gravity waves at the Venus cloud tops as observed by the Venus Monitoring Camera on board Venus Express. Icarus 227, 94-111. `DOI 10.1016/j.icarus.2013.09.012 <https://doi.org/10.1016/j.icarus.2013.09.012>`_
 
 .. _Seiff1980:
 

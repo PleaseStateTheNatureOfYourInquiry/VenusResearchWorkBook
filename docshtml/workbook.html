@@ -407,6 +407,7 @@ I try it out with the Python script <code class="file docutils literal notransla
 <div class="line">top directory: <code class="file docutils literal notranslate"><span class="pre">VMC/Step01</span></code></div>
 <div class="line">scripts:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/VMCImagesEvaluate.py</span></code></div>
+<div class="line"><code class="file docutils literal notranslate"><span class="pre">./scripts/checkLatLonBoxsizes.py</span></code></div>
 <div class="line">files:</div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages.dat</span></code></div>
 <div class="line"><code class="file docutils literal notranslate"><span class="pre">VMCSelectedImages_orbits_later_than_1188.dat</span></code></div>
@@ -559,6 +560,12 @@ In this way, I do not need to recalculate these if I need them at some later sta
 <a class="reference internal image-reference" href="_images/V2811_0084_UV2.png"><img alt="_images/V2811_0084_UV2.png" src="_images/V2811_0084_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
 <a class="reference internal image-reference" href="_images/V2811_0088_UV2.png"><img alt="_images/V2811_0088_UV2.png" src="_images/V2811_0088_UV2.png" style="width: 350.0px; height: 280.0px;" /></a>
 <p>The top row is from ingress, the bottom two images are from egress. The time of the egress images is very close to the VeRa-observation, as can be clearly seen by the positions of the <strong>X</strong> and the gray boxes. Note also that the size of the gray boxes is small, because the uncertainty in the latitude and longitude is a function of the time difference between the VeRa and VMC observations.</p>
+<p>I checked the variation of the sizes of the <em>latitude-longitude-box</em> using the script <code class="file docutils literal notranslate"><span class="pre">/scripts/checkLatLonBoxsizes.py</span></code>.
+Horizontal gravity waves have been observed with wavelengths up to about 20km (<a class="reference internal" href="#piccialli2014"><span class="std std-ref">Piccialli et al. 2014</span></a>).
+The average size of the box is an order of magnitude larger, the minimum a factor of 2:</p>
+<a class="reference internal image-reference" href="_images/latitudeLongitudeBoxSizes.png"><img alt="_images/latitudeLongitudeBoxSizes.png" src="_images/latitudeLongitudeBoxSizes.png" style="width: 384.0px; height: 288.0px;" /></a>
+<a class="reference internal image-reference" href="_images/latitudeLongitudeBoxSizes-0-100km.png"><img alt="_images/latitudeLongitudeBoxSizes-0-100km.png" src="_images/latitudeLongitudeBoxSizes-0-100km.png" style="width: 384.0px; height: 288.0px;" /></a>
+<p>Hence, averaging in these boxes will eliminate any horizontal gravity wave effects.</p>
 </section>
 <section id="step-02-determine-phase-curve">
 <span id="vmcstep02"></span><h4>Step 02 - Determine phase curve<a class="headerlink" href="#step-02-determine-phase-curve" title="Link to this heading"></a></h4>
@@ -1221,6 +1228,7 @@ PSS 113-114, 298-308. <a class="reference external" href="https://doi.org/10.101
 <p id="markiewicz2007"><strong>Markiewicz, W.J.</strong> <em>et al.</em>, 2007. Venus Monitoring Camera for Venus Express. Planetary Space Science 55, 1701-1711. <a class="reference external" href="https://doi.org/10.1016/j.pss.2007.01.004">DOI 10.1016/j.pss.2007.01.004</a>.</p>
 <p id="marcq2019"><strong>Marcq, R.</strong> <em>et al.</em>, 2019. Discovery of cloud top ozone on Venus. Icarus 319, 419-498, <a class="reference external" href="https://doi.org/10.1016/j.icarus.2018.10.006">DOI 10.1016/j.icarus.2018.10.006</a>.</p>
 <p id="marcq2020"><strong>Marcq, R.</strong> <em>et al.</em>, 2020. Climatology of SO2 and UV absorber at Venus’ cloud top from SPICAV-UV T nadir dataset. Icarus 355, 133368, <a class="reference external" href="https://doi.org/10.1016/j.icarus.2019.07.002">DOI 10.1016/j.icarus.2019.07.002</a>.</p>
+<p id="piccialli2014"><strong>Piccialli, A.</strong> <em>et al.</em> 2014. High latitude gravity waves at the Venus cloud tops as observed by the Venus Monitoring Camera on board Venus Express. Icarus 227, 94-111. <a class="reference external" href="https://doi.org/10.1016/j.icarus.2013.09.012">DOI 10.1016/j.icarus.2013.09.012</a></p>
 <p id="seiff1980"><strong>Seiff, Y.J.</strong> <em>et al.</em>, 1980. Measurements of Thermal Structure and Thermal Contrasts in the Atmosphere of Venus and Related Dynamical Observations: Results From the Four Pioneer Venus Probes. JGR 85, 7903-7933. <a class="reference external" href="https://doi.org/10.1029/JA085iA13p07903">DOI 10.1029/JA085iA13p07903</a>.</p>
 <p id="shalygina2015"><strong>Shalygina, Y.J.</strong> <em>et al.</em>, 2015. Optical properties of the Venus upper clouds from the data obtained
 by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 113-114, 135-158. <a class="reference external" href="https://doi.org/10.1016/j.pss.2014.11.012">DOI 10.1016/j.pss.2014.11.012</a>.</p>
@@ -1240,7 +1248,7 @@ by Venus Monitoring Camera on-board the Venus Express. Planetary Space Science 1
 
   <div role="contentinfo">
     <p>&#169; Copyright .
-      <span class="lastupdated">Last updated on Feb 26, 2025, 9:35:47 AM.
+      <span class="lastupdated">Last updated on Mar 23, 2025, 6:01:51 PM.
       </span></p>
   </div>
 
